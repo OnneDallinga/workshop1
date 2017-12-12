@@ -14,5 +14,9 @@ public class Main {
 		else {
 			Controller = new Controller(new UserMainMenuView(Controller.getCurrentUser()));
 		}
+		while (true) {
+			Controller.runView();
+			
+		}
 	}
 }

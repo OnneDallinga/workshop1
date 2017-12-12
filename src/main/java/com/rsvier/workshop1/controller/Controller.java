@@ -1,6 +1,7 @@
 package com.rsvier.workshop1.controller;
 
 import java.io.IOException;
+import java.util.*;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
 
@@ -14,6 +15,9 @@ public class Controller { // parent
 	}
 	public void runView() {
 		this.currentMenu.displayMessage();
+	}
+	public View getUserMenuChoice(ArrayList<Integer> possibleMenuOptions) {
+		return currentMenu.getUserMenuChoice();
 	}
 	public View getCurrentMenu() {
 		return currentMenu;
