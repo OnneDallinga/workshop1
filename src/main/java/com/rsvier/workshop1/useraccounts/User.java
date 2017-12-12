@@ -1,7 +1,7 @@
 package com.rsvier.workshop1.useraccounts;
 
 public class User {
-	private boolean isAdmin;
+	private boolean admin;
 	private String username;
 	
 	public User (String username) {
@@ -10,5 +10,8 @@ public class User {
 	
 	public String getUsername() {
 		return username;
+	}
+	public boolean isAdmin() {
+		return admin;
 	}
 }
