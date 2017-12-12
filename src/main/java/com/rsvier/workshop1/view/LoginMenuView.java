@@ -44,8 +44,4 @@ public class LoginMenuView extends View {
 			}
 		}
 	}
-	public String getUsername () {
-		return username;
-	}
-
 }
