@@ -7,6 +7,6 @@ public class Main {
 	
 	public static void main (String args[]) throws IOException {		
 		Controller Controller = new Controller(new LoginMenuView());
-		Controller.RunView();
+		Controller.runView();
 	}
 }

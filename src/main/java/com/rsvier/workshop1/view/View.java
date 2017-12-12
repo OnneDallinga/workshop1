@@ -8,7 +8,7 @@ public abstract class View { //parent version
 	protected ArrayList<Integer> possibleMenuOptions;
 	protected boolean validUserChoice;
 	
-	public void DisplayMessage() {};
+	public void displayMessage() {};
 	
 	public int asksUserForMenuChoice() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

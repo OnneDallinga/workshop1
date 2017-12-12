@@ -7,8 +7,8 @@ public class LoginMenuView extends View {
 	private String password;
 	private boolean validatedUser;
 	
-	//@Override		Why do I get an error here??
-	public void DisplayMessage() {
+	@Override		
+	public void displayMessage() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) { // always true unless the user hits the break (successful login) or enters 0 (system exit)
 			System.out.println("Welcome to the login screen. Please enter your username and password to login. Press 0 to exit. "
@@ -18,7 +18,7 @@ public class LoginMenuView extends View {
 				username = br.readLine();
 				if (username.equals("0")) System.exit(0);
 				if (username.equals("1")) {
-					new Controller(new UserCreationView()).RunView();
+					new Controller(new UserCreationView()).runView();
 					continue;
 				}
 			}

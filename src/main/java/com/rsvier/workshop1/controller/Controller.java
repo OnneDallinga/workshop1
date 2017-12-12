@@ -12,8 +12,8 @@ public class Controller { // parent
 		this.currentMenu = currentMenu;
 		//this.theModel = theModel;
 	}
-	public void RunView() {
-		this.currentMenu.DisplayMessage();
+	public void runView() {
+		this.currentMenu.displayMessage();
 	}
 	public View getCurrentMenu() {
 		return currentMenu;
