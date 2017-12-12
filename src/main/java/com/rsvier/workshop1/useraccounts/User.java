@@ -1,4 +1,4 @@
-package useraccounts;
+package com.rsvier.workshop1.useraccounts;
 
 public class User {
 	private boolean isAdmin;
