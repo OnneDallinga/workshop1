@@ -6,16 +6,18 @@ import com.rsvier.workshop1.view.*;
 public class Main {
 	
 	public static void main (String args[]) throws IOException {		
-		Controller Controller = new Controller(new LoginMenuView());
-		Controller.runView();
-		if (Controller.getCurrentUser().isAdmin()) {
-			Controller = new Controller(new AdminMainMenuView(Controller.getCurrentUser()));
+		Controller controller = new Controller(new LoginMenuView());
+		controller.runView();
+		if (controller.getCurrentUser().isAdmin()) {
+			System.out.println("?");
+			System.out.println(controller.getCurrentUser().isAdmin());
+			controller = new Controller(new AdminMainMenuView(controller.getCurrentUser()));
 		}
 		else {
-			Controller = new Controller(new UserMainMenuView(Controller.getCurrentUser()));
+			controller = new Controller(new UserMainMenuView(controller.getCurrentUser()));
 		}
 		while (true) {
-			Controller.runView();
+			controller.runView();
 			
 		}
 	}

@@ -1,8 +1,13 @@
 package com.rsvier.workshop1.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.rsvier.workshop1.useraccounts.User;
 
 public class AdminMainMenuView extends View {
+	private ArrayList<Integer> possibleMenuOptions = new ArrayList<Integer>();
+	protected HashMap<Integer, View> menuOptions = new HashMap<>();
 
 	public AdminMainMenuView(User currentUser) {
 		possibleMenuOptions.add(1);
@@ -18,7 +23,6 @@ public class AdminMainMenuView extends View {
 	public void displayMessage() {
 		System.out.println("Welcome to the main menu (for admins). Press 1 to view or edit the current users. "
 				+ "Press 2 to view or edit your products. Press 3 to view the orders. Press 0 to exit.");
+		userMenuChoice = menuOptions.get(asksUserForMenuChoice(possibleMenuOptions));
 	}
-	
-	
 }

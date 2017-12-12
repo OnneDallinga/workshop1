@@ -23,7 +23,7 @@ public abstract class View { //parent version
 	}
 	
 	
-	public int asksUserForMenuChoice() throws IOException { 
+	public int asksUserForMenuChoice(ArrayList<Integer> possibleMenuOptions) { 
 		//Asks user for a menu choice. Must be a valid Integer defined in the possibleMenuOptions.
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Please select an option: ");
@@ -36,7 +36,7 @@ public abstract class View { //parent version
 						return possibleUserChoice;
 					}
 				}
-			}catch(NumberFormatException inputIsNotAnIntError){
+			}catch(Exception inputIsNotAnIntError){
 				System.err.println("You entered an invalid input");
 			}
 		}

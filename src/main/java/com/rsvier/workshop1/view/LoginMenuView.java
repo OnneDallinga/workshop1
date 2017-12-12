@@ -46,8 +46,4 @@ public class LoginMenuView extends View {
 			}
 		}
 	}
-	@Override
-	public User getUser() {
-		return user;
-	}
 }
