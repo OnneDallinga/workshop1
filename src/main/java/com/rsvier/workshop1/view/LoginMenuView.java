@@ -1,6 +1,7 @@
 package com.rsvier.workshop1.view;
 import java.io.*;
 import com.rsvier.workshop1.controller.*;
+import com.rsvier.workshop1.useraccounts.*;
 
 public class LoginMenuView extends View {
 	private String username;
@@ -35,6 +36,7 @@ public class LoginMenuView extends View {
 					System.out.println("Incorrect username or password");
 					continue;
 				}
+				user = new User(username);
 				System.out.println("You logged in successfully.");
 				break;
 			}
@@ -43,5 +45,9 @@ public class LoginMenuView extends View {
 				continue;
 			}
 		}
+	}
+	@Override
+	public User getUser() {
+		return user;
 	}
 }

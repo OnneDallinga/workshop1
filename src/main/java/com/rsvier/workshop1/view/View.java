@@ -1,14 +1,19 @@
 package com.rsvier.workshop1.view;
 import java.io.*;
 import java.util.*;
+import com.rsvier.workshop1.useraccounts.*;
 
 public abstract class View { //parent version
 	protected int possibleUserChoice;
 	protected int menuChoice;
 	protected ArrayList<Integer> possibleMenuOptions;
 	protected boolean validUserChoice;
+	protected User user;
 	
 	public void displayMessage() {};
+	public User getUser() {
+		return user;
+	};
 	
 	public int asksUserForMenuChoice() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
