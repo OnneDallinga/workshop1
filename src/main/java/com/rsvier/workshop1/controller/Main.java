@@ -9,7 +9,6 @@ public class Main {
 		Controller controller = new Controller(new LoginMenuView());
 		controller.runView();
 		if (controller.getCurrentUser().isAdmin()) {
-			System.out.println(controller.getCurrentUser().isAdmin());
 			controller = new Controller(new AdminMainMenuView(controller.getCurrentUser()));
 		}
 		else {

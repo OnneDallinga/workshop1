@@ -6,16 +6,24 @@ public class ValidationCheckModel {
 
 	public boolean validateUser(String username, String password) {
 		try {
+			username = "'" + username + "'"; 
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
 			// Connect to the database
-			CallableStatement callableStatement = connection.prepareCall("{? = call correctLogin(?, ?)}");
-			callableStatement.setString(2,  username);
-			callableStatement.setString(3,  password);
-			callableStatement.registerOutParameter(1,  Types.INTEGER);
-			callableStatement.execute();
-			connection.close();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select password from userLoginInformation where username "
+			+ "= " + username);
+			if (resultSet.next()) {
+				String passwordInDatabase = resultSet.getString(1);
+				if (passwordInDatabase.equals(password)) {
+					connection.close();
+					return true;
+				}
+				else System.out.println("Failure");
+				connection.close();
+				return false;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,6 +31,6 @@ public class ValidationCheckModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 }

@@ -33,7 +33,7 @@ public class LoginMenuView extends View {
 				if (password.equals("0")) System.exit(0);
 				validatedUser = new ValidationCheck().validateUser(username, password);
 				if (validatedUser == false) {
-					System.out.println("Incorrect username or password");
+					System.out.println("Incorrect username or password.");
 					continue;
 				}
 				user = new User(username);
