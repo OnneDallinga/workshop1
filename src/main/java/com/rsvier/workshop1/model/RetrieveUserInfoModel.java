@@ -19,9 +19,17 @@ public class RetrieveUserInfoModel {
 	public boolean retrieveAdminStatus(int userID) {
 		String query = "select isAdmin from userInformation where userID = "
 				+ userID + ";";
-		String userIDAsString = Integer.toString(userID);
-		ArrayList<String> queryResult = databaseQuery(userIDAsString, query);
+		ArrayList<String> queryResult = databaseQuery(Integer.toString(userID), query);
 		if (Integer.parseInt(queryResult.get(0)) == 1) return true;
+		return false;
+	}
+	
+	public boolean login(String username, String password) {
+		username = "'" + username + "'";
+		String query = "Select password from userLoginInformation where username = "
+				+ username + ";";
+		ArrayList<String> queryResult = databaseQuery(username, query);
+		if (queryResult.get(0).equals(password)) return true;
 		return false;
 	}
 	

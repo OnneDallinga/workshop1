@@ -20,7 +20,6 @@ public class Main {
 		}
 		while (true) {
 			controller.runView();
-			
 		}
 	}
 }

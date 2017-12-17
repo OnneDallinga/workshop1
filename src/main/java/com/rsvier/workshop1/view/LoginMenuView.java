@@ -1,6 +1,7 @@
 package com.rsvier.workshop1.view;
 import java.io.*;
 import com.rsvier.workshop1.controller.*;
+import com.rsvier.workshop1.model.RetrieveUserInfoModel;
 import com.rsvier.workshop1.useraccounts.*;
 
 public class LoginMenuView extends View {
@@ -29,7 +30,7 @@ public class LoginMenuView extends View {
 				System.out.println("Password: ");
 				String password = br.readLine();
 				if (password.equals("0")) System.exit(0);
-				boolean validatedUser = new ValidationCheck().validateUser(username, password);
+				boolean validatedUser = new RetrieveUserInfoModel().login(username, password);
 				if (validatedUser == false) {
 					System.out.println("Incorrect username or password.");
 					continue;
