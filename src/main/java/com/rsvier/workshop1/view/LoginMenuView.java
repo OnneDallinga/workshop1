@@ -4,12 +4,10 @@ import com.rsvier.workshop1.controller.*;
 import com.rsvier.workshop1.useraccounts.*;
 
 public class LoginMenuView extends View {
-	private String username;
-	private String password;
-	private boolean validatedUser;
 	
 	@Override		
 	public void displayMessage() {
+		String username = "";
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) { // always true unless the user hits the break (successful login) or enters 0 (system exit)
 			System.out.println("Welcome to the login screen. Please enter your username and password to login. Press 0 to exit. "
@@ -29,15 +27,17 @@ public class LoginMenuView extends View {
 			}
 			try {
 				System.out.println("Password: ");
-				password = br.readLine();
+				String password = br.readLine();
 				if (password.equals("0")) System.exit(0);
-				validatedUser = new ValidationCheck().validateUser(username, password);
+				boolean validatedUser = new ValidationCheck().validateUser(username, password);
 				if (validatedUser == false) {
 					System.out.println("Incorrect username or password.");
 					continue;
 				}
-				user = new User(username);
 				System.out.println("You logged in successfully.");
+				UserBuilder userBuilder = new UserBuilder();
+				userBuilder.setUsername(username);
+				user = userBuilder.build();
 				break;
 			}
 			catch (IOException invalidInput){
