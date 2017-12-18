@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class RetrieveUserInfoModel {
+public class RetrieveUserInfoModel extends Model {
 	public int retrieveUserId(String username) {
 		username = "'" + username + "'";
 		String query = "select userID from userLoginInformation where username = "

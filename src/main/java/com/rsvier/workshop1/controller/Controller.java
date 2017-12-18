@@ -1,28 +1,22 @@
 package com.rsvier.workshop1.controller;
 
-import java.io.IOException;
-import java.util.*;
+import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
+import java.util.*;
 
-public class Controller { // parent
-	private View currentMenu;
-	//private Model theModel; //add later
+public abstract class Controller { // parent
+	protected View currentMenu;
+	protected Model theModel;
+	protected User user;
+	protected Controller nextController;
+	protected HashMap<Integer,Controller> menuOptions;
 	
-	public Controller (View currentMenu /*Model theModel*/) throws IOException {
-		this.currentMenu = currentMenu;
-		//this.theModel = theModel;
+	public abstract void runView();
+	public User getUser() {
+		return user;
 	}
-	public void runView() {
-		this.currentMenu.displayMessage();
-	}
-	public View getUserMenuChoice(ArrayList<Integer> possibleMenuOptions) {
-		return currentMenu.getUserMenuChoice();
-	}
-	public View getCurrentMenu() {
-		return currentMenu;
-	}
-	public User getCurrentUser() {
-		return currentMenu.getUser();
+	public Controller getNextController() {
+		return nextController;
 	}
 }

@@ -18,28 +18,21 @@ public abstract class View { //parent version
 	};
 	public View() {} //add HashMap info here and load the possibleMenuOptions
 	public View getUserMenuChoice() {
-		userMenuChoice = menuOptions.get(possibleUserChoice);
 		return userMenuChoice;
 	}
 	
 	
-	public int asksUserForMenuChoice(ArrayList<Integer> possibleMenuOptions) { 
-		//Asks user for a menu choice. Must be a valid Integer defined in the possibleMenuOptions.
+	public int asksUserForMenuChoice() { 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Please select an option: ");
-		while (validUserChoice == false) {
-			try{
-				possibleUserChoice = Integer.parseInt(br.readLine());
-				if (possibleUserChoice == 0) System.exit(0); // 0 is always exit
-				for (int possibleOption : possibleMenuOptions) {
-					if (possibleUserChoice == possibleOption) {
-						return possibleUserChoice;
-					}
-				}
+		int userInput = -1;
+		try{
+			userInput = Integer.parseInt(br.readLine());
+			if (userInput == 0) System.exit(0); // 0 is always exit
 			}catch(Exception inputIsNotAnIntError){
 				System.err.println("You entered an invalid input");
+				asksUserForMenuChoice();
 			}
-		}
-		return 0; // this point cannot be reached.
+		return userInput;
 	}
 }
