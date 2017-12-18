@@ -11,7 +11,6 @@ public class AdminUserOverview extends View {
 	}
 
 	public void printAllUsers(ArrayList<String> allOfTheUsers) {
-		System.err.println(allOfTheUsers.size());
 		for (int i = 0; i < allOfTheUsers.size(); i++) {
 			System.out.print(allOfTheUsers.get(i) + " "
 			+ allOfTheUsers.get(++i) + " "
