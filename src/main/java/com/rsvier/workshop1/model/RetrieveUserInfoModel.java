@@ -35,7 +35,7 @@ public class RetrieveUserInfoModel extends Model {
 	}
 	
 	public void showAllUsers() {
-		String query = "Select userID, voornaam, achternaam from userInformation where userID > 0";
+		String query = "Select * from userInformation where userID > 0";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
