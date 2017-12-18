@@ -13,21 +13,23 @@ public class LoginController extends Controller {
 	
 	@Override
 	public void runView() {
+		String username;
 		currentMenu.displayMessage();
-		String[] userInput = ((LoginMenuView) currentMenu).asksUserForLogin();
-		String username = userInput[0];
-		String password = userInput[1];
 		while (true) {
+			String[] userInput = ((LoginMenuView) currentMenu).asksUserForLogin();
+			username = userInput[0];
+			String password = userInput[1];
 			if (((RetrieveUserInfoModel) theModel).login(username, password)) break;
+			System.out.println("Incorrect username of password. Please try again or press 0 to exit.");
 		}
 		UserBuilder userBuilder = new UserBuilder();
 		userBuilder.setUsername(username);
 		user = userBuilder.build();
 		if (user.isAdmin()) {
-			nextController = new MainMenuController(new AdminMainMenuView(), null);
+			nextController = new MainMenuController(new AdminMainMenuView());
 		}
 		else {
-			nextController = new MainMenuController(new UserMainMenuView(), null);
+			nextController = new MainMenuController(new UserMainMenuView());
 		}
 	}
 }
