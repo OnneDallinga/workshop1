@@ -1,5 +1,7 @@
 package com.rsvier.workshop1.view;
 
+import java.util.ArrayList;
+
 public class AdminUserOverview extends View {
 	
 	@Override
@@ -8,4 +10,15 @@ public class AdminUserOverview extends View {
 				+ " Press 2 to return to the main menu. Press 0 to exit.");
 	}
 
+	public void printAllUsers(ArrayList<String> allOfTheUsers) {
+		System.err.println(allOfTheUsers.size());
+		for (int i = 0; i < allOfTheUsers.size(); i++) {
+			System.out.print(allOfTheUsers.get(i) + " "
+			+ allOfTheUsers.get(++i) + " "
+			+ allOfTheUsers.get(++i) + " "
+			+ allOfTheUsers.get(++i) + " "
+			+ allOfTheUsers.get(++i) + " ");
+			System.out.println(" ");
+		}
+	}
 }

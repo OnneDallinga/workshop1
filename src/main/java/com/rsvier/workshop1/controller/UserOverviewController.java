@@ -1,14 +1,15 @@
 package com.rsvier.workshop1.controller;
 
-import java.util.HashMap;
+import java.util.*;
 
 import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.view.*;
 
 public class UserOverviewController extends Controller{
 	private RetrieveUserInfoModel theModel;
+	private AdminUserOverview currentMenu;
 	
-	public UserOverviewController (View theView, RetrieveUserInfoModel theModel) {
+	public UserOverviewController (AdminUserOverview theView, RetrieveUserInfoModel theModel) {
 		this.currentMenu = theView;
 		this.theModel = theModel;
 
@@ -29,10 +30,8 @@ public class UserOverviewController extends Controller{
 			nextController = menuOptions.get(2);
 			return;
 		}
-		theModel.showAllUsers();
-		
-		
-		
-		
+		ArrayList<String> allOfTheUsers;
+		allOfTheUsers = theModel.showAllUsers();
+		currentMenu.printAllUsers(allOfTheUsers);
 	}
 }

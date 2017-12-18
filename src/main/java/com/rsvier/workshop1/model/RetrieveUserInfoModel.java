@@ -49,8 +49,9 @@ public class RetrieveUserInfoModel extends Model {
 		return false;
 	}
 	
-	public void showAllUsers() {
+	public ArrayList<String> showAllUsers() {
 		String query = "Select * from userInformation where userID > 0";
+		ArrayList<String> allOfTheUsers = new ArrayList<>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
@@ -60,11 +61,11 @@ public class RetrieveUserInfoModel extends Model {
 			ResultSet resultSet = statement.executeQuery(query);
 			// TODO: Add different class to handle this printing.
 			while (resultSet.next()) {
-				System.out.println(resultSet.getObject(1) + " " +
-				resultSet.getObject(2) + " " +
-				resultSet.getObject(3) + " " +
-				resultSet.getObject(4) + " " +
-				resultSet.getObject(5));
+				allOfTheUsers.add(resultSet.getObject(1) + " ");
+				allOfTheUsers.add(resultSet.getObject(2) + " ");
+				allOfTheUsers.add(resultSet.getObject(3) + " ");
+				allOfTheUsers.add(resultSet.getObject(4) + " ");
+				allOfTheUsers.add(resultSet.getObject(5) + " ");
 			}
 			connection.close();
 		}
@@ -74,6 +75,7 @@ public class RetrieveUserInfoModel extends Model {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return allOfTheUsers;
 	}
 	
 	private ArrayList<String> databaseQuery(String query) {
