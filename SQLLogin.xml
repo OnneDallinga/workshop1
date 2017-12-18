@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseinfo>
+	<databaseaddress>jdbc:mysql://localhost/mydb</databaseaddress>
+	<username>Onne</username>
+	<password>Once!UponAT1me</password>
+</databaseinfo>

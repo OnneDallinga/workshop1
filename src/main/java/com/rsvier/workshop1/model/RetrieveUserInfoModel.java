@@ -1,13 +1,28 @@
 package com.rsvier.workshop1.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.*;
+import java.util.*;
+
+import org.dom4j.*;
 
 public class RetrieveUserInfoModel extends Model {
+	
+/*	public void test() {
+		try {
+			URL url = new URL("C:\\Users\\Onne\\git\\Workshop1\\pom.xml");
+			Document document = new XMLReader().parse(url);
+			document.
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	} */
+	
 	public int retrieveUserId(String username) {
 		username = "'" + username + "'";
 		String query = "select userID from userLoginInformation where username = "
@@ -43,10 +58,13 @@ public class RetrieveUserInfoModel extends Model {
 			// Connect to the database
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
+			// TODO: Add different class to handle this printing.
 			while (resultSet.next()) {
-				int i = 1;
-				System.out.println(resultSet.getObject(i));
-				i++;
+				System.out.println(resultSet.getObject(1) + " " +
+				resultSet.getObject(2) + " " +
+				resultSet.getObject(3) + " " +
+				resultSet.getObject(4) + " " +
+				resultSet.getObject(5));
 			}
 			connection.close();
 		}
