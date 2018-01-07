@@ -12,8 +12,12 @@ public class OrderController extends Controller {
 
 	@Override
 	public void runView() {
-		// TODO Auto-generated method stub
-
+		currentMenu.displayMessage();
+		int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
+		if (userMenuChoice == 9) {
+			nextController = menuOptions.get(9);
+			return;
+		}
 	}
 
 }
