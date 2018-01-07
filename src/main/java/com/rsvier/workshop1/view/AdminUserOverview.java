@@ -1,6 +1,9 @@
 package com.rsvier.workshop1.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.rsvier.workshop1.controller.Controller;
 
 public class AdminUserOverview extends View {
 	

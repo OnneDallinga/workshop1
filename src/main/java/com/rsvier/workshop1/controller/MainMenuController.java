@@ -18,6 +18,6 @@ public class MainMenuController extends Controller {
 		menuOptions.put(3, new OrderController(new AdminOrderOverview(), new OrdersInDatabaseModel()));
 		
 		currentMenu.displayMessage();
-		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice());
+		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
 	}
 }

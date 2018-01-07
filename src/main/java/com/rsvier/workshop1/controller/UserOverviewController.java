@@ -12,20 +12,15 @@ public class UserOverviewController extends Controller{
 	public UserOverviewController (AdminUserOverview theView, RetrieveUserInfoModel theModel) {
 		this.currentMenu = theView;
 		this.theModel = theModel;
-
+		menuOptions = new HashMap<>();
+		menuOptions.put(2, new MainMenuController(new AdminMainMenuView()));
 	}
 
 	@Override
 	public void runView() {
-		menuOptions = new HashMap<>();
-		menuOptions.put(2, new MainMenuController(new AdminMainMenuView()));
 		
 		currentMenu.displayMessage();
-		int userMenuChoice = currentMenu.asksUserForMenuChoice();
-		while (!(userMenuChoice == 2 || userMenuChoice == 1)) {
-			System.out.println("Invalid input. Please try again");
-			userMenuChoice = currentMenu.asksUserForMenuChoice();
-		}
+		int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
 		if (userMenuChoice == 2) {
 			nextController = menuOptions.get(2);
 			return;
@@ -33,5 +28,6 @@ public class UserOverviewController extends Controller{
 		ArrayList<String> allOfTheUsers;
 		allOfTheUsers = theModel.showAllUsers();
 		currentMenu.printAllUsers(allOfTheUsers);
+		runView();
 	}
 }

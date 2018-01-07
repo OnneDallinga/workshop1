@@ -52,6 +52,7 @@ public class RetrieveUserInfoModel extends Model {
 	public ArrayList<String> showAllUsers() {
 		String query = "Select * from userInformation where userID > 0";
 		ArrayList<String> allOfTheUsers = new ArrayList<>();
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver

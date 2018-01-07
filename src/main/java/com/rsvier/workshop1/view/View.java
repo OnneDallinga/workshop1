@@ -1,9 +1,11 @@
 package com.rsvier.workshop1.view;
 import java.io.*;
 import java.util.*;
+
+import com.rsvier.workshop1.controller.Controller;
 import com.rsvier.workshop1.useraccounts.*;
 
-public abstract class View { //parent version
+public abstract class View<K> { //parent version
 	protected int possibleUserChoice;
 	protected int menuChoice;
 	protected ArrayList<Integer> possibleMenuOptions;
@@ -22,17 +24,31 @@ public abstract class View { //parent version
 	}
 	
 	
-	public int asksUserForMenuChoice() { 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Please select an option: ");
+	public int asksUserForMenuChoice(HashMap<Integer, K> allowedUserChoices) {
 		int userInput = -1;
-		try{
-			userInput = Integer.parseInt(br.readLine());
-			if (userInput == 0) System.exit(0); // 0 is always exit
-			}catch(Exception inputIsNotAnIntError){
-				System.err.println("You entered an invalid input");
-				asksUserForMenuChoice();
+		boolean validInput = false;
+		while (!validInput) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Please select an option: ");
+
+			try{
+				userInput = Integer.parseInt(br.readLine());
+				if (userInput == 0) {
+					System.out.println("Program is closing..");
+					System.exit(0); // 0 is always exit
+				}
+				if (allowedUserChoices.get(userInput) != null) {
+				validInput = true;
+				}
+				else {
+					System.out.println("You entered an invalid input");
+				}
 			}
+			catch(Exception inputIsNotAnIntError){
+					System.out.println("You entered an invalid input");
+					asksUserForMenuChoice(allowedUserChoices);
+			}
+		}
 		return userInput;
 	}
 }
