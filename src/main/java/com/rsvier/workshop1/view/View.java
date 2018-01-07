@@ -26,18 +26,17 @@ public abstract class View<K> { //parent version
 	
 	public int asksUserForMenuChoice(HashMap<Integer, K> allowedUserChoices) {
 		int userInput = -1;
-		boolean validInput = false;
+		boolean validInput = false; // Don't allow the user to exit unless he enters something valid
 		while (!validInput) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Please select an option: ");
-
 			try{
 				userInput = Integer.parseInt(br.readLine());
 				if (userInput == 0) {
 					System.out.println("Program is closing..");
 					System.exit(0); // 0 is always exit
 				}
-				if (allowedUserChoices.get(userInput) != null) {
+				if (allowedUserChoices.get(userInput) != null) { // If it's null then it's not a valid choice
 				validInput = true;
 				}
 				else {
@@ -45,8 +44,7 @@ public abstract class View<K> { //parent version
 				}
 			}
 			catch(Exception inputIsNotAnIntError){
-					System.out.println("You entered an invalid input");
-					asksUserForMenuChoice(allowedUserChoices);
+					System.out.println("You entered an invalid input"); // This point should not be reachable
 			}
 		}
 		return userInput;
