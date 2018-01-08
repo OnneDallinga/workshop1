@@ -1,14 +1,12 @@
 package com.rsvier.workshop1.controller;
 
-import java.io.IOException;
-
 import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
 
 public class Main {
 
-	public static void main (String args[]) throws IOException {
+	public static void main (String args[])  {
 		Controller currentController = new LoginController(new LoginMenuView(), new RetrieveUserInfoModel());
 		currentController.runView();
 		//user is now logged in		

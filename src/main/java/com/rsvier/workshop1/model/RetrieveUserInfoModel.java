@@ -5,8 +5,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
-import org.dom4j.*;
-
 public class RetrieveUserInfoModel extends Model {
 	
 /*	public void test() {
