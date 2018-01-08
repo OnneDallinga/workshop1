@@ -23,7 +23,6 @@ public abstract class View<K> { //parent version
 		return userMenuChoice;
 	}
 	
-	
 	public int asksUserForMenuChoice(HashMap<Integer, K> allowedUserChoices) {
 		int userInput = -1;
 		boolean validInput = false; // Don't allow the user to exit unless he enters something valid
@@ -49,4 +48,36 @@ public abstract class View<K> { //parent version
 		}
 		return userInput;
 	}
+	
+	public String asksUserForUserChoice(ArrayList<String> listOfUsers) {
+		String userInput = "";
+		boolean validInput = false; // Don't allow the user to exit unless he enters something valid
+		while (!validInput) {
+			System.out.println(listOfUsers);
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Please select a user or enter 9 to return");
+			try{
+				userInput = br.readLine();
+				System.out.println(userInput);
+				if (userInput.equals("9")) {
+					validInput = true;
+					break;
+				}
+				for (String user : listOfUsers) {
+					System.err.println(user);
+					if (user.equals(userInput)) {
+						System.err.println("HOERA");
+						validInput = true;
+						break;
+					}
+				}
+				System.out.println("You entered an invalid input");
+			}
+			catch(Exception inputIsNotValidError){
+					System.out.println("You entered an invalid input"); // This point should not be reachable
+			}
+		}
+		return userInput;
+	}
+	
 }
