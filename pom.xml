@@ -5,29 +5,38 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>RSVier1</name>
   <description>RSVier1</description>
+  
   <dependencies>
+  	
   	<dependency>
   		<groupId>mysql</groupId>
   		<artifactId>mysql-connector-java</artifactId>
   		<version>5.1.36</version>
   	</dependency>
+  	
 	<dependency>
-    		<groupId>dom4j</groupId>
-    		<artifactId>dom4j</artifactId>
-    		<version>1.6.1</version>
-	<groupId>org.slf4j</groupId>
+    	<groupId>dom4j</groupId>
+    	<artifactId>dom4j</artifactId>
+    	<version>1.6.1</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>1.7.25</version>
   	</dependency>
+  	
   	<dependency>
   		<groupId>ch.qos.logback</groupId>
   		<artifactId>logback-classic</artifactId>
   		<version>1.2.3</version>
   	</dependency>
+  	
   	<dependency>
-  		<groupId>ch.qos.logback</groupId>
+  	  	<groupId>ch.qos.logback</groupId>
   		<artifactId>logback-core</artifactId>
   		<version>1.2.3</version>
-	</dependency>
+  	</dependency>
+  	
   </dependencies>
 </project>
