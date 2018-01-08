@@ -1,4 +1,4 @@
-package model;
+package com.rsvier.workshop1.model;
 
 import java.math.BigDecimal;
 
