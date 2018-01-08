@@ -21,16 +21,24 @@ public class UserOverviewController extends Controller{
 	@Override
 	public void runView() {
 		boolean userWantsToStay = true;
-		ArrayList<String> allOfTheUsers = theModel.showAllUsers(); // load the users from the database
+		ArrayList<String> allOfTheUsernames = theModel.showAllUsernames(); // load the users from the database
 		while (userWantsToStay) {
 			currentMenu.displayMessage();
 			int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
 			switch (userMenuChoice) {
 			case 1: // Admin wants to view all users
-				currentMenu.printAllUsers(allOfTheUsers); // show all of the users
+				currentMenu.printAllUsers(allOfTheUsernames); // show all of the users
 				break;
 			case 2: // Admin wants to delete a user
-				String deleteThisUser = currentMenu.asksUserForUserChoice(allOfTheUsers); // a
+				String deleteThisUser = currentMenu.asksUserForUserChoice(allOfTheUsernames); // asks Admin to select a username to delete
+				System.out.println("Delete this user: " + deleteThisUser + "?");
+				boolean yesOrNo = currentMenu.asksUserYesOrNo();
+				if (yesOrNo) {
+					boolean success = new SendInfoToDatabaseModel().deleteUserFromDatabase(deleteThisUser);
+					if (success) {
+						System.out.println("User successfully deleted");
+					}
+				}
 				break;
 			case 9: // Return to main menu
 				nextController = menuOptions.get(9);

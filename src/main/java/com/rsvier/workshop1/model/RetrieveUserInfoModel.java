@@ -47,6 +47,32 @@ public class RetrieveUserInfoModel extends Model {
 		return false;
 	}
 	
+	public ArrayList<String> showAllUsernames() {
+		String query = "Select username from userLoginInformation where userID > 0";
+		ArrayList<String> allOfTheUsers = new ArrayList<>();
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			// Load the driver
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
+			// Connect to the database
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			// TODO: Add different class to handle this printing.
+			while (resultSet.next()) {
+				allOfTheUsers.add(resultSet.getObject(1) + "");
+			}
+			connection.close();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return allOfTheUsers;
+	}
+	
 	public ArrayList<String> showAllUsers() {
 		String query = "Select * from userInformation where userID > 0";
 		ArrayList<String> allOfTheUsers = new ArrayList<>();

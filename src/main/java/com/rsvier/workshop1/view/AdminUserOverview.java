@@ -14,13 +14,8 @@ public class AdminUserOverview extends View {
 	}
 
 	public void printAllUsers(ArrayList<String> allOfTheUsers) {
-		for (int i = 0; i < allOfTheUsers.size(); i++) {
-			System.out.print(allOfTheUsers.get(i) + " "
-			+ allOfTheUsers.get(++i) + " "
-			+ allOfTheUsers.get(++i) + " "
-			+ allOfTheUsers.get(++i) + " "
-			+ allOfTheUsers.get(++i) + " ");
-			System.out.println(" ");
+		for (String username : allOfTheUsers) {
+			System.out.println(username);
 		}
 	}
 }
