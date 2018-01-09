@@ -52,6 +52,7 @@ public abstract class View<K> { //parent version
 	public String asksUserForUserChoice(ArrayList<String> listOfUsers) {
 		String userInput = "";
 		boolean validInput = false; // Don't allow the user to exit unless he enters something valid
+		outer:
 		while (!validInput) {
 			System.out.println(listOfUsers);
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -64,11 +65,9 @@ public abstract class View<K> { //parent version
 					break;
 				}
 				for (String user : listOfUsers) {
-					System.err.println(user);
 					if (user.equals(userInput)) {
-						System.err.println("HOERA");
 						validInput = true;
-						break;
+						break outer;
 					}
 				}
 				System.out.println("You entered an invalid input");
@@ -78,6 +77,30 @@ public abstract class View<K> { //parent version
 			}
 		}
 		return userInput;
-	}
+	}	
 	
+	public boolean asksUserYesOrNo() {
+		String userInput = "";
+		boolean validInput = false; // Don't allow the user to exit unless he enters something valid
+		while (!validInput) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			try {
+				while (true) {
+					System.out.println("Please enter \"Yes\" or \"no\"");
+					userInput = br.readLine();
+					userInput = userInput.toLowerCase();
+					switch (userInput) {
+					case "yes":
+						return true;
+					case "no":
+						return false;
+					}
+				}
+			}
+			catch (IOException notAValidChoice) {
+				notAValidChoice.printStackTrace();
+			}
+		}
+		return false; // This point should not be reachable
+	}	
 }

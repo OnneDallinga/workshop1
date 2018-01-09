@@ -9,6 +9,7 @@
 				%d{yyyy-MM-dd HH:mm:ss} %-5level %class %logger{30} - %msg%n
 			</Pattern>
 		</encoder>
+		</file>
 	</appender>
 	
 	<logger name="Testing" level="WARN" additivity="false">
