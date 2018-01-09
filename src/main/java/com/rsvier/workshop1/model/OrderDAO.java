@@ -1,12 +1,21 @@
 package com.rsvier.workshop1.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface OrderDAO {
 	
-	public List<Order> getAllOrders();
-	public Order getOrder(long orderId);
+	// Create
+	public void newOrder(Order order);
+	
+	// Read
+	public ArrayList<Order> findAllOrders();
+	public Order findOrder(long orderId);
+	
+	// Update
 	public void updateOrder(Order order);
-	public void deleteOrder(Order order);
+	
+	// Delete
+	public void deleteSingleOrder(long orderId);
+	public void deleteAllOrdersCustomer(long customerId);
 
 }

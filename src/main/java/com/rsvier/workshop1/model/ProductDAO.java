@@ -1,12 +1,20 @@
 package com.rsvier.workshop1.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ProductDAO {
 
-	public List<Product> getAllProducts();
-	public Product getProduct(long productId);
-	public void updateProduct(Product product);
-	public void deleteProduct(Product product);
+	//Create
+	public int newProduct(Product product);
+	
+	// Read
+	public ArrayList<Product> findAllProducts();
+	public Product findProduct(long productId);
+	
+	// Update
+	public void updateProduct(long productId);
+	
+	// Delete
+	public void deleteProduct(long productId);
 	
 }
