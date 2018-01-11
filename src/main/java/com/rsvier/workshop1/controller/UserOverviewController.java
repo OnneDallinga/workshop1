@@ -31,6 +31,7 @@ public class UserOverviewController extends Controller{
 				break;
 			case 2: // Admin wants to delete a user
 				String deleteThisUser = currentMenu.asksUserForUserChoice(allOfTheUsernames); // asks Admin to select a username to delete
+				if (deleteThisUser.equals("9")) break; // 9 = cancel delete
 				System.out.println("Delete this user: " + deleteThisUser + "?");
 				boolean yesOrNo = currentMenu.asksUserYesOrNo();
 				if (yesOrNo) {
