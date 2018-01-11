@@ -109,6 +109,10 @@ public abstract class View<K> { //parent version
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			userInput = br.readLine();
+			if (userInput.equals("0")) {
+				System.out.println("Program is closing..");
+				System.exit(0);
+			}
 		}
 		catch (IOException notAValidChoice) {
 			notAValidChoice.printStackTrace();

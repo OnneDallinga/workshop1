@@ -19,14 +19,23 @@ public class AccountCreationController extends Controller {
 
 	@Override
 	public void runView() {
+		currentMenu.displayMessage();
 		String requestedUsername = "";
 		boolean validUsername = false;
 		while (!validUsername) {
-			currentMenu.displayMessage();
 			((UserCreationView) currentMenu).selectUsername();
 			requestedUsername = currentMenu.askUserForInput();
 			validUsername = validator.validateUsername(requestedUsername);
 		}
 		System.out.println("Username accepted. Username: " + requestedUsername);
+		
+		String requestedPassword = "";
+		boolean validPassword = false;
+		while (!validPassword) {
+			((UserCreationView) currentMenu).selectPassword();
+			requestedPassword = currentMenu.askUserForInput();
+			validPassword = validator.validatePassword(requestedPassword);
+		}
+		System.out.println("Password accepted. Password: " + requestedPassword);
 	}
 }
