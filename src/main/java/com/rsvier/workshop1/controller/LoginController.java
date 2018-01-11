@@ -17,6 +17,10 @@ public class LoginController extends Controller {
 		currentMenu.displayMessage();
 		while (true) {
 			String[] userInput = ((LoginMenuView) currentMenu).asksUserForLogin();
+			if (userInput.length == 0) { //empty array only occurs when user enters a 1
+				nextController = new AccountCreationController(new UserCreationView(), new SendInfoToDatabaseModel());
+				return;
+			}
 			username = userInput[0];
 			String password = userInput[1];
 			if (((RetrieveUserInfoModel) theModel).login(username, password)) break;

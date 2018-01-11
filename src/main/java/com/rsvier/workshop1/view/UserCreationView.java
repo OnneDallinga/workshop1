@@ -1,24 +1,22 @@
 package com.rsvier.workshop1.view;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class UserCreationView extends View {
 	
 	@Override
 	public void displayMessage() {
 		System.out.println("Welcome. Please enter your information below in order to create an account."
 				+ " Press 0 at any point to exit.");
-		selectUsername();
-		selectPassword();
-		selectOtherInfo();
-		
 	}
-	private void selectUsername() {
-		//TODO: Add code for username, send it to the database for checking and store when possible
+	public void selectUsername() {
+		System.out.println("Please enter your username: ");
 	}
-	private void selectPassword() {
-		//TODO: Add more code.
+	public void selectPassword() {
+		System.out.println("Please enter your password: ");
 	}
-	private void selectOtherInfo() { //placeholder method. To be replaced later with more detailed methods.
-		//TODO: Add more code.
+	public void selectOtherInfo() { //placeholder method. To be replaced later with more detailed methods.
 	}
-	
 }

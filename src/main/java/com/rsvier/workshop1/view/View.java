@@ -14,7 +14,7 @@ public abstract class View<K> { //parent version
 	protected User user;
 	protected View userMenuChoice;
 	
-	public void displayMessage() {}; //This runs when the menu is loaded. Welcome text etc.
+	public abstract void displayMessage(); //This runs when the menu is loaded. Welcome text etc.
 	public User getUser() { //Use this to get info on the current logged in user.
 		return user;
 	};
@@ -102,5 +102,17 @@ public abstract class View<K> { //parent version
 			}
 		}
 		return false; // This point should not be reachable
-	}	
+	}
+	
+	public String askUserForInput() {
+		String userInput = "";
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			userInput = br.readLine();
+		}
+		catch (IOException notAValidChoice) {
+			notAValidChoice.printStackTrace();
+		}
+		return userInput;
+	}
 }

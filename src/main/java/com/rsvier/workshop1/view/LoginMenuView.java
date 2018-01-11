@@ -19,9 +19,9 @@ public class LoginMenuView extends View {
 		try { // ask for their username. If user enters a 0: exit. If user enters a 1: Go to account creation.
 			System.out.println("Username: ");
 			username = br.readLine();
-			if (username.equals("0")) System.exit(0);
+			if (username.equals("0")) System.exit(0); // 0 = exit. 1 = account creation.
 			if (username.equals("1")) {
-				// TODO: Add code
+				return new String[0];
 			}
 		}
 		catch (IOException invalidInput){
@@ -30,7 +30,10 @@ public class LoginMenuView extends View {
 		try {
 			System.out.println("Password: ");
 			password = br.readLine();
-			if (password.equals("0")) System.exit(0);
+			if (password.equals("0")) System.exit(0); // 0 = exit. 1 = account creation.
+			if (username.equals("1")) {
+				return new String[0];
+			}
 		}
 		catch (IOException invalidInput){
 			System.out.println("Invalid input");
