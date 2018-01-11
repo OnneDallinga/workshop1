@@ -14,8 +14,8 @@ public class UserOverviewController extends Controller{
 		this.theModel = theModel;
 		menuOptions = new HashMap<>();
 		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
-		menuOptions.put(1, new MainMenuController(new AdminMainMenuView())); // 1 is a valid option but doesn't go anywhere
-		menuOptions.put(2, new MainMenuController(new AdminMainMenuView())); // 2 is a valid option but doesn't go anywhere
+		menuOptions.put(1, null);
+		menuOptions.put(2, null);
 	}
 
 	@Override

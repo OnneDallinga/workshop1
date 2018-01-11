@@ -35,7 +35,7 @@ public abstract class View<K> { //parent version
 					System.out.println("Program is closing..");
 					System.exit(0); // 0 is always exit
 				}
-				if (allowedUserChoices.get(userInput) != null) { // If it's null then it's not a valid choice
+				if (allowedUserChoices.containsKey(userInput)) { // If it's null then it's not a valid choice
 				validInput = true;
 				}
 				else {
@@ -43,7 +43,7 @@ public abstract class View<K> { //parent version
 				}
 			}
 			catch(Exception inputIsNotAnIntError){
-					System.out.println("You entered an invalid input"); // This point should not be reachable
+					System.out.println("You entered an invalid input"); 
 			}
 		}
 		return userInput;
