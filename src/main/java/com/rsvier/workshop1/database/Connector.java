@@ -19,7 +19,7 @@ public class Connector {
 				System.exit(1);
 			}
 			try {
-				connection = DriverManager.getConnection( dbUrl, dbUser, dbPass);
+				connection = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 			} catch (SQLException ex){
 				System.out.println("Invalid: check url, user, password");
 				System.exit(1);
