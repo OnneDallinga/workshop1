@@ -12,7 +12,6 @@ public class Main {
 		
 		while(true) { //infinite loop until the user stops the program
 			currentController = currentController.getNextController(); // get next menu & model from the users choice
-			System.out.println(currentController);
 			currentController.runView(); // run next menu
 		}
 	}

@@ -20,6 +20,12 @@ public class AccountCreationController extends Controller {
 	@Override
 	public void runView() {
 		currentMenu.displayMessage();
+		nextController = new LoginController(new LoginMenuView(), new RetrieveUserInfoModel());
+		usernameRequester();
+		passwordRequester();
+	}
+	
+	private void usernameRequester() {
 		String requestedUsername = "";
 		boolean validUsername = false;
 		while (!validUsername) {
@@ -28,7 +34,9 @@ public class AccountCreationController extends Controller {
 			validUsername = validator.validateUsername(requestedUsername);
 		}
 		System.out.println("Username accepted. Username: " + requestedUsername);
-		
+	}
+	
+	private void passwordRequester() {
 		String requestedPassword = "";
 		boolean validPassword = false;
 		while (!validPassword) {
