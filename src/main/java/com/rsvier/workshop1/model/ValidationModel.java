@@ -6,7 +6,12 @@ public class ValidationModel { // Validates possible user inputs.
 	private ArrayList<String> allExistingUsernames;
 	
 	public boolean validateUsername (String requestedUsername) { // all logic for the Usernames
-		if (requestedUsername.length() < 5) {
+		if (requestedUsername.equals("0")) {
+			System.out.println("Closing program.. ");
+			System.exit(0);
+		}
+		
+		if (requestedUsername.length() < 4) {
 			System.out.println("Your username is too short. It should be at least 5 characters.");
 			return false;
 		}
