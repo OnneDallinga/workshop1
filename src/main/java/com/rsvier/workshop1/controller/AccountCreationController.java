@@ -14,7 +14,6 @@ public class AccountCreationController extends Controller {
 	public AccountCreationController (UserCreationView theView, Model theModel) {
 		this.currentMenu = theView;
 		this.theModel = theModel;
-		this.validator = new ValidationModel();
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class AccountCreationController extends Controller {
 		while (!validUsername) {
 			((UserCreationView) currentMenu).selectUsername();
 			requestedUsername = currentMenu.askUserForInput();
-			validUsername = validator.validateUsername(requestedUsername);
+			validUsername = new ValidationModel(requestedUsername).validateUsername();
 		}
 		System.out.println("Username accepted. Username: " + requestedUsername);
 	}
@@ -42,7 +41,7 @@ public class AccountCreationController extends Controller {
 		while (!validPassword) {
 			((UserCreationView) currentMenu).selectPassword();
 			requestedPassword = currentMenu.askUserForInput();
-			validPassword = validator.validatePassword(requestedPassword);
+			validPassword = new ValidationModel(requestedPassword).validatePassword();
 		}
 		System.out.println("Password accepted. Password: " + requestedPassword);
 	}

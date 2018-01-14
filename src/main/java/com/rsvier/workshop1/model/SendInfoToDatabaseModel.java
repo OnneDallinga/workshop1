@@ -20,7 +20,7 @@ public class SendInfoToDatabaseModel extends Model {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "Onne", "Once!UponAT1me");
 			// Connect to the database
 			Statement statement = connection.createStatement();
 			resultSet = statement.executeQuery(query);

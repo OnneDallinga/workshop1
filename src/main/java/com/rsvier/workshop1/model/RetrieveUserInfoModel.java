@@ -23,7 +23,7 @@ public class RetrieveUserInfoModel extends Model {
 	
 	public int retrieveUserId(String username) {
 		username = "'" + username + "'";
-		String query = "select userID from userLoginInformation where username = "
+		String query = "select id from userLoginInformation where username = "
 				+ username + ";";
 		ArrayList<String> queryResult = databaseQuery(query);
 		return Integer.parseInt(queryResult.get(0));
@@ -54,7 +54,7 @@ public class RetrieveUserInfoModel extends Model {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "Onne", "Once!UponAT1me");
 			// Connect to the database
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
@@ -80,7 +80,7 @@ public class RetrieveUserInfoModel extends Model {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "Onne", "Once!UponAT1me");
 			// Connect to the database
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
@@ -109,7 +109,7 @@ public class RetrieveUserInfoModel extends Model {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// Load the driver
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "Onne", "Once!UponAT1me");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "Onne", "Once!UponAT1me");
 			// Connect to the database
 			Statement statement = connection.createStatement();
 			resultSet = statement.executeQuery(query);
