@@ -9,11 +9,9 @@ import java.util.ArrayList;
 
 public class SendInfoToDatabaseModel extends Model {
 	public boolean deleteUserFromDatabase(String username) {
-		String query = ("delete from userLoginInformation where username = " + username);
+		String query = ("delete from account where username = " + username);
 		return databaseQuery(query);
 	}
-	
-	
 	
 	private boolean databaseQuery(String query) {
 		ResultSet resultSet = null;
