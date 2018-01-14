@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} %-5level %class %logger{30} - %msg%n
+			</Pattern>
+		</encoder>
+		</file>
+	</appender>
+	
+	<logger name="Testing" level="WARN" additivity="false">
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<root level="ERROR">
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

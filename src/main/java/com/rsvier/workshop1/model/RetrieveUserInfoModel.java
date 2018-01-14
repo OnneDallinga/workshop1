@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
 import java.util.*;
+import com.zaxxer.hikari.*;
 
 public class RetrieveUserInfoModel extends Model {
 	
