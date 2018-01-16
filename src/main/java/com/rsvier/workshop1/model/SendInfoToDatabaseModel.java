@@ -24,7 +24,7 @@ public class SendInfoToDatabaseModel extends Model {
 			statement.setString(4, newUser.get(5));
 			statement.setString(5, newUser.get(6));
 			statement.executeUpdate();
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -37,7 +37,7 @@ public class SendInfoToDatabaseModel extends Model {
 			statement.setString(1,  newUser.get(2));
 			resultSet = statement.executeQuery();
 			id = resultSet.getString(0);
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class SendInfoToDatabaseModel extends Model {
 			statement.setString(2,  newUser.get(1));
 			statement.setString(3,  "whatever");
 			statement.executeUpdate();
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
