@@ -42,5 +42,6 @@ public class AccountCreationController extends Controller {
 			}
 			accountCreated = new SendInfoToDatabaseModel().createNewUser(necessaryCustomerInformation, newUser);
 		}
+		System.out.println("Account created. Returning to login screen..");
 	}
 }

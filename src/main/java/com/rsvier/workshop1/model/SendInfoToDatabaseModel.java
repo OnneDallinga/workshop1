@@ -28,33 +28,39 @@ public class SendInfoToDatabaseModel extends Model {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
+		
 		query = "SELECT id FROM customer WHERE first_name = (?)";
 		ResultSet resultSet = null;
-		String id = null;
+		int id = 0;
 		try (Connection connection = DataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(query);){
 			statement.setString(1,  newUser.get(2));
 			resultSet = statement.executeQuery();
-			id = resultSet.getString(0);
+			if (resultSet.next()) id = resultSet.getInt(1);
 			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 		
-		query = "INSERT INTO account (username, password, owner_type) VALUES (?,?,?) WHERE id = " + id;
+		query = "INSERT INTO account (customer_id, username, password, owner_type) VALUES (?,?,?,?)";
 		try (Connection connection = DataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(query);){
-			statement.setString(1,  newUser.get(0));
-			statement.setString(2,  newUser.get(1));
-			statement.setString(3,  "whatever");
+			statement.setInt(1, id);
+			statement.setString(2,  newUser.get(0));
+			statement.setString(3,  newUser.get(1));
+			statement.setString(4,  "whatever");
 			statement.executeUpdate();
 			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-		}	
+			return false;
+		}
+		
 		return true;
 	}
 	

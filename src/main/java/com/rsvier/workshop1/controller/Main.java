@@ -10,6 +10,10 @@ public class Main {
 	public static boolean mongoEnabled;
 
 	public static void main (String args[])  {
+		//new RetrieveUserInfoModel().showTable();
+		//System.exit(0);
+		
+		
 		System.out.println("Welcome. Enable Hikari Connection Pool?");
 		hikariEnabled = new UserMainMenuView().asksUserYesOrNo();
 		System.out.println("Use Mongo Database?");

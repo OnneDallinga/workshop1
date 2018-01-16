@@ -41,6 +41,20 @@ public class RetrieveUserInfoModel extends Model {
 		return false;
 	}
 	
+	public void showTable() { //temporary
+		String query = "select * from customer where id > 0";
+		try (Connection connection = DataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);
+				ResultSet resultSet = statement.executeQuery();) {
+			while (resultSet.next()) {
+				System.out.println(resultSet.getString(1));
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean login(String username, String password) {
 		username = "'" + username + "'";
 		String query = "Select password from account where username = "
@@ -60,7 +74,7 @@ public class RetrieveUserInfoModel extends Model {
 			while (resultSet.next()) {
 				allOfTheUsers.add(resultSet.getObject(1) + "");
 			}
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -81,7 +95,7 @@ public class RetrieveUserInfoModel extends Model {
 				allOfTheUsers.add(resultSet.getObject(4) + " ");
 				allOfTheUsers.add(resultSet.getObject(5) + " ");
 			}
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -99,7 +113,7 @@ public class RetrieveUserInfoModel extends Model {
 				resultSetAsArrayList.add(resultSet.getString(i));
 				i++;
 			}
-			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

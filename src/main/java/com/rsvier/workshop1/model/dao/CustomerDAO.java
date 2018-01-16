@@ -7,7 +7,7 @@ import com.rsvier.workshop1.model.Customer;
 public interface CustomerDAO {
 	
 	// Create
-	public void saveCustomer(Customer customer);
+	public void createCustomer(Customer customer);
 	
 	// Read
 	public ArrayList<Customer> findAllCustomers();
