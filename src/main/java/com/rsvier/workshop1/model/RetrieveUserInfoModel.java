@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
+import com.rsvier.workshop1.controller.Main;
 import com.rsvier.workshop1.database.DataSource;
 import com.zaxxer.hikari.*;
 
@@ -53,12 +54,13 @@ public class RetrieveUserInfoModel extends Model {
 	public ArrayList<String> showAllUsernames() {
 		String query = "Select username from account where id > 0";
 		ArrayList<String> allOfTheUsers = new ArrayList<>();
-		try (Connection con = DataSource.getConnection();
-			PreparedStatement statement = con.prepareStatement(query);
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();) {
 			while (resultSet.next()) {
 				allOfTheUsers.add(resultSet.getObject(1) + "");
 			}
+			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -69,8 +71,8 @@ public class RetrieveUserInfoModel extends Model {
 	public ArrayList<String> showAllUsers() {
 		String query = "Select * from account where id > 0";
 		ArrayList<String> allOfTheUsers = new ArrayList<>();
-		try (Connection con = DataSource.getConnection();
-			PreparedStatement statement = con.prepareStatement(query);
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();) {
 			while (resultSet.next()) {
 				allOfTheUsers.add(resultSet.getObject(1) + " ");
@@ -79,6 +81,7 @@ public class RetrieveUserInfoModel extends Model {
 				allOfTheUsers.add(resultSet.getObject(4) + " ");
 				allOfTheUsers.add(resultSet.getObject(5) + " ");
 			}
+			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -88,15 +91,51 @@ public class RetrieveUserInfoModel extends Model {
 	
 	private ArrayList<String> databaseQuery(String query) {
 		ArrayList<String> resultSetAsArrayList = new ArrayList<>();
-		try (Connection con = DataSource.getConnection();
-			PreparedStatement statement = con.prepareStatement(query);
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();) {
 			while (resultSet.next()) {
 				int i = 1;
 				resultSetAsArrayList.add(resultSet.getString(i));
 				i++;
 			}
+			if (Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultSetAsArrayList;
+	}
+
+	public ArrayList<String> retrieveAccountProperties() { // retrieves the information we need from the customer from the tables
+		ArrayList<String> resultSetAsArrayList = new ArrayList<>();
+		String query = "select column_name from information_schema.columns\r\n" + 
+				" where table_name = 'account'";
+		String query2 =  "select column_name from information_schema.columns\r\n" + 
+				" where table_name = 'customer'";
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet resultSet = statement.executeQuery();) {
+			while (resultSet.next()) {
+				int i = 1;
+				resultSetAsArrayList.add(resultSet.getString(i));
+				i++;
+			}
+			PreparedStatement statement2 = connection.prepareStatement(query2);
+			ResultSet resultSet2 = statement2.executeQuery();
+			while (resultSet2.next()) {
+				int i = 1;
+				resultSetAsArrayList.add(resultSet2.getString(i));
+				i++;
+				}
+			resultSetAsArrayList.remove("id"); //necessary until I figure out how not to select these
+			resultSetAsArrayList.remove("owner_type");
+			resultSetAsArrayList.remove("customer_id");
+			resultSetAsArrayList.remove("active");
+			resultSetAsArrayList.remove("id");
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+		}
+	
 		catch (SQLException e) {
 			e.printStackTrace();
 		}

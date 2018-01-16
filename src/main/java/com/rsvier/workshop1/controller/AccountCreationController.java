@@ -1,15 +1,18 @@
 package com.rsvier.workshop1.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.rsvier.workshop1.model.Model;
 import com.rsvier.workshop1.model.RetrieveUserInfoModel;
 import com.rsvier.workshop1.model.SendInfoToDatabaseModel;
 import com.rsvier.workshop1.model.ValidationModel;
+import com.rsvier.workshop1.useraccounts.UserBuilder;
 import com.rsvier.workshop1.view.LoginMenuView;
 import com.rsvier.workshop1.view.UserCreationView;
 import com.rsvier.workshop1.view.View;
 
 public class AccountCreationController extends Controller {
-	private ValidationModel validator;
 	
 	public AccountCreationController (UserCreationView theView, Model theModel) {
 		this.currentMenu = theView;
@@ -20,29 +23,24 @@ public class AccountCreationController extends Controller {
 	public void runView() {
 		currentMenu.displayMessage();
 		nextController = new LoginController(new LoginMenuView(), new RetrieveUserInfoModel());
-		usernameRequester();
-		passwordRequester();
+		accountCreator();
 	}
 	
-	private void usernameRequester() {
-		String requestedUsername = "";
-		boolean validUsername = false;
-		while (!validUsername) {
-			((UserCreationView) currentMenu).selectUsername();
-			requestedUsername = currentMenu.askUserForInput();
-			validUsername = new ValidationModel(requestedUsername).validateUsername();
+	private void accountCreator() {
+		ArrayList<String> necessaryCustomerInformation = new RetrieveUserInfoModel().retrieveAccountProperties();
+		boolean accountCreated = false;
+		ArrayList<String> newUser = new ArrayList<>();
+		while (!accountCreated) {
+			for (String customerProperty : necessaryCustomerInformation) {
+				boolean validInput = false;
+				String userInput = "";
+				while (!validInput) {
+					userInput = ((UserCreationView) currentMenu).askUserForInput(customerProperty);
+					validInput = new ValidationModel(userInput).validateNewUser(customerProperty);
+				}
+				newUser.add(userInput);
+			}
+			accountCreated = new SendInfoToDatabaseModel().createNewUser(necessaryCustomerInformation, newUser);
 		}
-		System.out.println("Username accepted. Username: " + requestedUsername);
-	}
-	
-	private void passwordRequester() {
-		String requestedPassword = "";
-		boolean validPassword = false;
-		while (!validPassword) {
-			((UserCreationView) currentMenu).selectPassword();
-			requestedPassword = currentMenu.askUserForInput();
-			validPassword = new ValidationModel(requestedPassword).validatePassword();
-		}
-		System.out.println("Password accepted. Password: " + requestedPassword);
 	}
 }
