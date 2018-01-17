@@ -2,7 +2,7 @@ package com.rsvier.workshop1.model;
 
 public class Customer {
 	
-	private long customerId;
+	private int customerId;
 	private String firstName;
 	private String lastName;
 	private String lastNamePreposition;
@@ -14,7 +14,7 @@ public class Customer {
 	}
 	
 	// Constructor with basic params
-	public Customer(long customerId,
+	public Customer(int customerId,
 				 String firstName,
 				 String lastName,
 				 String lastNamePreposition
@@ -27,7 +27,7 @@ public class Customer {
 	}
 	
 	// Complete constructor with all params
-	public Customer(long customerId,
+	public Customer(int customerId,
 			 String firstName,
 			 String lastName,
 			 String lastNamePreposition,
@@ -42,11 +42,11 @@ public class Customer {
 	this.phoneNumber = phoneNumber;
 	}
 
-	public long getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 

@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class Order {
 	
-	private long orderId;
-	private long customerId;
+	private int orderId;
+	private int customerId;
 	private BigDecimal orderPriceTotal;
 	private int orderItemsTotal;
 	private boolean shipped;
@@ -14,8 +14,8 @@ public class Order {
 	public Order() {
 	}
 	
-	public Order(long orderId,
-				 long customerId,
+	public Order(int orderId,
+				 int customerId,
 				 BigDecimal orderPriceTotal,
 				 int orderItemsTotal) {
 		this.orderId = orderId;
@@ -24,19 +24,19 @@ public class Order {
 		this.orderItemsTotal = orderItemsTotal;
 	}
 
-	public long getOrderId() {
+	public int getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(long orderId) {
+	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
 
-	public long getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 

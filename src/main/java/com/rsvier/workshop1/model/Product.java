@@ -4,18 +4,19 @@ import java.math.BigDecimal;
 
 public class Product {
 	
-	private long productId;
+	private int productId;
 	private String productName;
-	private String producerName;
 	private BigDecimal price;
 	private boolean inStock;
 	private int stockQuantity;
+	private int producedYear;
+	private double alcoholPercentage;
 
-	public long getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 
-	public void setProductId(long productId) {
+	public void setProductId(int productId) {
 		this.productId = productId;
 	}
 
@@ -25,14 +26,6 @@ public class Product {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
-	}
-
-	public String getProducerName() {
-		return producerName;
-	}
-
-	public void setProducerName(String producerName) {
-		this.producerName = producerName;
 	}
 
 	public BigDecimal getPrice() {
@@ -57,12 +50,33 @@ public class Product {
 
 	public void setStockQuantity(int stockQuantity) {
 		this.stockQuantity = stockQuantity;
+		if (stockQuantity == 0)
+			this.setInStock(false);
+		else if (stockQuantity > 0)
+			this.setInStock(true);
+	}
+	
+	public int getProducedYear() {
+		return producedYear;
+	}
+	
+	public void setProducedYear(int producedYear) {
+		this.producedYear = producedYear;
+	}
+	
+	public double getAlcoholPercentage() {
+		return alcoholPercentage;
+	}
+	
+	public void setAlcoholPercentage(double alcoholPercentage) {
+		this.alcoholPercentage = alcoholPercentage;
 	}
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", productName=" + productName + ", producerName=" + producerName
-				+ ", price=" + price + ", inStock=" + inStock + ", stockQuantity=" + stockQuantity + "]";
+		return "Product [productId=" + productId + ", productName=" + productName + ", price=" + price +
+			   ", inStock=" + inStock + ", stockQuantity=" + stockQuantity + ", producedYear=" + producedYear +
+			   ", alcoholPercentage=" + alcoholPercentage + "]";
 	}
 
 	@Override

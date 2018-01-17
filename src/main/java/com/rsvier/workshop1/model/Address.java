@@ -2,7 +2,8 @@ package com.rsvier.workshop1.model;
 
 public class Address {
 
-	private long addressId;
+	private int addressId;
+	private int customerId;
 	private String street;
 	private int houseNumber;
 	private String houseNumberAddition;
@@ -14,22 +15,38 @@ public class Address {
 	public Address() {
 	}
 	
-	public Address(long addressId,
-				   String street,
+	/* Constructor with parameters that render an address' uniqueness */
+	public Address(String postalCode,
+				   int houseNumber,
+				   String houseNumberAddition,
+				   int customerId) {
+	}
+	
+	/* Constructor with all parameters */
+	public Address(String street,
 				   int houseNumber,
 				   String houseNumberAddition,
 				   String postalCode,
 				   String city,
 				   String addressType,
-				   boolean active) {
+				   boolean active,
+				   int customerId) {
 	}
 
-	public long getAddressId() {
+	public int getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(long addressId) {
+	public void setAddressId(int addressId) {
 		this.addressId = addressId;
+	}
+	
+	public int getCustomerId() {
+		return customerId;
+	}
+	
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getStreet() {
@@ -92,10 +109,10 @@ public class Address {
 	public String toString() {
 		return "Address [addressId=" + addressId + ", street=" + street + ", houseNumber=" + houseNumber
 				+ ", houseNumberAddition=" + houseNumberAddition + ", postalCode=" + postalCode + ", city=" + city
-				+ ", addressType=" + addressType + ", active=" + active + "]";
+				+ ", addressType=" + addressType + ", active=" + active + ", customerId=" + customerId + "]";
 	}
 
-	/* Addresses are equal when postal code, house number and house number addition all match */
+	/* Addresses are considered equal when postal code, house number and house number addition all match */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
