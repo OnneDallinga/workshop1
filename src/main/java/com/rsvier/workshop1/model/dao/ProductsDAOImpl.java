@@ -136,18 +136,12 @@ public class ProductsDAOImpl implements ProductDAO {
 	@Override
 	public void deleteProduct(Product product) {
 		statement = null;
-	    query = "SELECT * FROM product WHERE id=?";
+	    query = "DELETE FROM product WHERE id=?";
 	    try {
 	      connection = DataSource.getConnection();
 	      statement = connection.prepareStatement(query);
 	      statement.setInt(1, product.getProductId());
-	      resultSet = statement.executeQuery();
-	      if (!resultSet.next()) {
-	        query = "DELETE FROM product WHERE id=?";
-	        statement = connection.prepareStatement(query);
-	        statement.setInt(1, product.getProductId());
-	        statement.executeUpdate();
-	      }
+	      statement.executeUpdate();
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    } finally {

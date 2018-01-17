@@ -145,18 +145,12 @@ public class AddressDAOImpl implements AddressDAO {
 	@Override
 	public void deleteAddress(Address address) {
 		statement = null;
-	    query = "SELECT * FROM order WHERE customer_customerID=?";
+	    query = "DELETE FROM address WHERE id=?";
 	    try {
 	      connection = DataSource.getConnection();
 	      statement = connection.prepareStatement(query);
 	      statement.setInt(1, address.getAddressId());
-	      resultSet = statement.executeQuery();
-	      if (!resultSet.next()) {
-	        query = "DELETE FROM address WHERE id=?";
-	        statement = connection.prepareStatement(query);
-	        statement.setInt(1, address.getAddressId());
-	        statement.executeUpdate();
-	      }
+	      statement.executeUpdate();
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    } finally {
@@ -166,5 +160,4 @@ public class AddressDAOImpl implements AddressDAO {
 	      }
 	    }
 	}
-
 }

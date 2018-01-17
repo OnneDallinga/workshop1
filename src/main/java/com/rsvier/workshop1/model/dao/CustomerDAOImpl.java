@@ -171,17 +171,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 	@Override
 	public void updateCustomer(Customer customer) {
 		statement = null;
-	    query = "UPDATE customer SET firstName = ?, lastName = ?," +
-	        "email = ? WHERE customerId=?";
+	    query = "UPDATE customer SET first_name = ?, last_name = ?, last_name_preposition = ?, " +
+	    		"email = ?, phone_number = ? WHERE id=?";
 	    try {
 	      connection = DataSource.getConnection();
 	      statement = connection.prepareStatement(query);
-	      statement.setInt(1, customer.getCustomerId());
-	      statement.setString(2, customer.getFirstName());
-	      statement.setString(3, customer.getLastName());
-	      statement.setString(4, customer.getLastNamePreposition());
-	      statement.setString(5, customer.getEmail());
-	      statement.setString(6, customer.getPhoneNumber());
+	      statement.setString(1, customer.getFirstName());
+	      statement.setString(2, customer.getLastName());
+	      statement.setString(3, customer.getLastNamePreposition());
+	      statement.setString(4, customer.getEmail());
+	      statement.setString(5, customer.getPhoneNumber());
 	      statement.executeUpdate();
 	    } catch (SQLException e) {
 	      e.printStackTrace();
