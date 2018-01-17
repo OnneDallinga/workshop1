@@ -3,10 +3,12 @@ package com.rsvier.workshop1.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.rsvier.workshop1.model.Customer;
 import com.rsvier.workshop1.model.Model;
 import com.rsvier.workshop1.model.RetrieveUserInfoModel;
 import com.rsvier.workshop1.model.SendInfoToDatabaseModel;
 import com.rsvier.workshop1.model.ValidationModel;
+import com.rsvier.workshop1.model.dao.CustomerDAOImpl;
 import com.rsvier.workshop1.useraccounts.UserBuilder;
 import com.rsvier.workshop1.view.LoginMenuView;
 import com.rsvier.workshop1.view.UserCreationView;
@@ -29,6 +31,7 @@ public class AccountCreationController extends Controller {
 	private void accountCreator() {
 		ArrayList<String> necessaryCustomerInformation = new RetrieveUserInfoModel().retrieveAccountProperties();
 		boolean accountCreated = false;
+		Customer newCustomer = new Customer();
 		ArrayList<String> newUser = new ArrayList<>();
 		while (!accountCreated) {
 			for (String customerProperty : necessaryCustomerInformation) {
@@ -38,9 +41,32 @@ public class AccountCreationController extends Controller {
 					userInput = ((UserCreationView) currentMenu).askUserForInput(customerProperty);
 					validInput = new ValidationModel(userInput).validateNewUser(customerProperty);
 				}
-				newUser.add(userInput);
+				switch (customerProperty) {
+				case "username": // to be added later
+					break;
+				case "password": // to be added later
+					break;
+				case "first_name":
+					newCustomer.setFirstName(userInput);
+					break;
+				case "last_name":
+					newCustomer.setLastName(userInput);
+					break;
+				case "last_name_preposition":
+					newCustomer.setLastNamePreposition(userInput);
+					break;
+				case "email":
+					newCustomer.setEmail(userInput);
+					break;
+				case "phone_number":
+					newCustomer.setPhoneNumber(userInput);
+					break;
+				default:
+					System.out.println("Unidentified customer property. Please check your database. Program is closing..");
+					System.exit(0);
+				}
 			}
-			accountCreated = new SendInfoToDatabaseModel().createNewUser(necessaryCustomerInformation, newUser);
+			accountCreated = new CustomerDAOImpl().createCustomer(newCustomer);
 		}
 		System.out.println("Account created. Returning to login screen..");
 	}

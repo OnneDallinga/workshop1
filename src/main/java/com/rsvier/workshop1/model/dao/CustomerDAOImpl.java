@@ -13,18 +13,18 @@ public class CustomerDAOImpl implements CustomerDAO {
 	private ResultSet resultSet;
 
 	@Override
-	public int createCustomer(Customer customer) {
+	public boolean createCustomer(Customer customer) {
 		int newCustomerId = 0;
 		statement = null;
 		query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number) VALUES (?,?,?,?,?);";
 		try {
 			connection = DataSource.getConnection();
 		    statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-		    statement.setString(2, customer.getFirstName());
-		    statement.setString(3, customer.getLastName());
-		    statement.setString(4, customer.getLastNamePreposition());
-		    statement.setString(5, customer.getEmail());
-		    statement.setString(6, customer.getPhoneNumber());
+		    statement.setString(1, customer.getFirstName());
+		    statement.setString(2, customer.getLastName());
+		    statement.setString(3, customer.getLastNamePreposition());
+		    statement.setString(4, customer.getEmail());
+		    statement.setString(5, customer.getPhoneNumber());
 		    statement.executeUpdate();
 		    try {
 		      resultSet = statement.getGeneratedKeys();
@@ -43,7 +43,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		    } catch (SQLException e) {
 		    }
 		 }
-		    return newCustomerId;
+		    return true;
 	}
 
 	@Override
