@@ -13,7 +13,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	private ResultSet resultSet;
 
 	@Override
-	public boolean createCustomer(Customer customer) {
+	public int createCustomer(Customer customer) {
 		int newCustomerId = 0;
 		statement = null;
 		query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number) VALUES (?,?,?,?,?);";
@@ -43,7 +43,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		    } catch (SQLException e) {
 		    }
 		 }
-		    return true;
+		    return newCustomerId;
 	}
 
 	@Override

@@ -32,7 +32,10 @@ public class AccountCreationController extends Controller {
 		ArrayList<String> necessaryCustomerInformation = new RetrieveUserInfoModel().retrieveAccountProperties();
 		boolean accountCreated = false;
 		Customer newCustomer = new Customer();
-		ArrayList<String> newUser = new ArrayList<>();
+		String username = "";
+		String password = "";
+		
+		
 		while (!accountCreated) {
 			for (String customerProperty : necessaryCustomerInformation) {
 				boolean validInput = false;
@@ -43,8 +46,10 @@ public class AccountCreationController extends Controller {
 				}
 				switch (customerProperty) {
 				case "username": // to be added later
+					username = userInput;
 					break;
 				case "password": // to be added later
+					password = userInput;
 					break;
 				case "first_name":
 					newCustomer.setFirstName(userInput);
@@ -66,7 +71,9 @@ public class AccountCreationController extends Controller {
 					System.exit(0);
 				}
 			}
-			accountCreated = new CustomerDAOImpl().createCustomer(newCustomer);
+			int customerID = new CustomerDAOImpl().createCustomer(newCustomer);
+			newCustomer.setCustomerId(customerID);
+			//TODO: Push username, password & customerID to login database
 		}
 		System.out.println("Account created. Returning to login screen..");
 	}
