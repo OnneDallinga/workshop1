@@ -1,5 +1,0 @@
-package com.rsvier.workshop1.model.dao;
-
-public class AdressDAOImpl implements AddressDAO {
-
-}

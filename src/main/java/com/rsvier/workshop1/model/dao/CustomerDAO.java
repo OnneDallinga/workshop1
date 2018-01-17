@@ -7,20 +7,18 @@ import com.rsvier.workshop1.model.Customer;
 public interface CustomerDAO {
 	
 	// Create
-	public void createCustomer(Customer customer);
+	public int createCustomer(Customer customer);
 	
 	// Read
 	public ArrayList<Customer> findAllCustomers();
-	public Customer findCustomer(long customerId);
+	public Customer findCustomerById(int customerId);
+	public Customer findCustomerByFirstName(String firstName);
+	public Customer findCustomerByLastName(String lastName);
 	
 	// Update
 	public void updateCustomer(Customer customer);
 	
 	// Delete
-	// Based on first and last name
 	public void deleteCustomer(Customer customer);
-	// Based on customer ID
-	public void deleteCustomer(long customerId);
-
 
 }

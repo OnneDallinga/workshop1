@@ -7,15 +7,15 @@ import com.rsvier.workshop1.model.Address;
 public interface AddressDAO {
 
 	// Create
-	public void createAddress(Address address);
+	public int createAddress(Address address);
 	
 	// Read
 	public ArrayList<Address> findAllAddresses();
-	public Address findAddress(long addressId);
+	public Address findAddress(int addressId);
 		
 	// Update
-	public void updateAddress (long addressId);
+	public void updateAddress (Address address);
 		
 	// Delete
-	public void deleteAddress(long addressId);
+	public void deleteAddress(Address address);
 }

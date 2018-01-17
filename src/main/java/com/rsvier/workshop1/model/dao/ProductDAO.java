@@ -7,16 +7,16 @@ import com.rsvier.workshop1.model.Product;
 public interface ProductDAO {
 
 	//Create
-	public int newProduct(Product product);
+	public int createProduct(Product product);
 	
 	// Read
 	public ArrayList<Product> findAllProducts();
-	public Product findProduct(long productId);
+	public Product findProductById(int productId);
 	
 	// Update
-	public void updateProduct(long productId);
+	public void updateProduct(Product product);
 	
 	// Delete
-	public void deleteProduct(long productId);
+	public void deleteProduct(Product product);
 	
 }
