@@ -4,16 +4,44 @@ import com.rsvier.workshop1.model.RetrieveUserInfoModel;
 
 public class UserBuilder {
 	private String username;
-	private int userID;
-	private boolean admin;
+	private String password;
+	private String firstName;
+	private String lastName;
+	private String lastNamePreposition;
+	private String email;
+	private String phoneNumber;
+	private int id;
+	private boolean isAdmin;
 	
-	public UserBuilder setUsername(String username) {
-		this.username = username;
-		return this;
-	}
 	public User build() {
-		userID = new RetrieveUserInfoModel().retrieveUserId(username);
-		admin = new RetrieveUserInfoModel().retrieveAdminStatus(userID);
-		return new User(username, userID, admin);
+		id = new RetrieveUserInfoModel().retrieveUserId(username);
+		isAdmin = new RetrieveUserInfoModel().retrieveAdminStatus(id);
+		return new User(username, id, isAdmin);
 	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public void setLastNamePreposition(String lastNamePreposition) {
+		this.lastNamePreposition = lastNamePreposition;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+
 }
