@@ -1,7 +1,7 @@
 package com.rsvier.workshop1.model;
 
 public class Customer {
-	
+
 	private int customerId;
 	private String firstName;
 	private String lastName;
@@ -9,37 +9,37 @@ public class Customer {
 	private String email;
 	private String phoneNumber;
 	private boolean customerActive;
-	
+
 	public Customer() {
 	}
-	
+
 	// Constructor with basic params
 	public Customer(int customerId,
-				 String firstName,
-				 String lastName,
-				 String lastNamePreposition
-				 ) {
-		
+			String firstName,
+			String lastName,
+			String lastNamePreposition
+			) {
+
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.lastNamePreposition = lastNamePreposition;
 	}
-	
+
 	// Complete constructor with all params
 	public Customer(int customerId,
-			 String firstName,
-			 String lastName,
-			 String lastNamePreposition,
-			 String email,
-			 String phoneNumber) {
-	
-	this.customerId = customerId;
-	this.firstName = firstName;
-	this.lastName = lastName;
-	this.lastNamePreposition = lastNamePreposition;
-	this.email = email;
-	this.phoneNumber = phoneNumber;
+			String firstName,
+			String lastName,
+			String lastNamePreposition,
+			String email,
+			String phoneNumber) {
+
+		this.customerId = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.lastNamePreposition = lastNamePreposition;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public int getCustomerId() {
@@ -119,6 +119,6 @@ public class Customer {
 			return false;
 		return true;
 	}
-	
+
 
 }

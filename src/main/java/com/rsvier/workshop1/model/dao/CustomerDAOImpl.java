@@ -1,222 +1,179 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
 import com.rsvier.workshop1.model.Customer;
 import com.rsvier.workshop1.database.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
 
 public class CustomerDAOImpl implements CustomerDAO {
 
-	private Connection connection;
 	private String query;
-	private PreparedStatement statement;
-	private ResultSet resultSet;
+	private Logger logger = Logger.getLogger(CustomerDAOImpl.class.getName());
 
 	@Override
 	public int createCustomer(Customer customer) {
 		int newCustomerId = 0;
-		statement = null;
-		query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number) VALUES (?,?,?,?,?);";
-		try {
-			connection = DataSource.getConnection();
-		    statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-		    statement.setString(1, customer.getFirstName());
-		    statement.setString(2, customer.getLastName());
-		    statement.setString(3, customer.getLastNamePreposition());
-		    statement.setString(4, customer.getEmail());
-		    statement.setString(5, customer.getPhoneNumber());
-		    statement.executeUpdate();
-		    try {
-		      resultSet = statement.getGeneratedKeys();
-		      if (resultSet.next()) {
-		    	newCustomerId = resultSet.getInt(1);
-		        customer.setCustomerId(newCustomerId);
-		      }           
-		    } catch (SQLException e) {
-		      System.out.println("Creating new user failed.");
-		    }
-		 } catch (SQLException e) {
-		      e.printStackTrace();
-		 } finally {
-		   try {
-		    connection.close();
-		    } catch (SQLException e) {
-		    }
-		 }
-		    return newCustomerId;
+		query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number)" +
+				"VALUES (?,?,?,?,?);";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				ResultSet rs = stmt.getGeneratedKeys();) {
+			logger.info("Connected to database.");
+			stmt.setString(1, customer.getFirstName());
+			stmt.setString(2, customer.getLastName());
+			stmt.setString(3, customer.getLastNamePreposition());
+			stmt.setString(4, customer.getEmail());
+			stmt.setString(5, customer.getPhoneNumber());
+			stmt.executeUpdate();
+			try {
+				if (rs.next()) {
+					newCustomerId = rs.getInt(1);
+					customer.setCustomerId(newCustomerId);
+					logger.info("Succesfully added new customer.");
+				}           
+			} catch (SQLException e) {
+				logger.info("Creating new user failed.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return newCustomerId;
 	}
 
 	@Override
 	public ArrayList<Customer> findAllCustomers() {
-		statement = null;
 		ArrayList<Customer> list = new ArrayList<Customer>();
 		query = "SELECT * FROM customer;";
-		try {
-		  connection = DataSource.getConnection();
-		  statement = connection.prepareStatement(query);
-		  resultSet = statement.executeQuery();
-			      
-		  while(resultSet.next()) {
-		    Customer customer = new Customer();
-			customer.setCustomerId(resultSet.getInt(1));
-			customer.setFirstName(resultSet.getString(2));
-			customer.setLastName(resultSet.getString(3));
-			customer.setLastNamePreposition(resultSet.getString(4));
-			customer.setEmail(resultSet.getString(5));
-			customer.setPhoneNumber(resultSet.getString(6));
-			list.add(customer);
-		  }
-		  resultSet.close();
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");	      
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerId(rs.getInt(1));
+				customer.setFirstName(rs.getString(2));
+				customer.setLastName(rs.getString(3));
+				customer.setLastNamePreposition(rs.getString(4));
+				customer.setEmail(rs.getString(5));
+				customer.setPhoneNumber(rs.getString(6));
+				list.add(customer);
+			}
+			logger.info("Total customers:" + rs.getRow());
 		} catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	    	connection.close();
-		  } catch (SQLException e) {
-		  }
-	    }
+			e.printStackTrace();
+		}
 		return list;
 	}
 
 	@Override
 	public Customer findCustomerById(int customerId) {
-		statement = null;
 		Customer foundCustomer = new Customer();
 		query = "SELECT * FROM customer WHERE id=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setObject(1, customerId);
-	      resultSet = statement.executeQuery();
-	      
-	      if(resultSet.next()) {
-		    foundCustomer.setCustomerId(resultSet.getInt(1));
-		    foundCustomer.setFirstName(resultSet.getString(2));
-		    foundCustomer.setLastName(resultSet.getString(3));
-		    foundCustomer.setLastNamePreposition(resultSet.getString(4));
-		    foundCustomer.setEmail(resultSet.getString(5));
-		    foundCustomer.setPhoneNumber(resultSet.getString(6));
-		  }
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setObject(1, customerId);	      
+			if(rs.next()) {
+				foundCustomer.setCustomerId(rs.getInt(1));
+				foundCustomer.setFirstName(rs.getString(2));
+				foundCustomer.setLastName(rs.getString(3));
+				foundCustomer.setLastNamePreposition(rs.getString(4));
+				foundCustomer.setEmail(rs.getString(5));
+				foundCustomer.setPhoneNumber(rs.getString(6));
+			}
 		} catch (SQLException e) {
-		  e.printStackTrace();
-		} finally {
-		  try {
-		    connection.close();
-		  } catch (SQLException e) {
-		  }
-		}
-	    return foundCustomer;
+			e.printStackTrace();
+		} 
+		return foundCustomer;
 	}
 
 	@Override
 	public Customer findCustomerByFirstName(String firstName) {
-		statement = null;
 		Customer foundCustomer = new Customer();
 		query = "SELECT * FROM customer WHERE first_name=?";
-		try {
-			connection = DataSource.getConnection();
-			statement = connection.prepareStatement(query);
-			statement.setString(1, firstName);
-			resultSet = statement.executeQuery();
-			
-			if(resultSet.next()) {
-			    foundCustomer.setCustomerId(resultSet.getInt(1));
-			    foundCustomer.setFirstName(resultSet.getString(2));
-			    foundCustomer.setLastName(resultSet.getString(3));
-			    foundCustomer.setLastNamePreposition(resultSet.getString(4));
-			    foundCustomer.setEmail(resultSet.getString(5));
-			    foundCustomer.setPhoneNumber(resultSet.getString(6));
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setString(1, firstName);
+			if(rs.next()) {
+				foundCustomer.setCustomerId(rs.getInt(1));
+				foundCustomer.setFirstName(rs.getString(2));
+				foundCustomer.setLastName(rs.getString(3));
+				foundCustomer.setLastNamePreposition(rs.getString(4));
+				foundCustomer.setEmail(rs.getString(5));
+				foundCustomer.setPhoneNumber(rs.getString(6));
 			}
 		} catch (SQLException e) {
-		  e.printStackTrace();
-		} finally {
-		  try {
-			  connection.close();
-		  } catch (SQLException e) {
-		  }
+			e.printStackTrace();
 		}
 		return foundCustomer;
 	}
 
 	@Override
 	public Customer findCustomerByLastName(String lastName) {
-		statement = null;
 		Customer foundCustomer = new Customer();
 		query = "SELECT * FROM customer WHERE last_name=?";
-		try {
-			connection = DataSource.getConnection();
-			statement = connection.prepareStatement(query);
-			statement.setString(1, lastName);
-			resultSet = statement.executeQuery();
-			
-			if(resultSet.next()) {
-			    foundCustomer.setCustomerId(resultSet.getInt(1));
-			    foundCustomer.setFirstName(resultSet.getString(2));
-			    foundCustomer.setLastName(resultSet.getString(3));
-			    foundCustomer.setLastNamePreposition(resultSet.getString(4));
-			    foundCustomer.setEmail(resultSet.getString(5));
-			    foundCustomer.setPhoneNumber(resultSet.getString(6));
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setString(1, lastName);
+			if(rs.next()) {
+				foundCustomer.setCustomerId(rs.getInt(1));
+				foundCustomer.setFirstName(rs.getString(2));
+				foundCustomer.setLastName(rs.getString(3));
+				foundCustomer.setLastNamePreposition(rs.getString(4));
+				foundCustomer.setEmail(rs.getString(5));
+				foundCustomer.setPhoneNumber(rs.getString(6));
 			}
 		} catch (SQLException e) {
-		  e.printStackTrace();
-		} finally {
-		  try {
-			  connection.close();
-		  } catch (SQLException e) {
-		  }
-		}
+			e.printStackTrace();
+		} 
 		return foundCustomer;
 	}
 
 	@Override
 	public void updateCustomer(Customer customer) {
-		statement = null;
-	    query = "UPDATE customer SET first_name = ?, last_name = ?, last_name_preposition = ?, " +
-	    		"email = ?, phone_number = ? WHERE id=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setString(1, customer.getFirstName());
-	      statement.setString(2, customer.getLastName());
-	      statement.setString(3, customer.getLastNamePreposition());
-	      statement.setString(4, customer.getEmail());
-	      statement.setString(5, customer.getPhoneNumber());
-	      statement.executeUpdate();
-	    } catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	        connection.close();
-	      } catch (SQLException e) {
-	      }
-	    }
+		query = "UPDATE customer SET first_name = ?, last_name = ?, last_name_preposition = ?, " +
+				"email = ?, phone_number = ? WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			stmt.setString(1, customer.getFirstName());
+			stmt.setString(2, customer.getLastName());
+			stmt.setString(3, customer.getLastNamePreposition());
+			stmt.setString(4, customer.getEmail());
+			stmt.setString(5, customer.getPhoneNumber());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	/* Full customer deletion includes deletion of all orders with the associated customer */
 	@Override
 	public void deleteCustomer(Customer customer) {
-		statement = null;
-	    query = "SELECT * FROM order WHERE customer_customerID=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setInt(1, customer.getCustomerId());
-	      resultSet = statement.executeQuery();
-	      if (!resultSet.next()) {
-	        query = "DELETE FROM customer WHERE id=?";
-	        statement = connection.prepareStatement(query);
-	        statement.setInt(1, customer.getCustomerId());
-	        statement.executeUpdate();
-	      } else {
-	        System.out.println("Client has active orders in place, cannot delete.");
-	      }
-	    } catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	        connection.close();
-	      } catch (SQLException e) {
-	      }
-	    }
+		query = "SELECT * FROM order WHERE customer_customerID=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setInt(1, customer.getCustomerId());
+			if (!rs.next()) {
+				query = "DELETE FROM customer WHERE id=?";
+				try (PreparedStatement stmt2 = conn.prepareStatement(query);) {
+					stmt2.setInt(1, customer.getCustomerId());
+					stmt2.executeUpdate();
+				}
+			} else {
+				logger.info("Client has active orders in place, cannot delete.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 }

@@ -1,156 +1,116 @@
 package com.rsvier.workshop1.model.dao;
 
+import com.rsvier.workshop1.model.Order;
+import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import com.rsvier.workshop1.database.DataSource;
-import com.rsvier.workshop1.model.Order;
+import java.util.logging.Logger;
 
 public class OrderDAOImpl implements OrderDAO {
-	
-	private Connection connection;
+
 	private String query;
-	private PreparedStatement statement;
-	private ResultSet resultSet;
+	private Logger logger = Logger.getLogger(OrderDAOImpl.class.getName());
 
 	@Override
 	public int createOrder(Order order) {
 		int newOrderId = 0;
-		statement = null;
 		query = "INSERT INTO order (total_price, total_products, shipped_status, customerID) VALUES (?,?,?,?);";
-		try {
-			connection = DataSource.getConnection();
-		    statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-		    statement.setBigDecimal(1, order.getOrderPriceTotal());
-		    statement.setInt(2, order.getOrderItemsTotal());
-		    statement.setBoolean(3,  order.isShipped());
-		    statement.setInt(4, order.getCustomerId());
-		    statement.executeUpdate();
-		    try {
-		      resultSet = statement.getGeneratedKeys();
-		      if (resultSet.next()) {
-		    	  newOrderId = resultSet.getInt(1);
-		    	  order.setOrderId(newOrderId);
-		      }           
-		    } catch (SQLException e) {
-		      System.out.println("Creating new order failed.");
-		    }
-		 } catch (SQLException e) {
-		      e.printStackTrace();
-		 } finally {
-		   try {
-		    connection.close();
-		    } catch (SQLException e) {
-		    }
-		 }
-		    return newOrderId;
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				ResultSet rs = stmt.getGeneratedKeys();) {
+			stmt.setBigDecimal(1, order.getOrderPriceTotal());
+			stmt.setInt(2, order.getOrderItemsTotal());
+			stmt.setBoolean(3,  order.isShipped());
+			stmt.setInt(4, order.getCustomerId());
+			stmt.executeUpdate();
+			try {
+				if (rs.next()) {
+					newOrderId = rs.getInt(1);
+					order.setOrderId(newOrderId);
+					logger.info("Succesfully created new order.");
+				}           
+			} catch (SQLException e) {
+				System.out.println("Creating new order failed.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return newOrderId;
 	}
 
 	@Override
 	public ArrayList<Order> findAllOrders() {
-		statement = null;
 		ArrayList<Order> list = new ArrayList<Order>();
 		query = "SELECT * FROM order;";
-		try {
-		  connection = DataSource.getConnection();
-		  statement = connection.prepareStatement(query);
-		  resultSet = statement.executeQuery();
-			      
-		  while(resultSet.next()) {
-		    Order order = new Order();
-		    order.setOrderId(resultSet.getInt(1));
-		    order.setOrderPriceTotal(resultSet.getBigDecimal(2));
-		    order.setOrderItemsTotal(resultSet.getInt(3));
-		    order.setShipped(resultSet.getBoolean(4));
-		    order.setCustomerId(resultSet.getInt(5));
-			list.add(order);
-		  }
-		  resultSet.close();
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");    
+			while(rs.next()) {
+				Order order = new Order();
+				order.setOrderId(rs.getInt(1));
+				order.setOrderPriceTotal(rs.getBigDecimal(2));
+				order.setOrderItemsTotal(rs.getInt(3));
+				order.setShipped(rs.getBoolean(4));
+				order.setCustomerId(rs.getInt(5));
+				list.add(order);
+			}
+			logger.info("Total orders:" + rs.getRow());
 		} catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	    	connection.close();
-		  } catch (SQLException e) {
-		  }
-	    }
+			e.printStackTrace();
+		} 
 		return list;
 	}
 
 	@Override
 	public Order findOrderById(int orderId) {
-		statement = null;
 		Order foundOrder = new Order();
 		query = "SELECT * FROM order WHERE id=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setObject(1, orderId);
-	      resultSet = statement.executeQuery();
-	      
-	      if(resultSet.next()) {
-	    	foundOrder.setOrderId(resultSet.getInt(1));
-	    	foundOrder.setOrderPriceTotal(resultSet.getBigDecimal(2));
-	    	foundOrder.setOrderItemsTotal(resultSet.getInt(3));
-	    	foundOrder.setShipped(resultSet.getBoolean(4));
-	    	foundOrder.setCustomerId(resultSet.getInt(5));
-		  }
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setObject(1, orderId);	      
+			if(rs.next()) {
+				foundOrder.setOrderId(rs.getInt(1));
+				foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
+				foundOrder.setOrderItemsTotal(rs.getInt(3));
+				foundOrder.setShipped(rs.getBoolean(4));
+				foundOrder.setCustomerId(rs.getInt(5));
+			}
 		} catch (SQLException e) {
-		  e.printStackTrace();
-		} finally {
-		  try {
-		    connection.close();
-		  } catch (SQLException e) {
-		  }
+			e.printStackTrace();
 		}
-	    return foundOrder;
+		return foundOrder;
 	}
 
 	@Override
 	public void updateOrder(Order order) {
-		statement = null;
-	    query = "UPDATE order SET total_price = ?, total_products = ?," +
-	        "shipped_status = ?, customerID = ? WHERE id=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setBigDecimal(1, order.getOrderPriceTotal());
-	      statement.setInt(2, order.getOrderItemsTotal());
-	      statement.setBoolean(3, order.isShipped());
-	      statement.setInt(4, order.getCustomerId());
-	      statement.executeUpdate();
-	    } catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	        connection.close();
-	      } catch (SQLException e) {
-	      }
-	    }
-		
+		query = "UPDATE order SET total_price = ?, total_products = ?," +
+				"shipped_status = ?, customerID = ? WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			stmt.setBigDecimal(1, order.getOrderPriceTotal());
+			stmt.setInt(2, order.getOrderItemsTotal());
+			stmt.setBoolean(3, order.isShipped());
+			stmt.setInt(4, order.getCustomerId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	@Override
 	public void deleteOrder(Order order) {
-		statement = null;
-	    query = "SELECT * FROM order WHERE id=?";
-	    try {
-	      connection = DataSource.getConnection();
-	      statement = connection.prepareStatement(query);
-	      statement.setInt(1, order.getOrderId());
-	      resultSet = statement.executeQuery();
-	      if (!resultSet.next()) {
-	        query = "DELETE FROM order WHERE id=?";
-	        statement = connection.prepareStatement(query);
-	        statement.setInt(1, order.getOrderId());
-	        statement.executeUpdate();
-	      }
-	    } catch (SQLException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	        connection.close();
-	      } catch (SQLException e) {
-	      }
-	    }
+		query = "DELETE * FROM order WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			stmt.setInt(1, order.getOrderId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 }
