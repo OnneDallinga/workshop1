@@ -12,6 +12,8 @@ public interface ProductDAO {
 	// Read
 	public ArrayList<Product> findAllProducts();
 	public Product findProductById(int productId);
+	public Product findProductByCountry(String country);
+	public Product findProductByGrapeVariety(String grapeVariety);
 	
 	// Update
 	public void updateProduct(Product product);
