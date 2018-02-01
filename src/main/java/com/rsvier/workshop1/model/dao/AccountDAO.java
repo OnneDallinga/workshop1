@@ -9,15 +9,16 @@ public interface AccountDAO {
 	public int getUserID(String username);
 	public boolean isAdmin(int userID);
 	public ArrayList<String> getUsernameList();
+	public ArrayList<String> retrieveAccountProperties();
 	
 	// Create
-	public boolean createAccount();
+	public boolean createAccount(ArrayList<String> necessaryCustomerInformation, ArrayList<String> newUser);
 	
 	// Modify
 	public boolean changeUsername();
 	public boolean changePassword();
 	
 	// Delete
-	public boolean deleteAccount();
+	public boolean deleteAccount(String deleteThisUser);
 	
 }

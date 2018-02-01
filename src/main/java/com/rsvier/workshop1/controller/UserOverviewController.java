@@ -7,7 +7,6 @@ import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.view.*;
 
 public class UserOverviewController extends Controller{
-	private RetrieveUserInfoModel theModel;
 	private AdminUserOverview currentMenu;
 	
 	public UserOverviewController (AdminUserOverview theView) {
@@ -35,7 +34,7 @@ public class UserOverviewController extends Controller{
 				System.out.println("Delete this user: " + deleteThisUser + "?");
 				boolean yesOrNo = currentMenu.asksUserYesOrNo();
 				if (yesOrNo) {
-					boolean success = new SendInfoToDatabaseModel().deleteUserFromDatabase(deleteThisUser);
+					boolean success = new AccountDAOImpl().deleteAccount(deleteThisUser);
 					if (success) {
 						System.out.println("User successfully deleted");
 					}

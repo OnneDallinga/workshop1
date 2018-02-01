@@ -38,18 +38,24 @@ public class AccountDAOImpl implements AccountDAO {
 			}
 			return result;
 	}
-
-
-	@Override
-	public boolean createAccount() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean changeUsername() {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public ArrayList<String> getUsernameList() {
+		String query = "Select username from account where id > 0";
+		ArrayList<String> allOfTheUsers = new ArrayList<>();
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);){
+			logger.info("Connected to database");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				allOfTheUsers.add(resultSet.getObject(1) + "");
+			}
+			logger.info("List of usernames retrieved");
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return allOfTheUsers;
 	}
 	
 	@Override
@@ -111,15 +117,74 @@ public class AccountDAOImpl implements AccountDAO {
 		}
 		return resultSetAsArrayList;
 	}
+	
+	@Override
+	public boolean createAccount(ArrayList<String> necessaryCustomerInformation, ArrayList<String> newUser) { // creates a new user
+			String query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number) VALUES (?,?,?,?,?)";
+			try (Connection connection = DataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);){
+				statement.setString(1, newUser.get(2));
+				statement.setString(2, newUser.get(3));
+				statement.setString(3, newUser.get(4));
+				statement.setString(4, newUser.get(5));
+				statement.setString(5, newUser.get(6));
+				statement.executeUpdate();
+				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			query = "SELECT id FROM customer WHERE first_name = (?)";
+			ResultSet resultSet = null;
+			int id = 0;
+			try (Connection connection = DataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);){
+				statement.setString(1,  newUser.get(2));
+				resultSet = statement.executeQuery();
+				if (resultSet.next()) id = resultSet.getInt(1);
+				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			query = "INSERT INTO account (customer_id, username, password, owner_type) VALUES (?,?,?,?)";
+			try (Connection connection = DataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);){
+				statement.setInt(1, id);
+				statement.setString(2,  newUser.get(0));
+				statement.setString(3,  newUser.get(1));
+				statement.setString(4,  "whatever");
+				statement.executeUpdate();
+				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			return true;
+	}
 
 	@Override
 	public boolean changePassword() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+
 
 	@Override
-	public boolean deleteAccount() {
+	public boolean changeUsername() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAccount(String deleteThisUser) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -132,22 +197,4 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 
-	public ArrayList<String> getUsernameList() {
-			String query = "Select username from account where id > 0";
-			ArrayList<String> allOfTheUsers = new ArrayList<>();
-			try (Connection connection = DataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(query);){
-				logger.info("Connected to database");
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					allOfTheUsers.add(resultSet.getObject(1) + "");
-					logger.info("List of usernames retrieved");
-				}
-				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return allOfTheUsers;
-		}
 }
