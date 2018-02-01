@@ -1,7 +1,6 @@
 package com.rsvier.workshop1.view;
 import java.io.*;
 import com.rsvier.workshop1.controller.*;
-import com.rsvier.workshop1.model.RetrieveUserInfoModel;
 import com.rsvier.workshop1.useraccounts.*;
 
 public class LoginMenuView extends View {
