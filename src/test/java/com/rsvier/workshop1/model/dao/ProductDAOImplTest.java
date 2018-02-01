@@ -1,0 +1,128 @@
+package com.rsvier.workshop1.model.dao;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.*;
+import java.sql.*;
+import com.rsvier.workshop1.database.DataSource;
+import com.rsvier.workshop1.model.Product;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.logging.Logger;
+
+public class ProductDAOImplTest {
+	
+	ProductDAOImpl productDao;
+	Logger logger = Logger.getLogger(ProductDAOImplTest.class.getName());
+	
+	@BeforeEach
+	void setUp() {
+		logger.info("Setting up database..");
+		try {
+			Connection conn = DataSource.getConnection();
+			// Set up two product rows for testing
+			String query = "INSERT INTO product (name, price, stock_quantity, produced_year," +
+						   "country, grapeVariety, alcohol_percentage)" + 
+						   "VALUES ('Avec Toutatis', 10.0, 10, 2017, 'France', 'Malbec', 7.2)";
+			Statement stmt = conn.createStatement();
+			stmt.addBatch(query);
+			String query2 = "INSERT INTO product (name, price, stock_quantity, produced_year," +
+							"country, grapeVariety, alcohol_percentage)" +
+							"VALUES ('El Rioja Diablo', 8.4, 42, 2014, 'Spain', 'Rioja', 6.66)";
+			stmt.addBatch(query2);
+			stmt.executeBatch();
+			conn.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			fail("Error instantiating database table: " + ex.getMessage());
+		}
+	}
+	
+	@AfterEach
+	void tearDown() {
+		logger.info("Cleaning up database..");
+		try {
+			Connection conn = DataSource.getConnection();
+			Statement stmt = conn.createStatement();
+			String query = "DELETE FROM product";
+			stmt.addBatch(query);
+			String query2 = "ALTER TABLE product AUTO_INCREMENT = 1";
+			stmt.addBatch(query2);
+			stmt.executeBatch();
+			conn.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@Test
+	void canCreateProduct() {
+		Product product = new Product();
+		product.setProductName("Chateau de Degoutant");
+		product.setPrice(new BigDecimal("8"));
+		product.setStockQuantity(5);
+
+		// The method returns the created product's id which should be 3 given setUp()
+		int createdProductId = productDao.createProduct(product);
+
+		assertEquals(3, createdProductId);
+	}
+	
+	@Test
+	void canFindAllProducts() {
+		List<Product> products = productDao.findAllProducts();
+
+		assertAll(
+		() -> assertEquals(products.size(), 2),
+		() -> assertNotNull(products.get(1).getProductName()),
+		() -> assertNotNull(products.get(2).getProductName())
+		);
+	}
+	
+	@Test
+	void canFindProductById() {
+		Product product = productDao.findProductById(2);
+
+		assertEquals(product.getProductId(), 2);
+	}
+	
+	@Test
+	void canUpdateProduct() {
+		// Goal: change price of 1st product from 10 to 9
+		Product productToUpdate = new Product(1, "Avec Toutatis", new BigDecimal("9"), 10);
+		
+		productDao.updateProduct(productToUpdate);
+		
+		try {
+			Connection conn = DataSource.getConnection();
+			String query = "SELECT * FROM product WHERE id=1";
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+			
+			assertEquals(productToUpdate.getPrice(), 9);
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@Test
+	void canDeleteProduct() throws Exception {
+		Product product = new Product();
+		product.setProductId(1);
+
+		productDao.deleteProduct(product);
+
+		try {
+			Connection conn = DataSource.getConnection();
+			String query = "SELECT * FROM product WHERE id=1";
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+}
