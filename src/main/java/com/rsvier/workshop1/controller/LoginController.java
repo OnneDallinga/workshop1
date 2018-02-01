@@ -1,6 +1,7 @@
 package com.rsvier.workshop1.controller;
 
 import com.rsvier.workshop1.model.*;
+import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
 
@@ -23,7 +24,7 @@ public class LoginController extends Controller {
 			}
 			username = userInput[0];
 			String password = userInput[1];
-			if (((RetrieveUserInfoModel) theModel).login(username, password)) break;
+			if (new AccountDAOImpl().login(username, password)) break;
 			System.out.println("Incorrect username of password. Please try again or press 0 to exit.");
 		}
 		UserBuilder userBuilder = new UserBuilder();

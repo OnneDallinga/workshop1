@@ -3,7 +3,9 @@ package com.rsvier.workshop1.model.dao;
 public interface AccountDAO {
 	
 	// Read
-	public boolean login();
+	public boolean login(String username, String password);
+	public int getUserID(String username);
+	public boolean isAdmin(int userID);
 	
 	// Create
 	public boolean createAccount();
