@@ -8,9 +8,8 @@ import com.rsvier.workshop1.view.View;
 
 public class ProductController extends Controller {
 	
-	public ProductController(View theView, Model theModel) {
+	public ProductController(View theView) {
 		this.currentMenu = theView;
-		this.theModel = theModel;
 		menuOptions = new HashMap<>();
 		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
 	}

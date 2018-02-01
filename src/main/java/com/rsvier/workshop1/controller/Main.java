@@ -1,7 +1,5 @@
 package com.rsvier.workshop1.controller;
 
-import com.rsvier.workshop1.model.*;
-import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
 
 public class Main {
@@ -18,8 +16,12 @@ public class Main {
 		hikariEnabled = new UserMainMenuView().asksUserYesOrNo();
 		System.out.println("Use Mongo Database?");
 		mongoEnabled = new UserMainMenuView().asksUserYesOrNo();
+		System.out.println("Initialize database?");
+		if (new UserMainMenuView().asksUserYesOrNo()) {
+			
+		}
 		
-		Controller currentController = new LoginController(new LoginMenuView(), new RetrieveUserInfoModel());
+		Controller currentController = new LoginController(new LoginMenuView());
 		currentController.runView(); // run next menu
 		
 		while(true) { //infinite loop until the user stops the program

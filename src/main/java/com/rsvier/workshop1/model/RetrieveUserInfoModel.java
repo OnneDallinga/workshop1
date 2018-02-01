@@ -79,7 +79,7 @@ public class RetrieveUserInfoModel extends Model {
 		return resultSetAsArrayList;
 	}*/
 
-	public ArrayList<String> retrieveAccountProperties() { // retrieves the information we need from the customer from the tables
+	/*public ArrayList<String> retrieveAccountProperties() { // retrieves the information we need from the customer from the tables
 		ArrayList<String> resultSetAsArrayList = new ArrayList<>();
 		String query = "select column_name from information_schema.columns\r\n" + 
 				" where table_name = 'account'";
@@ -112,5 +112,5 @@ public class RetrieveUserInfoModel extends Model {
 			e.printStackTrace();
 		}
 		return resultSetAsArrayList;
-	}
+	}*/
 }

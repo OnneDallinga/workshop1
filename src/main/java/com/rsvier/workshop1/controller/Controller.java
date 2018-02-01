@@ -7,7 +7,6 @@ import java.util.*;
 
 public abstract class Controller { // parent
 	protected View currentMenu;
-	protected Model theModel;
 	protected User user;
 	protected Controller nextController;
 	protected HashMap<Integer,Controller> menuOptions;

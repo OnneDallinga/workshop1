@@ -10,9 +10,8 @@ public class UserOverviewController extends Controller{
 	private RetrieveUserInfoModel theModel;
 	private AdminUserOverview currentMenu;
 	
-	public UserOverviewController (AdminUserOverview theView, RetrieveUserInfoModel theModel) {
+	public UserOverviewController (AdminUserOverview theView) {
 		this.currentMenu = theView;
-		this.theModel = theModel;
 		menuOptions = new HashMap<>();
 		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
 		menuOptions.put(1, null);
