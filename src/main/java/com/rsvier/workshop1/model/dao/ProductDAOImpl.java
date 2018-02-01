@@ -3,6 +3,7 @@ package com.rsvier.workshop1.model.dao;
 import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -44,8 +45,8 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public ArrayList<Product> findAllProducts() {
-		ArrayList<Product> list = new ArrayList<Product>();
+	public List<Product> findAllProducts() {
+		List<Product> allProducts = new ArrayList<Product>();
 		query = "SELECT * FROM product;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);
@@ -61,13 +62,13 @@ public class ProductDAOImpl implements ProductDAO {
 				product.setCountry(rs.getString(6));
 				product.setGrapeVariety(rs.getString(7));
 				product.setAlcoholPercentage(rs.getDouble(8));
-				list.add(product);
+				allProducts.add(product);
 			}
 			logger.info("Total products:" + rs.getRow());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		return list;
+		return allProducts;
 	}
 
 	@Override
@@ -94,41 +95,16 @@ public class ProductDAOImpl implements ProductDAO {
 		} 
 		return foundProduct;
 	}
-
+	
 	@Override
-	public Product findProductByCountry(String country) {
+	public Product findProductByName(String name) {
 		Product foundProduct = new Product();
-		query = "SELECT * FROM product WHERE country=?";
+		query = "SELECT * FROM product WHERE name=?";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);
 				ResultSet rs = stmt.executeQuery();) {
 			logger.info("Connected to database.");	    
-			stmt.setObject(1, country);
-			if(rs.next()) {
-				foundProduct.setProductId(rs.getInt(1));
-				foundProduct.setProductName(rs.getString(2));
-				foundProduct.setPrice(rs.getBigDecimal(3));
-				foundProduct.setStockQuantity(rs.getInt(4));
-				foundProduct.setProducedYear(rs.getInt(5));
-				foundProduct.setCountry(rs.getString(6));
-				foundProduct.setGrapeVariety(rs.getString(7));
-				foundProduct.setAlcoholPercentage(rs.getDouble(8));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		return foundProduct;
-	}
-
-	@Override
-	public Product findProductByGrapeVariety(String grapeVariety) {
-		Product foundProduct = new Product();
-		query = "SELECT * FROM product WHERE grape_variety=?";
-		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet rs = stmt.executeQuery();) {
-			logger.info("Connected to database.");	    
-			stmt.setObject(1, grapeVariety);
+			stmt.setObject(1, name);
 			if(rs.next()) {
 				foundProduct.setProductId(rs.getInt(1));
 				foundProduct.setProductName(rs.getString(2));

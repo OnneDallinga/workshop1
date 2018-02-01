@@ -3,6 +3,7 @@ package com.rsvier.workshop1.controller;
 import java.util.*;
 
 import com.rsvier.workshop1.model.*;
+import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.view.*;
 
 public class UserOverviewController extends Controller{
@@ -21,7 +22,7 @@ public class UserOverviewController extends Controller{
 	@Override
 	public void runView() {
 		boolean userWantsToStay = true;
-		ArrayList<String> allOfTheUsernames = theModel.showAllUsernames(); // load the users from the database
+		ArrayList<String> allOfTheUsernames = new AccountDAOImpl().getUsernameList(); // load the users from the database
 		while (userWantsToStay) {
 			currentMenu.displayMessage();
 			int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);

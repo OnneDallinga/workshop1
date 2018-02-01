@@ -3,6 +3,8 @@ package com.rsvier.workshop1.model;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import com.rsvier.workshop1.model.dao.AccountDAOImpl;
+
 public class ValidationModel { // Validates possible user inputs.
 	private String userInput;
 	
@@ -39,7 +41,7 @@ public class ValidationModel { // Validates possible user inputs.
 					+ " and contain only letters or numbers.");
 			return false;
 		}
-		ArrayList<String> allExistingUsernames = new RetrieveUserInfoModel().showAllUsernames();
+		ArrayList<String> allExistingUsernames = new AccountDAOImpl().getUsernameList();
 		for (String usernames : allExistingUsernames) {
 			if (usernames.equals(userInput)) {
 				System.out.println("This username is already taken. Please select another.");

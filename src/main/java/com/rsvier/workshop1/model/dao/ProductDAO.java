@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.rsvier.workshop1.model.Product;
 
@@ -10,10 +10,9 @@ public interface ProductDAO {
 	public int createProduct(Product product);
 	
 	// Read
-	public ArrayList<Product> findAllProducts();
+	public List<Product> findAllProducts();
 	public Product findProductById(int productId);
-	public Product findProductByCountry(String country);
-	public Product findProductByGrapeVariety(String grapeVariety);
+	public Product findProductByName(String name);
 	
 	// Update
 	public void updateProduct(Product product);

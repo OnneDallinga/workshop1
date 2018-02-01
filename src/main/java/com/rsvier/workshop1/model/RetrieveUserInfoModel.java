@@ -25,23 +25,8 @@ public class RetrieveUserInfoModel extends Model {
 		}
 	} */
 	
-	public int retrieveUserId(String username) {
-		username = "'" + username + "'";
-		String query = "select id from account where username = "
-				+ username + ";";
-		ArrayList<String> queryResult = databaseQuery(query);
-		return Integer.parseInt(queryResult.get(0));
-	}
 
-	public boolean retrieveAdminStatus(int userID) {
-		String query = "select owner_type from account where id = "
-				+ userID + ";";
-		ArrayList<String> queryResult = databaseQuery(query);
-		if (queryResult.get(0).equals("ADMIN")) return true;
-		return false;
-	}
-	
-	public void showTable() { //temporary
+	/*public void showTable() { //temporary
 		String query = "select * from customer where id > 0";
 		try (Connection connection = DataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
@@ -53,36 +38,9 @@ public class RetrieveUserInfoModel extends Model {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
-	public boolean login(String username, String password) {
-		username = "'" + username + "'";
-		String query = "Select password from account where username = "
-				+ username + ";";
-		ArrayList<String> queryResult = databaseQuery(query);
-		if (queryResult.isEmpty()) return false;
-		if (queryResult.get(0).equals(password)) return true;
-		return false;
-	}
-	
-	public ArrayList<String> showAllUsernames() {
-		String query = "Select username from account where id > 0";
-		ArrayList<String> allOfTheUsers = new ArrayList<>();
-		try (Connection connection = DataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(query);
-			ResultSet resultSet = statement.executeQuery();) {
-			while (resultSet.next()) {
-				allOfTheUsers.add(resultSet.getObject(1) + "");
-			}
-			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return allOfTheUsers;
-	}
-	
-	public ArrayList<String> showAllUsers() {
+	/*public ArrayList<String> showAllUsers() {
 		String query = "Select * from account where id > 0";
 		ArrayList<String> allOfTheUsers = new ArrayList<>();
 		try (Connection connection = DataSource.getConnection();
@@ -101,9 +59,9 @@ public class RetrieveUserInfoModel extends Model {
 			e.printStackTrace();
 		}
 		return allOfTheUsers;
-	}
+	}*/
 	
-	private ArrayList<String> databaseQuery(String query) {
+	/*private ArrayList<String> databaseQuery(String query) {
 		ArrayList<String> resultSetAsArrayList = new ArrayList<>();
 		try (Connection connection = DataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -119,7 +77,7 @@ public class RetrieveUserInfoModel extends Model {
 			e.printStackTrace();
 		}
 		return resultSetAsArrayList;
-	}
+	}*/
 
 	public ArrayList<String> retrieveAccountProperties() { // retrieves the information we need from the customer from the tables
 		ArrayList<String> resultSetAsArrayList = new ArrayList<>();
