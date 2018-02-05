@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.rsvier.workshop1.model.Address;
 
@@ -10,7 +10,7 @@ public interface AddressDAO {
 	public int createAddress(Address address);
 	
 	// Read
-	public ArrayList<Address> findAllAddresses();
+	public List<Address> findAllAddresses();
 	public Address findAddress(int addressId);
 		
 	// Update

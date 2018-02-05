@@ -4,6 +4,7 @@ import com.rsvier.workshop1.model.OrderLineItem;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class OrderLineItemDAOImpl implements OrderLineItemDAO {
@@ -39,8 +40,8 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 	}
 
 	@Override
-	public ArrayList<OrderLineItem> getAllOrderLineItemsByOrderId(int orderId) {
-		ArrayList<OrderLineItem> list = new ArrayList<OrderLineItem>();
+	public List<OrderLineItem> getAllOrderLineItemsByOrderId(int orderId) {
+		List<OrderLineItem> list = new ArrayList<OrderLineItem>();
 		query = "SELECT * FROM order_line_item WHERE orderID=?;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);

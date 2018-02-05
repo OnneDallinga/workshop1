@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.rsvier.workshop1.model.OrderLineItem;
 
@@ -10,7 +10,7 @@ public interface OrderLineItemDAO {
 	public int createOrderLineItem(OrderLineItem orderLineItem);
 	
 	// Read
-	public ArrayList<OrderLineItem> getAllOrderLineItemsByOrderId(int orderId);
+	public List<OrderLineItem> getAllOrderLineItemsByOrderId(int orderId);
 	public OrderLineItem findOrderLineItemById(int orderLineItemId);
 	
 	// Update

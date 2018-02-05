@@ -4,6 +4,7 @@ import com.rsvier.workshop1.model.Customer;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -42,8 +43,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public ArrayList<Customer> findAllCustomers() {
-		ArrayList<Customer> list = new ArrayList<Customer>();
+	public List<Customer> findAllCustomers() {
+		List<Customer> list = new ArrayList<Customer>();
 		query = "SELECT * FROM customer;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);

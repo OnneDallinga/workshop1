@@ -4,6 +4,7 @@ import com.rsvier.workshop1.model.Address;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AddressDAOImpl implements AddressDAO {
@@ -44,8 +45,8 @@ public class AddressDAOImpl implements AddressDAO {
 	}
 
 	@Override
-	public ArrayList<Address> findAllAddresses() {
-		ArrayList<Address> list = new ArrayList<Address>();
+	public List<Address> findAllAddresses() {
+		List<Address> list = new ArrayList<Address>();
 		query = "SELECT * FROM address;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);

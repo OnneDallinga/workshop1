@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.rsvier.workshop1.model.Order;
 
@@ -10,7 +10,7 @@ public interface OrderDAO {
 	public int createOrder(Order order);
 	
 	// Read
-	public ArrayList<Order> findAllOrders();
+	public List<Order> findAllOrders();
 	public Order findOrderById(int orderId);
 	
 	// Update

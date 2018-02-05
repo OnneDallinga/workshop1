@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.rsvier.workshop1.model.Customer;
 
@@ -10,7 +10,7 @@ public interface CustomerDAO {
 	public int createCustomer(Customer customer);
 	
 	// Read
-	public ArrayList<Customer> findAllCustomers();
+	public List<Customer> findAllCustomers();
 	public Customer findCustomerById(int customerId);
 	public Customer findCustomerByLastName(String lastName);
 	

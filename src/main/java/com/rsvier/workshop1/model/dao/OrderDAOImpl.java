@@ -4,6 +4,7 @@ import com.rsvier.workshop1.model.Order;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class OrderDAOImpl implements OrderDAO {
@@ -39,8 +40,8 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public ArrayList<Order> findAllOrders() {
-		ArrayList<Order> list = new ArrayList<Order>();
+	public List<Order> findAllOrders() {
+		List<Order> list = new ArrayList<Order>();
 		query = "SELECT * FROM order;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);
