@@ -12,7 +12,6 @@ public interface CustomerDAO {
 	// Read
 	public ArrayList<Customer> findAllCustomers();
 	public Customer findCustomerById(int customerId);
-	public Customer findCustomerByFirstName(String firstName);
 	public Customer findCustomerByLastName(String lastName);
 	
 	// Update
