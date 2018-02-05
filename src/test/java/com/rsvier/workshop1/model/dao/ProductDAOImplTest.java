@@ -55,6 +55,7 @@ public class ProductDAOImplTest {
 		}
 	}
 	
+	// TODO: Fix bug
 	// Currently failing: returns ID = 0
 	@Test
 	void canCreateProduct() {
@@ -80,7 +81,6 @@ public class ProductDAOImplTest {
 		);
 	}
 	
-	// Currently failing, returned id = 0
 	@Test
 	void canFindProductById() {
 		Product product = productDao.findProductById(2);
@@ -88,7 +88,6 @@ public class ProductDAOImplTest {
 		assertEquals(2, product.getProductId());
 	}
 	
-	// Currently failing: returned product name is null
 	@Test
 	void canFindProductByName() {
 		Product product = productDao.findProductByName("El Rioja Diablo");

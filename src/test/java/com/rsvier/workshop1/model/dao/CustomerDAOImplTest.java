@@ -119,6 +119,7 @@ class CustomerDAOImplTest {
 	}
 
 	@Test
+	// Throws an exception due to the logic of deleting customer with ID 2 and then trying to retrieve it from DB
 	void canDeleteCustomer() throws Exception {
 		Customer customer = new Customer();
 		customer.setCustomerId(2);
