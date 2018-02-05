@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class ProductDAOImplTest {
 	
-	ProductDAOImpl productDao;
+	ProductDAOImpl productDao = new ProductDAOImpl();
 	Logger logger = Logger.getLogger(ProductDAOImplTest.class.getName());
 	
 	@BeforeEach
@@ -55,6 +55,7 @@ public class ProductDAOImplTest {
 		}
 	}
 	
+	// Currently failing: returns ID = 0
 	@Test
 	void canCreateProduct() {
 		Product product = new Product();
@@ -73,17 +74,26 @@ public class ProductDAOImplTest {
 		List<Product> products = productDao.findAllProducts();
 
 		assertAll(
-		() -> assertEquals(products.size(), 2),
-		() -> assertNotNull(products.get(1).getProductName()),
-		() -> assertNotNull(products.get(2).getProductName())
+		() -> assertEquals(2, products.size()),
+		() -> assertNotNull(products.get(0).getProductName()),
+		() -> assertNotNull(products.get(1).getProductName())
 		);
 	}
 	
+	// Currently failing, returned id = 0
 	@Test
 	void canFindProductById() {
 		Product product = productDao.findProductById(2);
 
-		assertEquals(product.getProductId(), 2);
+		assertEquals(2, product.getProductId());
+	}
+	
+	// Currently failing: returned product name is null
+	@Test
+	void canFindProductByName() {
+		Product product = productDao.findProductByName("El Rioja Diablo");
+		
+		assertEquals("El Rioja Diablo", product.getProductName());
 	}
 	
 	@Test
@@ -98,9 +108,8 @@ public class ProductDAOImplTest {
 			String query = "SELECT * FROM product WHERE id=1";
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
-			rs.next();
 			
-			assertEquals(productToUpdate.getPrice(), 9);
+			assertEquals(new BigDecimal("9"), rs.getBigDecimal(3));
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -108,6 +117,7 @@ public class ProductDAOImplTest {
 	}
 	
 	@Test
+	// Throws an exception due to the logic of deleting product with ID 2 and then trying to retrieve it from DB
 	void canDeleteProduct() throws Exception {
 		Product product = new Product();
 		product.setProductId(1);
