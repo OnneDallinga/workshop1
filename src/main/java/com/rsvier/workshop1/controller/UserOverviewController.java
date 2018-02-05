@@ -3,15 +3,14 @@ package com.rsvier.workshop1.controller;
 import java.util.*;
 
 import com.rsvier.workshop1.model.*;
+import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.view.*;
 
 public class UserOverviewController extends Controller{
-	private RetrieveUserInfoModel theModel;
 	private AdminUserOverview currentMenu;
 	
-	public UserOverviewController (AdminUserOverview theView, RetrieveUserInfoModel theModel) {
+	public UserOverviewController (AdminUserOverview theView) {
 		this.currentMenu = theView;
-		this.theModel = theModel;
 		menuOptions = new HashMap<>();
 		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
 		menuOptions.put(1, null);
@@ -21,7 +20,7 @@ public class UserOverviewController extends Controller{
 	@Override
 	public void runView() {
 		boolean userWantsToStay = true;
-		ArrayList<String> allOfTheUsernames = theModel.showAllUsernames(); // load the users from the database
+		ArrayList<String> allOfTheUsernames = new AccountDAOImpl().getUsernameList(); // load the users from the database
 		while (userWantsToStay) {
 			currentMenu.displayMessage();
 			int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
@@ -35,7 +34,7 @@ public class UserOverviewController extends Controller{
 				System.out.println("Delete this user: " + deleteThisUser + "?");
 				boolean yesOrNo = currentMenu.asksUserYesOrNo();
 				if (yesOrNo) {
-					boolean success = new SendInfoToDatabaseModel().deleteUserFromDatabase(deleteThisUser);
+					boolean success = new AccountDAOImpl().deleteAccount(deleteThisUser);
 					if (success) {
 						System.out.println("User successfully deleted");
 					}

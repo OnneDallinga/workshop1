@@ -1,6 +1,6 @@
 package com.rsvier.workshop1.useraccounts;
 
-import com.rsvier.workshop1.model.RetrieveUserInfoModel;
+import com.rsvier.workshop1.model.dao.*;
 
 public class UserBuilder {
 	private String username;
@@ -14,8 +14,8 @@ public class UserBuilder {
 	private boolean isAdmin;
 	
 	public User build() {
-		id = new RetrieveUserInfoModel().retrieveUserId(username);
-		isAdmin = new RetrieveUserInfoModel().retrieveAdminStatus(id);
+		id = new AccountDAOImpl().getUserID(username);
+		isAdmin = new AccountDAOImpl().isAdmin(id);
 		return new User(username, id, isAdmin);
 	}
 	

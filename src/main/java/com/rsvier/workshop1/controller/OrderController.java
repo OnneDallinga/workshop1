@@ -5,9 +5,8 @@ import com.rsvier.workshop1.view.View;
 
 public class OrderController extends Controller {
 	
-	public OrderController(View theView, Model theModel) {
+	public OrderController(View theView) {
 		this.currentMenu = theView;
-		this.theModel = theModel;
 	}
 
 	@Override
