@@ -86,7 +86,7 @@ public abstract class View<K> { //parent version
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			try {
 				while (true) {
-					System.out.println("Please enter \"Yes\" or \"no\"");
+					System.out.println("Please enter \"Yes\" or \"No\"");
 					userInput = br.readLine();
 					userInput = userInput.toLowerCase();
 					switch (userInput) {
