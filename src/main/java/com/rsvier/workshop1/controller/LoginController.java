@@ -1,6 +1,5 @@
 package com.rsvier.workshop1.controller;
 
-import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;

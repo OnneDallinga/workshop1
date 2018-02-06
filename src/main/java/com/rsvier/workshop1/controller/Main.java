@@ -1,5 +1,6 @@
 package com.rsvier.workshop1.controller;
 
+import com.rsvier.workshop1.model.dao.DatabaseBuilderDAOImpl;
 import com.rsvier.workshop1.view.*;
 
 public class Main {
@@ -18,7 +19,12 @@ public class Main {
 		mongoEnabled = new UserMainMenuView().asksUserYesOrNo();
 		System.out.println("Initialize database?");
 		if (new UserMainMenuView().asksUserYesOrNo()) {
-			
+			if (new DatabaseBuilderDAOImpl().initializeDatabase()) {
+				System.out.println("Database initalized");
+			}
+			else {
+				System.out.println("Failed to initalize database");
+			}
 		}
 		
 		Controller currentController = new LoginController(new LoginMenuView());
