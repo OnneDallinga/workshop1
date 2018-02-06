@@ -1,17 +1,13 @@
 package com.rsvier.workshop1.model.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Logger;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.DriverManager;
 import com.rsvier.workshop1.database.DataSource;
-import com.rsvier.workshop1.model.Order;
 import com.ibatis.common.jdbc.ScriptRunner;
 
 public class DatabaseBuilderDAOImpl implements DatabaseBuilderDAO {
@@ -25,7 +21,7 @@ public class DatabaseBuilderDAOImpl implements DatabaseBuilderDAO {
 	}
 
 	@Override
-	public boolean initializeDatabase() {
+	public boolean initializeMYSQLDatabase() {
 			String aSQLScriptFilePath = "create.sql";
 			Connection conn = null;
 			Reader reader = null;

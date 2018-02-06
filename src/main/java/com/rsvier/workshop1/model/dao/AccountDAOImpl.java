@@ -26,15 +26,18 @@ public class AccountDAOImpl implements AccountDAO {
 					while (resultSet.next()) {
 						if (password.equals(resultSet.getString(1))) {
 							logger.info("Login successful");
-							return true;	
+							result = true;	
+						}
+						else {
+							logger.info("Login failed");
 						}
 					}
-					logger.info("Login failed");
+
 					if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 				}
 			catch (SQLException e) {
 				e.printStackTrace();
-				return false;
+				result = false;
 			}
 			return result;
 	}
@@ -67,12 +70,9 @@ public class AccountDAOImpl implements AccountDAO {
 				logger.info("Connected to database");
 				statement.setString(1, username);
 				ResultSet resultSet = statement.executeQuery();
-				if (!resultSet.next()) {
-					return -99;
-				}
 				while (resultSet.next()) {
 					userID = resultSet.getInt(1);
-					logger.info("User ID retrieved");
+					logger.info("User ID retrieved: " + userID);
 				}
 				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 			}
@@ -192,8 +192,30 @@ public class AccountDAOImpl implements AccountDAO {
 
 	@Override
 	public boolean isAdmin(int userID) {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "Select owner_type from account where customer_id = (?)";
+		ResultSet resultSet = null;
+		boolean isAdmin = false;
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);){
+			logger.info("Connected to database");
+			statement.setInt(1,  userID);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				if (resultSet.getString(1).equalsIgnoreCase("Admin")) {
+					isAdmin = true;
+					logger.info("User is admin");
+				}
+				else {
+					logger.info("User is not admin");
+				}
+			}
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return isAdmin;
 	}
 
 

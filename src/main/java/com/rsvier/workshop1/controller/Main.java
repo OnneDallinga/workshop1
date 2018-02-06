@@ -9,9 +9,6 @@ public class Main {
 	public static boolean mongoEnabled;
 
 	public static void main (String args[])  {
-		//new RetrieveUserInfoModel().showTable();
-		//System.exit(0);
-		
 		
 		System.out.println("Welcome. Enable Hikari Connection Pool?");
 		hikariEnabled = new UserMainMenuView().asksUserYesOrNo();
@@ -19,12 +16,24 @@ public class Main {
 		mongoEnabled = new UserMainMenuView().asksUserYesOrNo();
 		System.out.println("Initialize database?");
 		if (new UserMainMenuView().asksUserYesOrNo()) {
-			if (new DatabaseBuilderDAOImpl().initializeDatabase()) {
-				System.out.println("Database initalized");
+			if (!mongoEnabled) {
+				if (new DatabaseBuilderDAOImpl().initializeMYSQLDatabase()) {
+					System.out.println("Database initalized");
+				}
+				else {
+					System.out.println("Failed to initalize database");
+				}
 			}
-			else {
-				System.out.println("Failed to initalize database");
-			}
+			
+			// TODO: Add Mongo Database and enable the following code:
+			/*else {
+				if (new DatabaseBuilderDAOImpl().initializeMONGODatabase()) {
+					System.out.println("Database initalized");
+				}
+				else {
+					System.out.println("Failed to initalize database");
+				}
+			}*/
 		}
 		
 		Controller currentController = new LoginController(new LoginMenuView());

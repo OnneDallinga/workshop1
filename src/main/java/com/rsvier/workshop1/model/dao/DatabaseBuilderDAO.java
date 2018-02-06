@@ -6,6 +6,6 @@ public interface DatabaseBuilderDAO {
 	public abstract boolean isDatabaseInitialized();
 	
 	// Create
-	public abstract boolean initializeDatabase();
+	public abstract boolean initializeMYSQLDatabase();
 
 }
