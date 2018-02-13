@@ -39,6 +39,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			e.printStackTrace();
 		} 
 		logger.info("Succesfully added new customer.");
+		logger.info("Added customer info to the customer table");
 		return newCustomerId;
 	}
 

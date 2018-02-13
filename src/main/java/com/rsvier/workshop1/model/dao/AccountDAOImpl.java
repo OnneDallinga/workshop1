@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import com.rsvier.workshop1.controller.Main;
 import com.rsvier.workshop1.database.DataSource;
+import com.rsvier.workshop1.model.Customer;
 
 public class AccountDAOImpl implements AccountDAO {
 	
@@ -119,16 +120,18 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 	
 	@Override
-	public boolean createAccount(ArrayList<String> necessaryCustomerInformation, ArrayList<String> newUser) { // creates a new user
+	public boolean createAccount(Customer newCustomer) { // creates a new user
 			String query = "INSERT INTO customer (first_name, last_name, last_name_preposition, email, phone_number) VALUES (?,?,?,?,?)";
 			try (Connection connection = DataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);){
-				statement.setString(1, newUser.get(2));
-				statement.setString(2, newUser.get(3));
-				statement.setString(3, newUser.get(4));
-				statement.setString(4, newUser.get(5));
-				statement.setString(5, newUser.get(6));
+				logger.info("Connected to the database");
+				statement.setString(1, newCustomer.getFirstName());
+				statement.setString(2, newCustomer.getLastName());
+				statement.setString(3, newCustomer.getLastNamePreposition());
+				statement.setString(4, newCustomer.getEmail());
+				statement.setString(5, newCustomer.getPhoneNumber());
 				statement.executeUpdate();
+				logger.info("Created a new customer in the customer table");
 				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 			}
 			catch (SQLException e) {
@@ -141,9 +144,11 @@ public class AccountDAOImpl implements AccountDAO {
 			int id = 0;
 			try (Connection connection = DataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);){
-				statement.setString(1,  newUser.get(2));
+				logger.info("Connected to the database");
+				statement.setString(1,  newCustomer.getFirstName());
 				resultSet = statement.executeQuery();
 				if (resultSet.next()) id = resultSet.getInt(1);
+				logger.info("Retrieved new customer's user ID");
 				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 			}
 			catch (SQLException e) {
@@ -154,11 +159,13 @@ public class AccountDAOImpl implements AccountDAO {
 			query = "INSERT INTO account (customer_id, username, password, owner_type) VALUES (?,?,?,?)";
 			try (Connection connection = DataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);){
+				logger.info("Connected to the database");
 				statement.setInt(1, id);
-				statement.setString(2,  newUser.get(0));
-				statement.setString(3,  newUser.get(1));
-				statement.setString(4,  "whatever");
+				statement.setString(2,  newCustomer.getUsername());
+				statement.setString(3,  newCustomer.getSaltedPassword());
+				statement.setString(4,  "basicUser");
 				statement.executeUpdate();
+				logger.info("Added new customer to the account table");
 				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 			}
 			catch (SQLException e) {
@@ -193,6 +200,7 @@ public class AccountDAOImpl implements AccountDAO {
 			statement.setString(1,  deleteThisUser);
 			statement.executeUpdate();
 			success = true;
+			if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

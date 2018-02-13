@@ -38,11 +38,11 @@ public class AccountCreationController extends Controller {
 					validInput = new ValidationModel(userInput).validateNewUser(customerProperty);
 				}
 				switch (customerProperty) {
-				case "username": // to be added later
-					username = userInput;
+				case "username":
+					newCustomer.setUsername(userInput);
 					break;
-				case "password": // to be added later
-					password = userInput;
+				case "password": // to be fixed later
+					newCustomer.setSaltedPassword(userInput);
 					break;
 				case "first_name":
 					newCustomer.setFirstName(userInput);
@@ -66,6 +66,7 @@ public class AccountCreationController extends Controller {
 			}
 			int customerID = new CustomerDAOImpl().createCustomer(newCustomer);
 			newCustomer.setCustomerId(customerID);
+			accountCreated = new AccountDAOImpl().createAccount(newCustomer);
 			//TODO: Push username, password & customerID to login database
 		}
 		System.out.println("Account created. Returning to login screen..");

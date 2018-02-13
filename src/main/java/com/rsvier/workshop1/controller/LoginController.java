@@ -1,5 +1,6 @@
 package com.rsvier.workshop1.controller;
 
+import com.rsvier.workshop1.model.PasswordHasher;
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.useraccounts.*;
 import com.rsvier.workshop1.view.*;
@@ -22,6 +23,11 @@ public class LoginController extends Controller {
 			}
 			username = userInput[0];
 			String password = userInput[1];
+			String hashedAndSalted = new PasswordHasher().makeSaltedPasswordHash(password);
+			String hashed = new PasswordHasher().hasher(password);
+			System.err.println("Password: " + password + " Salted: " + hashed );
+			System.err.println("Salted and hashed: " + hashedAndSalted);
+			
 			
 			//String password = new PasswordHasher().makeSaltedPasswordHash(userInput[1]);
 			if (new AccountDAOImpl().login(username, password)) break;

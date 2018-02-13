@@ -9,6 +9,10 @@ public class Customer {
 	private String email;
 	private String phoneNumber;
 	private boolean customerActive;
+	private String username;
+	private String saltedPassword;
+	private String userType;
+	private int active;
 
 	public Customer() {
 	}
@@ -89,13 +93,45 @@ public class Customer {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
+	
+	public String getSaltedPassword () {
+		return this.saltedPassword;
+	}
+	
+	public void setSaltedPassword (String saltedPassword) {
+		this.saltedPassword = saltedPassword;
+	}
+	
+	public String getUsername () {
+		return this.username;
+	}
+	
+	public void setUsername (String username) {
+		this.username = username;
+	}
+	
+	public String getUserType () {
+		return this.userType;
+	}
+	
+	public void setUserType (String userType) {
+		this.userType = userType;
+	}
+	
 	public boolean isCustomerActive() {
 		return customerActive;
 	}
 
 	public void setCustomerActive(boolean customerActive) {
 		this.customerActive = customerActive;
+	}
+	
+	public void setActive (int active) {
+		this.active = active;
+	}
+	
+	public int getActive () {
+		return this.active;
 	}
 
 	@Override
