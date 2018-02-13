@@ -22,7 +22,7 @@ public class DataSource {
     	  	Class.forName("com.mysql.jdbc.Driver");
     	  	// Load the driver
     	  	//TODO: Figure out how to pass XML dbvars to static method
-    	  	Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "GeertL", "k44sBl0kJe$");
+    	  	Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/rsvier", "Onne", "Once!UponAT1me");
     	  	// Connect to the database
     	  	return connection;
     	}

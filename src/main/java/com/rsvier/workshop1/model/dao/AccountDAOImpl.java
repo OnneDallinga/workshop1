@@ -185,8 +185,20 @@ public class AccountDAOImpl implements AccountDAO {
 
 	@Override
 	public boolean deleteAccount(String deleteThisUser) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = false;
+		String query = "Delete from account where username = (?)";
+		try (Connection connection = DataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);){
+			logger.info("Connected to database");
+			statement.setString(1,  deleteThisUser);
+			statement.executeUpdate();
+			success = true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			success = false;
+		}
+		return success;
 	}
 
 

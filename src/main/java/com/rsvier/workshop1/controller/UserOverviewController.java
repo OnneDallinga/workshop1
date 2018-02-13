@@ -34,9 +34,13 @@ public class UserOverviewController extends Controller{
 				System.out.println("Delete this user: " + deleteThisUser + "?");
 				boolean yesOrNo = currentMenu.asksUserYesOrNo();
 				if (yesOrNo) {
-					boolean success = new AccountDAOImpl().deleteAccount(deleteThisUser);
+					boolean success = new AccountDAOImpl().deleteAccount(deleteThisUser); // Deletes the user
 					if (success) {
 						System.out.println("User successfully deleted");
+						allOfTheUsernames = new AccountDAOImpl().getUsernameList(); // Re-load the users from the database
+					}
+					else {
+						System.out.println("Failed to delete user");
 					}
 				}
 				break;
