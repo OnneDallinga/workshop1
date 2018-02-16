@@ -177,7 +177,7 @@ public class AccountDAOImpl implements AccountDAO {
 				statement.setInt(1, id);
 				statement.setString(2,  newCustomer.getUsername());
 				statement.setString(3,  newCustomer.getSaltedPassword());
-				statement.setString(4,  "basicUser");
+				statement.setString(4,  "NOTADMIN");
 				statement.setString(5,  newCustomer.getHash());
 				statement.executeUpdate();
 				logger.info("Added new customer to the account table");
@@ -197,7 +197,22 @@ public class AccountDAOImpl implements AccountDAO {
 		return false;
 	}
 	
-
+	public boolean upgradeAccount(String changeThisUser) {
+		String query = "update account set owner_type='ADMIN' where username=?";
+		try (Connection connection = DataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);){
+				logger.info("Connected to the database");
+				statement.setString(1,  changeThisUser);
+				statement.executeUpdate();
+				logger.info("Upgraded " + changeThisUser + " to admin");
+				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
 	@Override
 	public boolean changeUsername() {
@@ -252,6 +267,4 @@ public class AccountDAOImpl implements AccountDAO {
 		}
 		return isAdmin;
 	}
-
-
 }
