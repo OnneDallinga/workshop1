@@ -10,6 +10,7 @@ public class Order {
 	private int orderItemsTotal;
 	private boolean shipped;
 	private Address shippedTo;
+	private boolean completed;
 	
 	public Order() {
 	}
@@ -32,6 +33,14 @@ public class Order {
 		this.orderId = orderId;
 	}
 
+	public boolean isCompleted() {
+		return this.completed;
+	}
+	
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	
 	public int getCustomerId() {
 		return customerId;
 	}

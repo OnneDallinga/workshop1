@@ -33,9 +33,11 @@ public class LoginController extends Controller {
 		user = userBuilder.build();
 		if (user.isAdmin()) {
 			nextController = new AdminMainMenuController(new AdminMainMenuView());
+			nextController.setUser(user);
 		}
 		else {
 			nextController = new UserMainMenuController(new UserMainMenuView());
+			nextController.setUser(user);
 		}
 	}
 }

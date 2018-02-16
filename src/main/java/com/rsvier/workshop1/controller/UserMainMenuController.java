@@ -19,7 +19,7 @@ public class UserMainMenuController extends Controller {
 		
 		currentMenu.displayMessage();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
-
+		nextController.setUser(user);
 	}
 
 }

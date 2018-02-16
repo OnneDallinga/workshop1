@@ -20,6 +20,7 @@ public class AdminProductController extends Controller {
 		int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
 		if (userMenuChoice == 9) {
 			nextController = menuOptions.get(9);
+			nextController.setUser(user);
 			return;
 		}
 		if (userMenuChoice == 1) {

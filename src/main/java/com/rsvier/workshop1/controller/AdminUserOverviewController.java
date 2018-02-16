@@ -69,6 +69,7 @@ public class AdminUserOverviewController extends Controller{
 				break;
 			case 9: // Return to main menu
 				nextController = menuOptions.get(9);
+				nextController.setUser(user);
 				userWantsToStay = false;
 				break;
 			}

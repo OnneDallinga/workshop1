@@ -1,5 +1,10 @@
 package com.rsvier.workshop1.controller;
 
+import java.util.HashMap;
+
+import com.rsvier.workshop1.view.UserAccountView;
+import com.rsvier.workshop1.view.UserOrderOverview;
+import com.rsvier.workshop1.view.UserProductOverview;
 import com.rsvier.workshop1.view.View;
 
 public class UserProductController extends Controller {
@@ -10,8 +15,13 @@ public class UserProductController extends Controller {
 
 	@Override
 	public void runView() {
-		// TODO Auto-generated method stub
-
+		menuOptions = new HashMap<Integer, Controller>();
+		menuOptions.put(1, new UserOrderController(new UserOrderOverview()));
+		menuOptions.put(2, new UserProductController(new UserProductOverview()));
+		menuOptions.put(3,  new UserAccountController(new UserAccountView()));
+		
+		currentMenu.displayMessage();
+		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
+		nextController.setUser(user);
 	}
-
 }

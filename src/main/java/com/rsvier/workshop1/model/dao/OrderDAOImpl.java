@@ -1,3 +1,4 @@
+
 package com.rsvier.workshop1.model.dao;
 
 import com.rsvier.workshop1.model.Order;
@@ -83,6 +84,62 @@ public class OrderDAOImpl implements OrderDAO {
 			e.printStackTrace();
 		}
 		return foundOrder;
+	}
+	
+	public ArrayList<Order> findCompletedOrdersByCustomerId(int customerID) {
+		ArrayList<Order> listOfCompletedOrders = new ArrayList<>();
+		query = "SELECT * FROM order WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setObject(1, customerID);	      
+			while(rs.next()) {
+				Order foundOrder = new Order();
+				foundOrder.setOrderId(rs.getInt(1));
+				foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
+				foundOrder.setOrderItemsTotal(rs.getInt(3));
+				foundOrder.setShipped(rs.getBoolean(4));
+				foundOrder.setCustomerId(rs.getInt(5));
+				foundOrder.setCompleted(rs.getBoolean(6));
+				logger.info("Found 1 order");
+				if (foundOrder.isCompleted()) {
+					logger.info("Order is complete. Added to list.");
+					listOfCompletedOrders.add(foundOrder);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listOfCompletedOrders;
+	}
+	
+	public ArrayList<Order> findPendingOrdersByCustomerId(int customerID) {
+		ArrayList<Order> listOfPendingOrders = new ArrayList<>();
+		query = "SELECT * FROM order WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			stmt.setObject(1, customerID);	      
+			while(rs.next()) {
+				Order foundOrder = new Order();
+				foundOrder.setOrderId(rs.getInt(1));
+				foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
+				foundOrder.setOrderItemsTotal(rs.getInt(3));
+				foundOrder.setShipped(rs.getBoolean(4));
+				foundOrder.setCustomerId(rs.getInt(5));
+				foundOrder.setCompleted(rs.getBoolean(6));
+				logger.info("Found 1 order");
+				if (!foundOrder.isCompleted()) {
+					logger.info("Order is incomplete. Added to list.");
+					listOfPendingOrders.add(foundOrder);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listOfPendingOrders;
 	}
 
 	@Override

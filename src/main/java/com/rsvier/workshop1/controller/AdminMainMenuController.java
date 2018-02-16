@@ -19,5 +19,6 @@ public class AdminMainMenuController extends Controller {
 		
 		currentMenu.displayMessage();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
+		nextController.setUser(user);
 	}
 }
