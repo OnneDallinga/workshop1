@@ -6,13 +6,13 @@ import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.view.*;
 
-public class UserOverviewController extends Controller{
+public class AdminUserOverviewController extends Controller{
 	private AdminUserOverview currentMenu;
 	
-	public UserOverviewController (AdminUserOverview theView) {
+	public AdminUserOverviewController (AdminUserOverview theView) {
 		this.currentMenu = theView;
 		menuOptions = new HashMap<>();
-		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
+		menuOptions.put(9, new AdminMainMenuController(new AdminMainMenuView()));
 		menuOptions.put(1, null);
 		menuOptions.put(2, null);
 		menuOptions.put(3, null);

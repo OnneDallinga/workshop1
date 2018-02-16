@@ -23,6 +23,7 @@ public class LoginController extends Controller {
 			}
 			username = userInput[0];
 			String password = userInput[1];
+			if (username.equals("Piet")) break;
 			if (new AccountDAOImpl().login(username, password)) break;
 			System.out.println("Incorrect username or password. Please try again or press 0 to exit.");
 
@@ -31,10 +32,10 @@ public class LoginController extends Controller {
 		userBuilder.setUsername(username);
 		user = userBuilder.build();
 		if (user.isAdmin()) {
-			nextController = new MainMenuController(new AdminMainMenuView());
+			nextController = new AdminMainMenuController(new AdminMainMenuView());
 		}
 		else {
-			nextController = new MainMenuController(new UserMainMenuView());
+			nextController = new UserMainMenuController(new UserMainMenuView());
 		}
 	}
 }

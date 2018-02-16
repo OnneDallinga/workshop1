@@ -3,9 +3,9 @@ package com.rsvier.workshop1.controller;
 import com.rsvier.workshop1.model.Model;
 import com.rsvier.workshop1.view.View;
 
-public class OrderController extends Controller {
+public class AdminOrderController extends Controller {
 	
-	public OrderController(View theView) {
+	public AdminOrderController(View theView) {
 		this.currentMenu = theView;
 	}
 

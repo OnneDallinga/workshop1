@@ -6,12 +6,12 @@ import com.rsvier.workshop1.model.Model;
 import com.rsvier.workshop1.view.AdminMainMenuView;
 import com.rsvier.workshop1.view.View;
 
-public class ProductController extends Controller {
+public class AdminProductController extends Controller {
 	
-	public ProductController(View theView) {
+	public AdminProductController(View theView) {
 		this.currentMenu = theView;
 		menuOptions = new HashMap<>();
-		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
+		menuOptions.put(9, new AdminMainMenuController(new AdminMainMenuView()));
 	}
 
 	@Override
