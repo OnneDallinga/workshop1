@@ -2,6 +2,7 @@ package com.rsvier.workshop1.controller;
 
 import java.util.ArrayList;
 import com.rsvier.workshop1.model.Customer;
+import com.rsvier.workshop1.model.PasswordHasher;
 import com.rsvier.workshop1.model.ValidationModel;
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.model.dao.CustomerDAOImpl;
@@ -30,9 +31,11 @@ public class AccountCreationController extends Controller {
 		
 		
 		while (!accountCreated) {
+
 			for (String customerProperty : necessaryCustomerInformation) {
 				boolean validInput = false;
 				String userInput = "";
+				if (customerProperty.equals("hash")) continue; // requires no action
 				while (!validInput) {
 					userInput = ((UserCreationView) currentMenu).askUserForInput(customerProperty);
 					validInput = new ValidationModel(userInput).validateNewUser(customerProperty);
@@ -41,8 +44,10 @@ public class AccountCreationController extends Controller {
 				case "username":
 					newCustomer.setUsername(userInput);
 					break;
-				case "password": // to be fixed later
-					newCustomer.setSaltedPassword(userInput);
+				case "password":
+					PasswordHasher passwordHasher = new PasswordHasher();
+					newCustomer.setSaltedPassword(passwordHasher.makeSaltedPasswordHash((passwordHasher.hasher(userInput))));
+					newCustomer.setHash(passwordHasher.saltString);
 					break;
 				case "first_name":
 					newCustomer.setFirstName(userInput);

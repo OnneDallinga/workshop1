@@ -23,15 +23,9 @@ public class LoginController extends Controller {
 			}
 			username = userInput[0];
 			String password = userInput[1];
-			String hashedAndSalted = new PasswordHasher().makeSaltedPasswordHash(password);
-			String hashed = new PasswordHasher().hasher(password);
-			System.err.println("Password: " + password + " Salted: " + hashed );
-			System.err.println("Salted and hashed: " + hashedAndSalted);
-			
-			
-			//String password = new PasswordHasher().makeSaltedPasswordHash(userInput[1]);
 			if (new AccountDAOImpl().login(username, password)) break;
-			System.out.println("Incorrect username of password. Please try again or press 0 to exit.");
+			System.out.println("Incorrect username or password. Please try again or press 0 to exit.");
+
 		}
 		UserBuilder userBuilder = new UserBuilder();
 		userBuilder.setUsername(username);

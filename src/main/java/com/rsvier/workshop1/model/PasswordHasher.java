@@ -10,6 +10,7 @@ public class PasswordHasher {
 		    private String password;
 		    private String encryptedPass;
 		    private String encryptedTotal;
+		    public String saltString;
 
 		    private byte[] generateSalt() {
 		        this.random = new SecureRandom();
@@ -20,8 +21,25 @@ public class PasswordHasher {
 
 		    public String makeSaltedPasswordHash(String password) {
 		        byte[] salt = generateSalt();
-		        String saltString = new String(salt);
+		        saltString = new String(salt);
 		        this.password = password + saltString;
+		        
+		        try {
+		            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+		            messageDigest.update(this.password.getBytes());
+		            this.encryptedPass = new String(messageDigest.digest());
+		            this.encryptedTotal = this.encryptedPass + saltString;
+		        } catch (NoSuchAlgorithmException e) {
+		            System.out.println(e);
+		        }
+		        return this.encryptedTotal;
+		    }
+		    
+		    
+		    public String makeSaltedPasswordHash(String password, String hash) {
+		        saltString = hash;
+		        this.password = password + saltString;
+		        
 		        try {
 		            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 		            messageDigest.update(this.password.getBytes());

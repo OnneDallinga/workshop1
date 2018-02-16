@@ -13,6 +13,7 @@ public class Customer {
 	private String saltedPassword;
 	private String userType;
 	private int active;
+	private String hash;
 
 	public Customer() {
 	}
@@ -132,6 +133,14 @@ public class Customer {
 	
 	public int getActive () {
 		return this.active;
+	}
+	
+	public void setHash (String hash) {
+		this.hash = hash;
+	}
+	
+	public String getHash () {
+		return this.hash;
 	}
 
 	@Override
