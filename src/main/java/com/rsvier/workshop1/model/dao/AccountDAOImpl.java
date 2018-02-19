@@ -28,18 +28,18 @@ public class AccountDAOImpl implements AccountDAO {
 			try (Connection connection = DataSource.getConnection();
 					PreparedStatement statementOne = connection.prepareStatement(queryOne);
 					PreparedStatement statementTwo = connection.prepareStatement(queryTwo);){
-					String hash = "";
+					byte[] salt = null;
 					PasswordHasher passwordHasher = new PasswordHasher();
 					logger.info("Connected to database");
 					statementOne.setString(1, username);
 					statementTwo.setString(1, username);
 					ResultSet resultSet = statementOne.executeQuery();
 					while (resultSet.next()) {
-						hash = resultSet.getString(1);
+						salt = resultSet.getString(1).getBytes();
 					}
 					resultSet = statementTwo.executeQuery();
 					while (resultSet.next()) {
-						if (passwordHasher.makeSaltedPasswordHash(password, hash).equals(resultSet.getString(1))) {
+						if (passwordHasher.makeSaltedPasswordHash(password, salt).equals(resultSet.getString(1))) {
 							logger.info("Login successful");
 							result = true;	
 						}
@@ -176,9 +176,9 @@ public class AccountDAOImpl implements AccountDAO {
 				logger.info("Connected to the database");
 				statement.setInt(1, id);
 				statement.setString(2,  newCustomer.getUsername());
-				statement.setString(3,  newCustomer.getSaltedPassword());
+				statement.setString(3,  newCustomer.getEncryptedPassword());
 				statement.setString(4,  "NOTADMIN");
-				statement.setString(5,  newCustomer.getHash());
+				statement.setString(5,  newCustomer.getSalt().toString());
 				statement.executeUpdate();
 				logger.info("Added new customer to the account table");
 				if (!Main.hikariEnabled) connection.close(); // necessary for the JDBC

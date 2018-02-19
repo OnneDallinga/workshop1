@@ -10,10 +10,10 @@ public class Customer {
 	private String phoneNumber;
 	private boolean customerActive;
 	private String username;
-	private String saltedPassword;
+	private String encryptedPassword;
 	private String userType;
 	private int active;
-	private String hash;
+	private byte[] salt;
 
 	public Customer() {
 	}
@@ -95,12 +95,12 @@ public class Customer {
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public String getSaltedPassword () {
-		return this.saltedPassword;
+	public String getEncryptedPassword () {
+		return this.encryptedPassword;
 	}
 	
-	public void setSaltedPassword (String saltedPassword) {
-		this.saltedPassword = saltedPassword;
+	public void setEncryptedPassword (String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
 	}
 	
 	public String getUsername () {
@@ -135,12 +135,12 @@ public class Customer {
 		return this.active;
 	}
 	
-	public void setHash (String hash) {
-		this.hash = hash;
+	public void setSalt (byte[] salt) {
+		this.salt = salt;
 	}
 	
-	public String getHash () {
-		return this.hash;
+	public byte[] getSalt () {
+		return this.salt;
 	}
 
 	@Override

@@ -26,9 +26,6 @@ public class AccountCreationController extends Controller {
 		ArrayList<String> necessaryCustomerInformation = new AccountDAOImpl().retrieveAccountProperties();
 		boolean accountCreated = false;
 		Customer newCustomer = new Customer();
-		String username = "";
-		String password = "";
-		
 		
 		while (!accountCreated) {
 
@@ -46,8 +43,9 @@ public class AccountCreationController extends Controller {
 					break;
 				case "password":
 					PasswordHasher passwordHasher = new PasswordHasher();
-					newCustomer.setSaltedPassword(passwordHasher.makeSaltedPasswordHash((passwordHasher.hasher(userInput))));
-					newCustomer.setHash(passwordHasher.saltString);
+					byte[] salt = passwordHasher.generateSalt();
+					newCustomer.setEncryptedPassword(passwordHasher.makeSaltedPasswordHash(userInput, salt));
+					newCustomer.setSalt(salt);
 					break;
 				case "first_name":
 					newCustomer.setFirstName(userInput);

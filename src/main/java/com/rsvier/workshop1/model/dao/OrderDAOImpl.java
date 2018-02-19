@@ -2,6 +2,7 @@
 package com.rsvier.workshop1.model.dao;
 
 import com.rsvier.workshop1.model.Order;
+import com.rsvier.workshop1.controller.Main;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,12 +89,12 @@ public class OrderDAOImpl implements OrderDAO {
 	
 	public ArrayList<Order> findCompletedOrdersByCustomerId(int customerID) {
 		ArrayList<Order> listOfCompletedOrders = new ArrayList<>();
-		query = "SELECT * FROM order WHERE id=?";
+		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet rs = stmt.executeQuery();) {
+				PreparedStatement stmt = conn.prepareStatement(query);) {
 			logger.info("Connected to database.");
-			stmt.setObject(1, customerID);	      
+			stmt.setObject(1, customerID);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Order foundOrder = new Order();
 				foundOrder.setOrderId(rs.getInt(1));
@@ -113,15 +114,15 @@ public class OrderDAOImpl implements OrderDAO {
 		}
 		return listOfCompletedOrders;
 	}
-	
+
 	public ArrayList<Order> findPendingOrdersByCustomerId(int customerID) {
 		ArrayList<Order> listOfPendingOrders = new ArrayList<>();
-		query = "SELECT * FROM order WHERE id=?";
+		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet rs = stmt.executeQuery();) {
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			stmt.setInt(1, customerID);	    
+			ResultSet rs = stmt.executeQuery();
 			logger.info("Connected to database.");
-			stmt.setObject(1, customerID);	      
 			while(rs.next()) {
 				Order foundOrder = new Order();
 				foundOrder.setOrderId(rs.getInt(1));
@@ -130,9 +131,9 @@ public class OrderDAOImpl implements OrderDAO {
 				foundOrder.setShipped(rs.getBoolean(4));
 				foundOrder.setCustomerId(rs.getInt(5));
 				foundOrder.setCompleted(rs.getBoolean(6));
-				logger.info("Found 1 order");
+				logger.info("Found an order!");
 				if (!foundOrder.isCompleted()) {
-					logger.info("Order is incomplete. Added to list.");
+					logger.info("Order is pending. Added to list.");
 					listOfPendingOrders.add(foundOrder);
 				}
 			}
