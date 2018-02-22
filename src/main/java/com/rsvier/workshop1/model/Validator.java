@@ -5,13 +5,46 @@ import java.util.regex.Pattern;
 
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 
-public class ValidationModel { // Validates possible user inputs.
+public class Validator { // Validates possible user inputs.
 	private String userInput;
 	
-	public ValidationModel(String userInput) {
+	public Validator(String userInput) {
 		this.userInput = userInput;
 	}
-
+	
+    public static boolean isAnInt(String userInput) {   
+        try {
+            Integer.parseInt(userInput);
+            return true;
+        }
+        catch (Exception ex) {
+        	System.out.println("Not a number.");
+            return false;
+        }
+    }
+    
+    public static boolean isAPositiveOrZeroInt(String userInput) {
+    	try {
+    		int id = Integer.parseInt(userInput);
+    		if(id >= 0) {
+    			return true;
+    		} else {
+    			System.out.println("You did not enter a number, it was lower than 0.");
+    			return false;
+    		}
+    	} catch (Exception ex) {
+    		System.out.println("Not a number.");
+    		return false;
+    	}
+    }
+    
+    public static boolean validateMenuChoice(String menuChoice) { // considers 1-9 valid input
+    	if(Integer.parseInt(menuChoice) < 10) {
+    		return true;
+    	}
+    	return false;
+    }
+	
 	public boolean validateNewUser(String customerProperty) { //validates a new user
 		switch (customerProperty) {
 		case "username":
@@ -97,6 +130,37 @@ public class ValidationModel { // Validates possible user inputs.
 		Pattern pattern = Pattern.compile("[0-9]{10}");
 		if (pattern.matcher(userInput).matches()) return true;
 		System.out.println("Your phone number needs to be exactly 10 numbers");
+		return false;
+	}
+	
+	public static boolean validatePrice(String userInput) {
+		Pattern pattern = Pattern.compile("^\\d{0,4}(\\.\\d{1,2})?$");
+		if(pattern.matcher(userInput).matches()) return true;
+		System.out.println("Not a valid price");
+		return false;
+	}
+	
+	public static boolean validateCountry(String userInput) {
+		if (userInput.length() < 4) { // smallest country is min 4 letters
+			System.out.println("You must enter at least 4 letters");
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public static boolean validateAlcoholPercentage(String userInput) {
+		Pattern pattern = Pattern.compile("^\\d{0,2}(?:\\.\\d)?$");
+		if(pattern.matcher(userInput).matches()) return true;
+		System.out.println("You must enter 1 or 2 numbers, followed by an optional decimal" +
+						   "and one number thereafter.");
+		return false;
+	}
+	
+	public static boolean validatePostalCode(String userInput) {
+		Pattern pattern = Pattern.compile("/^[1-9][0-9]{3}?[a-z]{2}$/i");
+		if(pattern.matcher(userInput).matches()) return true;
+		System.out.println("Not a valid Dutch postal code.");
 		return false;
 	}
 }
