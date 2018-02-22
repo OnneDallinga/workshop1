@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.rsvier.workshop1.model.ValidationModel;
+import com.rsvier.workshop1.model.Validator;
 
 public class UserCreationView extends View {
 	

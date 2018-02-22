@@ -22,7 +22,7 @@ class CustomerDAOImplTest {
 	Logger logger = Logger.getLogger(CustomerDAOImplTest.class.getName());
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		logger.info("Setting up database..");
 		try {
 			Connection conn = DataSource.getConnection();
@@ -43,7 +43,7 @@ class CustomerDAOImplTest {
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
 		logger.info("Cleaning up database..");
 		try {
 			Connection conn = DataSource.getConnection();

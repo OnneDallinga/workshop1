@@ -15,6 +15,7 @@ public abstract class View<K> { //parent version
 	protected View userMenuChoice;
 	
 	public abstract void displayMessage(); //This runs when the menu is loaded. Welcome text etc.
+	public abstract void displayMenu(); // Displays the relevant menu
 	public User getUser() { //Use this to get info on the current logged in user.
 		return user;
 	};
@@ -32,8 +33,11 @@ public abstract class View<K> { //parent version
 			try{
 				userInput = Integer.parseInt(br.readLine());
 				if (userInput == 0) {
+					System.out.println("You are about to exit the program. Are you certain?");
+					if (asksUserYesOrNo()) {
 					System.out.println("Program is closing..");
 					System.exit(0); // 0 is always exit
+					}
 				}
 				if (allowedUserChoices.containsKey(userInput)) { // If it's null then it's not a valid choice
 				validInput = true;
@@ -86,13 +90,13 @@ public abstract class View<K> { //parent version
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			try {
 				while (true) {
-					System.out.println("Please enter \"Yes\" or \"No\"");
+					System.out.println("Please enter \"Y\" or \"N\"");
 					userInput = br.readLine();
 					userInput = userInput.toLowerCase();
 					switch (userInput) {
-					case "yes":
+					case "y":
 						return true;
-					case "no":
+					case "n":
 						return false;
 					}
 				}
@@ -118,5 +122,56 @@ public abstract class View<K> { //parent version
 			notAValidChoice.printStackTrace();
 		}
 		return userInput;
+	}
+	
+	public void pressEnterToReturn() {
+		System.out.println("Hit \"ENTER\" to return to the previous menu.");
+		Scanner input;
+		   try {
+			   input = new Scanner(System.in);
+			   input.nextLine();
+		   } catch (Exception e) {
+			   e.printStackTrace();
+		   }	   
+	}
+	
+	public void promptUserForItemId() {
+		System.out.println("Please enter the items's ID-number");
+	}
+	
+	public void displayCanFindByIdAndName() {
+		System.out.println("Please enter the item's ID-number or name");
+	}
+	
+	public void displayCreateSuccess() {
+		System.out.println("Creation of item was successful.");
+	}
+	
+	public void displayUpdateSuccess() {
+		System.out.println("Update was successful.");
+	}
+	
+	public void displayDeleteSuccess() {
+		System.out.println("Deletion was successful.");
+	}
+	
+	public void displayDeletionConfirmationPrompt() {
+		System.out.println("WARNING: Permanently removing from database. Are you certain?");
+	}
+	
+	public void displayOperationFailed() {
+		System.out.println("Operation failed. Please try again.");
+	}
+	
+	public void displayOperationCancelled() {
+		System.out.println("Operation cancelled.");
+	}
+	
+	public void displayItemNotFound() {
+		System.out.println("Item was not found in database.");
+	}
+	
+	public void displayDivider() { // Commonly used to segment information for the user
+		System.out.println("==================================================" + "\n");
 	}
 }
