@@ -16,7 +16,7 @@ public class ProductDAOImpl implements ProductDAO {
 	public int createProduct(Product newProduct) {
 		int newProductId = 0;
 		query = "INSERT INTO product (name, price, stock_quantity, produced_year, country," +
-				"grapeVariety, alcohol_percentage) VALUES (?,?,?,?,?,?,?);";
+				"grape_variety, alcohol_percentage) VALUES (?,?,?,?,?,?,?);";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 			logger.info("Connected to database.");
@@ -48,22 +48,25 @@ public class ProductDAOImpl implements ProductDAO {
 		List<Product> allProducts = new ArrayList<Product>();
 		query = "SELECT * FROM product;";
 		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet rs = stmt.executeQuery();) {
-			logger.info("Connected to database.");	    
-			while(rs.next()) {
-				Product product = new Product();
-				product.setProductId(rs.getInt(1));
-				product.setProductName(rs.getString(2));
-				product.setPrice(rs.getBigDecimal(3));
-				product.setStockQuantity(rs.getInt(4));
-				product.setProducedYear(rs.getInt(5));
-				product.setCountry(rs.getString(6));
-				product.setGrapeVariety(rs.getString(7));
-				product.setAlcoholPercentage(rs.getDouble(8));
-				allProducts.add(product);
-			}
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			try (ResultSet rs = stmt.executeQuery();) {
+				while(rs.next()) {
+					Product product = new Product();
+					product.setProductId(rs.getInt(1));
+					product.setProductName(rs.getString(2));
+					product.setPrice(rs.getBigDecimal(3));
+					product.setStockQuantity(rs.getInt(4));
+					product.setProducedYear(rs.getInt(5));
+					product.setCountry(rs.getString(6));
+					product.setGrapeVariety(rs.getString(7));
+					product.setAlcoholPercentage(rs.getDouble(8));
+					allProducts.add(product);
+				}
 			logger.info("Total products:" + rs.getRow());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException e) {
 			logger.info("Could not retrieve products.");
 			e.printStackTrace();
@@ -128,9 +131,29 @@ public class ProductDAOImpl implements ProductDAO {
 		} 
 		return foundProduct;
 	}
+	
+	@Override
+	public boolean isProductStoredWithId(int productId) {
+		boolean isStored = false;
+		query = "SELECT * FROM product WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");	    
+			stmt.setInt(1, productId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next())
+				isStored = true;
+			else
+				isStored = false;
+		} catch (Exception e) {
+			logger.info("No product found.");
+			e.printStackTrace();
+		}
+		return isStored;
+	}
 
 	@Override
-	public void updateProduct(Product product) {
+	public boolean updateProduct(Product product) {
 		query = "UPDATE product SET name = ?, price = ?, stock_quantity = ?" + 
 				"produced_year = ?, country = ?, grape_variety = ?," + 
 				"alcohol_percentage = ? WHERE id=?";
@@ -148,11 +171,13 @@ public class ProductDAOImpl implements ProductDAO {
 		} catch (SQLException e) {
 			logger.info("Updating product failed.");
 			e.printStackTrace();
-		} 
+			return false;
+		}
+		return true;
 	}
 
 	@Override
-	public void deleteProduct(Product product) {
+	public boolean deleteProduct(Product product) {
 		query = "DELETE FROM product WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -162,6 +187,8 @@ public class ProductDAOImpl implements ProductDAO {
 		} catch (SQLException e) {
 			logger.info("Deleting product failed.");
 			e.printStackTrace();
-		} 
+			return false;
+		}
+		return true;
 	}
 }

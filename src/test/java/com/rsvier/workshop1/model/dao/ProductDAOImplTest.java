@@ -22,12 +22,12 @@ public class ProductDAOImplTest {
 			Connection conn = DataSource.getConnection();
 			// Set up two product rows for testing
 			String query = "INSERT INTO product (name, price, stock_quantity, produced_year," +
-						   "country, grapeVariety, alcohol_percentage)" + 
+						   "country, grape_variety, alcohol_percentage)" + 
 						   "VALUES ('Avec Toutatis', 10.0, 10, 2017, 'France', 'Malbec', 7.2)";
 			Statement stmt = conn.createStatement();
 			stmt.addBatch(query);
 			String query2 = "INSERT INTO product (name, price, stock_quantity, produced_year," +
-							"country, grapeVariety, alcohol_percentage)" +
+							"country, grape_variety, alcohol_percentage)" +
 							"VALUES ('El Rioja Diablo', 8.4, 42, 2014, 'Spain', 'Rioja', 6.66)";
 			stmt.addBatch(query2);
 			stmt.executeBatch();

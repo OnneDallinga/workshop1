@@ -13,11 +13,12 @@ public interface ProductDAO {
 	public List<Product> findAllProducts();
 	public Product findProductById(int productId);
 	public Product findProductByName(String name);
+	public boolean isProductStoredWithId(int productId);
 	
 	// Update
-	public void updateProduct(Product product);
+	public boolean updateProduct(Product product);
 	
 	// Delete
-	public void deleteProduct(Product product);
+	public boolean deleteProduct(Product product);
 	
 }
