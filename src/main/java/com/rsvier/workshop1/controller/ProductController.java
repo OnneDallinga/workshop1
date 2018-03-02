@@ -2,66 +2,61 @@ package com.rsvier.workshop1.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import com.rsvier.workshop1.model.Product;
+import com.rsvier.workshop1.model.dao.ProductDAO;
 import com.rsvier.workshop1.model.dao.ProductDAOImpl;
 import com.rsvier.workshop1.view.AdminMainMenuView;
 import com.rsvier.workshop1.view.ProductView;
+import com.rsvier.workshop1.view.UserMainMenuView;
 import com.rsvier.workshop1.model.Validator;
 
 public class ProductController extends Controller {
 	
 	private ProductView currentMenu;
-	private Scanner input;
-	private ProductDAOImpl productDao;
+	private ProductDAO productDao;
+	private Scanner input = new Scanner(System.in);
 	
 	public ProductController(ProductView theView) {
 		this.currentMenu = theView;
-		menuOptions = new HashMap<>();
-		menuOptions.put(9, new MainMenuController(new AdminMainMenuView()));
-		menuOptions.put(1, null);
-		menuOptions.put(2, null);
-		menuOptions.put(3, null);
-		menuOptions.put(4, null);
-		menuOptions.put(5, null);
-		// menuOptions.put(0, null); view class currrently handles program exit //
+		productDao = new ProductDAOImpl();
 	}
 
 	@Override
 	public void runView() {
-		boolean userWantsToStay = true;
-		while (userWantsToStay) {
-			currentMenu.displayMenu();
-			int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
-			switch (userMenuChoice) {
-			case 1: findAllProducts();
-					break;
-			case 2: findProduct();
-					break;
-			case 3: addNewProduct();
-					break;
-			case 4: updateProduct();
-					break;
-			case 5: deleteProduct();
-					break;
-			case 9: // Returns to main menu
-					nextController = menuOptions.get(9);
+		currentMenu.displayMenu();
+		int userMenuChoice = Integer.parseInt(currentMenu.askUserForInput());
+		switch (userMenuChoice) {
+		case 1: findAllProducts();
+				break;
+		case 2: findProduct();
+				break;
+		case 3: addNewProduct();
+				break;
+		case 4: updateProduct();
+				break;
+		case 5: deleteProduct();
+				break;
+		case 9: // Returns to main menu
+				if (user.isAdmin()) {
+					nextController = new AdminMainMenuController(new AdminMainMenuView());
 					nextController.setUser(user);
-					userWantsToStay = false;
-					break;
-			default: System.out.println("Not a valid option.");
-					currentMenu.displayMenu();
-			}
+				}
+				else {
+					nextController = new UserMainMenuController(new UserMainMenuView());
+					nextController.setUser(user);
+				}
+				break;
+		default: System.out.println("Not a valid option.");
+				currentMenu.displayMenu();
 		}
 	}
 	
 	// Validation of inputs takes place in helper methods
 	public void addNewProduct() {
-		productDao = new ProductDAOImpl();
 		Product productToAdd = new Product();
-		// TODO Functional but ugly, make non-ugly!
+
 		String name = inputName();
 		productToAdd.setProductName(name);
 		
@@ -89,7 +84,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void deleteProduct() {
-		productDao = new ProductDAOImpl();
 		Product productToDelete = new Product();
 		
 		int id = inputValidProductId();
@@ -111,7 +105,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void findProduct() {
-		productDao = new ProductDAOImpl();
 		Product foundProduct = new Product();
 		currentMenu.displayCanFindByIdAndName(); // Indicates allowed search parameters to user
 		String findThisProduct = currentMenu.askUserForInput();
@@ -135,7 +128,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void findAllProducts() {
-		productDao = new ProductDAOImpl();
 		ArrayList<Product> allProducts = (ArrayList<Product>) productDao.findAllProducts();
 		currentMenu.displayProductPropertiesHeader();
 		currentMenu.displayDivider();
@@ -177,7 +169,6 @@ public class ProductController extends Controller {
 	/* EDIT PRODUCT METHODS */
 	
 	public void editProductName() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 		// requires an id from user to identify which product to update
 		int id = inputValidProductId();
@@ -192,7 +183,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductPrice() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -207,7 +197,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductStockQuantity() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -222,7 +211,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductYear() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -237,7 +225,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductCountryOfOrigin() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -252,7 +239,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductGrapeVariety() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -267,7 +253,6 @@ public class ProductController extends Controller {
 	}
 	
 	public void editProductAlcoholContent() {
-		productDao = new ProductDAOImpl();
 		Product productToUpdate = new Product();
 
 		int id = inputValidProductId();
@@ -283,7 +268,7 @@ public class ProductController extends Controller {
 		}
 	}
 	
-	/* HELPER METHODS */
+	/* INPUT & HELPER METHODS */
 	
 	public String inputName() {
 		System.out.print("Enter a name:");
@@ -363,7 +348,7 @@ public class ProductController extends Controller {
 		currentMenu.promptUserForItemId();
 		String attemptAtId = input.nextLine();
 		while (!Validator.isAnInt(attemptAtId)) {
-			System.out.println("You did not enter a valid product id. \n");
+			System.out.println("You did not enter a valid product id.");
 			attemptAtId = input.nextLine();
 		}
 		int id = Integer.parseInt(attemptAtId);
@@ -376,7 +361,7 @@ public class ProductController extends Controller {
 		currentMenu.displayProductUpdateMenu();	
 	}
 	
-	public boolean idIsInDatabase(int id, ProductDAOImpl productDao) {
+	public boolean idIsInDatabase(int id, ProductDAO productDao) {
 		if(productDao.isProductStoredWithId(id)) {
 			return true;
 		} else {
@@ -384,7 +369,7 @@ public class ProductController extends Controller {
 		}
 	}
 	
-	public void runUpdateOnProduct(Product productToUpdate, ProductDAOImpl productDao) {
+	public void runUpdateOnProduct(Product productToUpdate, ProductDAO productDao) {
 		boolean isSuccessful = productDao.updateProduct(productToUpdate);
 		if (isSuccessful) {
 			currentMenu.displayUpdateSuccess();
