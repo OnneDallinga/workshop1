@@ -114,8 +114,11 @@ public abstract class View<K> { //parent version
 		try {
 			userInput = br.readLine();
 			if (userInput.equals("0")) {
-				System.out.println("Program is closing..");
-				System.exit(0);
+				System.out.println("You are about to exit the program. Are you certain?");
+				if (asksUserYesOrNo()) {
+					System.out.println("Program is closing..");
+					System.exit(0); // 0 is always exit
+				}
 			}
 		}
 		catch (IOException notAValidChoice) {
