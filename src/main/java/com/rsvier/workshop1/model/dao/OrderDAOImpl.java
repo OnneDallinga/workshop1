@@ -93,6 +93,26 @@ public class OrderDAOImpl implements OrderDAO {
 		return foundOrder;
 	}
 	
+	public boolean isOrderStoredWithId(int orderId) {
+		boolean isStored = false;
+		query = "SELECT * FROM order WHERE id=?";
+		query = "SELECT * FROM product WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");	    
+			stmt.setInt(1, orderId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next())
+				isStored = true;
+			else
+				isStored = false;
+		} catch (Exception e) {
+			logger.info("No order found.");
+			e.printStackTrace();
+		}
+		return isStored;
+	}
+	
 	public ArrayList<Order> findCompletedOrdersByCustomerId(int customerID) {
 		ArrayList<Order> listOfCompletedOrders = new ArrayList<>();
 		query = "SELECT * FROM order WHERE customerID = (?)";
@@ -150,7 +170,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public void updateOrder(Order order) {
+	public boolean updateOrder(Order order) {
 		query = "UPDATE order SET total_price = ?, total_products = ?," +
 				"shipped_status = ?, customerID = ? WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
@@ -162,12 +182,15 @@ public class OrderDAOImpl implements OrderDAO {
 			stmt.setInt(4, order.getCustomerId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
+			logger.info("Updating order failed.");
 			e.printStackTrace();
+			return false;
 		} 
+		return true;
 	}
 
 	@Override
-	public void deleteOrder(Order order) {
+	public boolean deleteOrder(Order order) {
 		query = "DELETE * FROM order WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -175,7 +198,10 @@ public class OrderDAOImpl implements OrderDAO {
 			stmt.setInt(1, order.getOrderId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
+			logger.info("Deleting order failed.");
 			e.printStackTrace();
+			return false;
 		} 
+		return true;
 	}
 }

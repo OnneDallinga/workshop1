@@ -12,11 +12,12 @@ public interface OrderDAO {
 	// Read
 	public List<Order> findAllOrders();
 	public Order findOrderById(int orderId);
+	public boolean isOrderStoredWithId(int orderId);
 	
 	// Update
-	public void updateOrder(Order order);
+	public boolean updateOrder(Order order);
 	
 	// Delete
-	public void deleteOrder(Order order);
+	public boolean deleteOrder(Order order);
 
 }
