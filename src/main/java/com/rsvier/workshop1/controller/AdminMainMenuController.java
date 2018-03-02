@@ -14,8 +14,9 @@ public class AdminMainMenuController extends Controller {
 	public void runView() {
 		menuOptions = new HashMap<Integer, Controller>();
 		menuOptions.put(1, new AdminUserOverviewController(new AdminUserOverview()));
-		menuOptions.put(2, new AdminProductController(new AdminProductOverview()));
-		menuOptions.put(3, new AdminOrderController(new AdminOrderOverview()));
+		menuOptions.put(2, new CustomerController(new CustomerView()));
+		menuOptions.put(3, new ProductController(new ProductView()));
+		menuOptions.put(4, new OrderController(new OrderView()));
 		
 		currentMenu.displayMessage();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
