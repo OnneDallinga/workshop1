@@ -21,5 +21,4 @@ public class UserMainMenuController extends Controller {
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
 		nextController.setUser(user);
 	}
-
 }
