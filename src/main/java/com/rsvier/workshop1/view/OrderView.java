@@ -6,10 +6,17 @@ import com.rsvier.workshop1.model.Order;
 import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.model.OrderLineItem;
 
-public class OrderMenu extends View {
+public class OrderView extends View {
 	
 	@Override
 	public void displayMessage() {
+	}
+	
+	@Override
+	public void displayMenu() {
+		displayMenuHeader();
+		displayDivider();
+		displayMenuOptions();
 	}
 	
 	public void displayMenuHeader() {
@@ -18,10 +25,12 @@ public class OrderMenu extends View {
 	
 	public void displayMenuOptions() {
 		System.out.print("1. View all orders \n" +
-						 "2. Find an order" +
-						 "3. Add new order \n" +
-						 "4. Update order \n" +
-						 "5. Delete order \n" +
+						 "2. View pending orders only \n" +
+						 "3. View completed orders only \n" +
+						 "4. Find an order" +
+						 "5. Add new order \n" +
+						 "6. Update order \n" +
+						 "7. Delete order \n" +
 						 "9. Return to main menu \n" +
 						 "0. Exit program \n" +
 						 "\n");

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.rsvier.workshop1.model.Customer;
 
-public class CustomerMenu extends View {
+public class CustomerView extends View {
 	
 	@Override
 	public void displayMessage() {
