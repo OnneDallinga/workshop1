@@ -14,8 +14,9 @@ public class UserMainMenuController extends Controller {
 	public void runView() {
 		menuOptions = new HashMap<Integer, Controller>();
 		menuOptions.put(1, new UserOrderController(new UserOrderOverview()));
-		menuOptions.put(2, new UserProductController(new UserProductOverview()));
-		menuOptions.put(3,  new UserAccountController(new UserAccountView()));
+		menuOptions.put(2, new CustomerController(new CustomerView()));
+		menuOptions.put(3, new ProductController(new ProductView()));
+		menuOptions.put(4, new OrderController(new OrderView()));
 		
 		currentMenu.displayMessage();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
