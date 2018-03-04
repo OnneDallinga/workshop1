@@ -79,11 +79,10 @@ public class OrderView extends View {
 	public void displayOrderUpdateMenu() {
 		System.out.print("What would you like to update? \n" +
 						 "\n" +
-						 "1. Order id \n" +
-						 "2. Associated customer id \n" +
-						 "3. Number of items in order \n" +
-						 "4. Total price of order \n" +
-						 "5. Shipping status \n" +
+						 "1. Associated customer \n" +
+						 "2. Items in order \n" +
+						 "3. Shipping status \n" +
+						 "4. Associated shipping address \n" +
 						 "9. Return to the order menu \n" +
 						 "\n");
 	}
