@@ -53,55 +53,11 @@ public class ProductController extends Controller {
 		}
 	}
 	
-	// Validation of inputs takes place in helper methods
-	public void addNewProduct() {
-		Product productToAdd = new Product();
-
-		String name = inputName();
-		productToAdd.setProductName(name);
-		
-		String price = inputPrice();
-		productToAdd.setPrice(new BigDecimal(price));
-		
-		int stockQuantity = inputStockQuantity();
-		productToAdd.setStockQuantity(stockQuantity);
-		
-		int producedYear = inputYear();
-		productToAdd.setProducedYear(producedYear);
-		
-		String country = inputCountry();
-		productToAdd.setCountry(country);
-		
-		String grapeVariety = inputGrapeVariety();
-		productToAdd.setGrapeVariety(grapeVariety);
-		
-		double alcoholPercentage = inputAlcoholPercentage();
-		productToAdd.setAlcoholPercentage(alcoholPercentage);
-		
-		productDao.createProduct(productToAdd);
-		currentMenu.displayCreateSuccess();
-		currentMenu.displayOperationFailed();
-	}
-	
-	public void deleteProduct() {
-		Product productToDelete = new Product();
-		
-		int id = inputValidProductId();
-		
-		productToDelete.setProductId(id);
-		if(idIsInDatabase(id, productDao)) {
-			currentMenu.displayDeletionConfirmationPrompt(); // Require confirmation
-			boolean yesOrNo = currentMenu.asksUserYesOrNo();
-			if (yesOrNo) { // user answered yes
-				productDao.deleteProduct(productToDelete);
-				currentMenu.displayDeleteSuccess();
-			} else {
-				currentMenu.displayOperationCancelled();
-			}
-		} else {
-			currentMenu.displayItemNotFound();
-			currentMenu.pressEnterToReturn();
-		}
+	public void findAllProducts() {
+		ArrayList<Product> allProducts = (ArrayList<Product>) productDao.findAllProducts();
+		currentMenu.displayProductPropertiesHeader();
+		currentMenu.displayDivider();
+		currentMenu.displayAllProducts(allProducts);
 	}
 	
 	public void findProduct() {
@@ -127,11 +83,54 @@ public class ProductController extends Controller {
 		currentMenu.displayProductProperties(foundProduct);
 	}
 	
-	public void findAllProducts() {
-		ArrayList<Product> allProducts = (ArrayList<Product>) productDao.findAllProducts();
-		currentMenu.displayProductPropertiesHeader();
-		currentMenu.displayDivider();
-		currentMenu.displayAllProducts(allProducts);
+	public void addNewProduct() {
+		Product productToAdd = new Product();
+		System.out.println("Please enter product details below:");
+
+		String name = inputName();
+		productToAdd.setProductName(name);
+		
+		String price = inputPrice();
+		productToAdd.setPrice(new BigDecimal(price));
+		
+		int stockQuantity = inputStockQuantity();
+		productToAdd.setStockQuantity(stockQuantity);
+		
+		int producedYear = inputYear();
+		productToAdd.setProducedYear(producedYear);
+		
+		String country = inputCountry();
+		productToAdd.setCountry(country);
+		
+		String grapeVariety = inputGrapeVariety();
+		productToAdd.setGrapeVariety(grapeVariety);
+		
+		double alcoholPercentage = inputAlcoholPercentage();
+		productToAdd.setAlcoholPercentage(alcoholPercentage);
+		
+		productDao.createProduct(productToAdd);
+		currentMenu.displayCreateSuccess();
+	}
+	
+	public void deleteProduct() {
+		Product productToDelete = new Product();
+		
+		int id = inputValidProductId();
+		
+		productToDelete.setProductId(id);
+		if(idIsInDatabase(id, productDao)) {
+			currentMenu.displayDeletionConfirmationPrompt(); // Require confirmation
+			boolean yesOrNo = currentMenu.asksUserYesOrNo();
+			if (yesOrNo) { // user answered yes
+				productDao.deleteProduct(productToDelete);
+				currentMenu.displayDeleteSuccess();
+			} else {
+				currentMenu.displayOperationCancelled();
+			}
+		} else {
+			currentMenu.displayItemNotFound();
+			currentMenu.pressEnterToReturn();
+		}
 	}
 	
 	public void updateProduct() {
