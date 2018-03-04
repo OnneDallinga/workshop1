@@ -7,16 +7,16 @@ import com.rsvier.workshop1.model.OrderLineItem;
 public interface OrderLineItemDAO {
 	
 	// Create
-	public int createOrderLineItem(OrderLineItem orderLineItem);
+	public boolean createOrderLineItem(OrderLineItem orderLineItem);
 	
 	// Read
 	public List<OrderLineItem> getAllOrderLineItemsByOrderId(int orderId);
-	public OrderLineItem findOrderLineItemById(int orderLineItemId);
+	public List<OrderLineItem> getAllOrderLineItemsForProductId (int productId);
 	
 	// Update
 	public void updateOrderLineItem(OrderLineItem orderLineItem);
 	
 	// Delete
-	public void deleteOrderLineItem(OrderLineItem orderLineItem);
-
+	public void deleteSingleOrderLineItem(OrderLineItem orderLineItem);
+	public void deleteAllLineItemsFromOrder(int orderId);
 }

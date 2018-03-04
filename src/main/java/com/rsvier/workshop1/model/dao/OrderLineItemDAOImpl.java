@@ -1,6 +1,8 @@
 package com.rsvier.workshop1.model.dao;
 
+import com.rsvier.workshop1.model.Order;
 import com.rsvier.workshop1.model.OrderLineItem;
+import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,22 +15,20 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 	private Logger logger = Logger.getLogger(OrderDAOImpl.class.getName());
 
 	@Override
-	public int createOrderLineItem(OrderLineItem orderLineItem) {
-		int newOrderLineItemId = 0;
+	public boolean createOrderLineItem(OrderLineItem orderLineItem) {
 		query = "INSERT INTO order_line_item (productID, orderID, quantity) VALUES (?,?,?);";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				ResultSet rs = stmt.getGeneratedKeys();) {
 			logger.info("Connected to database.");
-			stmt.setInt(2, orderLineItem.getProductId());
-			stmt.setInt(3, orderLineItem.getOrderId());
-			stmt.setInt(4, orderLineItem.getQuantity());
+			stmt.setInt(2, orderLineItem.getProduct().getProductId());
+			stmt.setInt(3, orderLineItem.getParentOrder().getOrderId());
+			stmt.setInt(4, orderLineItem.getProductQuantity());
 			stmt.executeUpdate();
 			try {
 				if (rs.next()) {
-					newOrderLineItemId = rs.getInt(1);
-					orderLineItem.setOrderLineItemId(newOrderLineItemId);
 					logger.info("Succesfully added new line item.");
+					return true;
 				}           
 			} catch (SQLException e) {
 				logger.info("Adding new line item failed.");
@@ -36,7 +36,7 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		return newOrderLineItemId;
+		return false;
 	}
 
 	@Override
@@ -49,11 +49,50 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 			logger.info("Connected to database.");	      
 			while(rs.next()) {
 				OrderLineItem orderLineItem = new OrderLineItem();
-				orderLineItem.setOrderLineItemId(rs.getInt(1));
-				orderLineItem.setProductId(rs.getInt(2));
-				orderLineItem.setOrderId(rs.getInt(3));
-				orderLineItem.setQuantity(rs.getInt(4));
+				// Associate a product for each retrieved line item
+				Product product = new Product();
+				product.setProductId(rs.getInt(2));
+				orderLineItem.setProduct(product);
+				
+				orderLineItem.setProductQuantity(rs.getInt(4));
 				list.add(orderLineItem);
+			}
+			Order order = new Order();
+			order.setOrderId(orderId);
+			for (OrderLineItem item : list) {
+				item.setParentOrder(order);
+			}
+			logger.info("Total line items:" + rs.getRow());
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
+	@Override
+	public List<OrderLineItem> getAllOrderLineItemsForProductId(int productId) {
+		List<OrderLineItem> list = new ArrayList<OrderLineItem>();
+		query = "SELECT * FROM order_line_item WHERE productID=?;";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery();) {
+			logger.info("Connected to database.");
+			while(rs.next()) {
+				OrderLineItem orderLineItem = new OrderLineItem();;
+				
+				// Associate an order for all retrieved line items
+				Order order = new Order();;
+				order.setOrderId(rs.getInt(3));
+				orderLineItem.setParentOrder(order);
+		
+				orderLineItem.setProductQuantity(rs.getInt(4));
+				list.add(orderLineItem);
+			}
+			Product product = new Product();
+			product.setProductId(productId);
+			for(OrderLineItem item : list) {
+				item.setProduct(product);
 			}
 			logger.info("Total line items:" + rs.getRow());
 			rs.close();
@@ -64,36 +103,15 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 	}
 
 	@Override
-	public OrderLineItem findOrderLineItemById(int orderLineItemId) {
-		OrderLineItem foundOrderLineItem = new OrderLineItem();
-		query = "SELECT * FROM order_line_item WHERE id=?";
-		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);
-				ResultSet rs = stmt.executeQuery();) {
-			logger.info("Connected to database.");
-			stmt.setObject(1, orderLineItemId);
-			if(rs.next()) {
-				foundOrderLineItem.setOrderLineItemId(rs.getInt(1));
-				foundOrderLineItem.setProductId(rs.getInt(2));
-				foundOrderLineItem.setOrderId(rs.getInt(3));
-				foundOrderLineItem.setQuantity(rs.getInt(4));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		return foundOrderLineItem;
-	}
-
-	@Override
 	public void updateOrderLineItem(OrderLineItem orderLineItem) {
 		query = "UPDATE orderLineItem SET productID = ?, orderID = ?," +
-				"quantity = ? WHERE id=?";
+				"quantity = ?";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
 			logger.info("Connected to database.");
-			stmt.setInt(1, orderLineItem.getProductId());
-			stmt.setInt(2, orderLineItem.getOrderId());
-			stmt.setInt(3, orderLineItem.getQuantity());
+			stmt.setInt(1, orderLineItem.getProduct().getProductId());
+			stmt.setInt(2, orderLineItem.getParentOrder().getOrderId());
+			stmt.setInt(3, orderLineItem.getProductQuantity());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -101,15 +119,30 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 	}
 
 	@Override
-	public void deleteOrderLineItem(OrderLineItem orderLineItem) {
-		query = "DELETE FROM order_line_item WHERE id=?";
+	public void deleteSingleOrderLineItem(OrderLineItem orderLineItem) {
+		query = "DELETE FROM order_line_item WHERE (productID, orderID, quantity) VALUES (?,?,?)";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
 			logger.info("Connected to database.");
-			stmt.setInt(1, orderLineItem.getOrderLineItemId());
+			stmt.setInt(1, orderLineItem.getProduct().getProductId());
+			stmt.setInt(2, orderLineItem.getParentOrder().getOrderId());
+			stmt.setInt(3, orderLineItem.getProductQuantity());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
+	}
+	
+	@Override
+	public void deleteAllLineItemsFromOrder(int orderId) {
+		// TODO insert correct name for the link table
+		query = "DELETE FROM order_line_item WHERE order_id = " + orderId;
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
