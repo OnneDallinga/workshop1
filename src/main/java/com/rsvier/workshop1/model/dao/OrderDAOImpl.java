@@ -2,7 +2,7 @@
 package com.rsvier.workshop1.model.dao;
 
 import com.rsvier.workshop1.model.Order;
-import com.rsvier.workshop1.controller.Main;
+import com.rsvier.workshop1.model.Customer;
 import com.rsvier.workshop1.database.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class OrderDAOImpl implements OrderDAO {
 	private Logger logger = Logger.getLogger(OrderDAOImpl.class.getName());
 
 	@Override
-	public int createOrder(Order order) {
+	public int createOrder(Order order, Customer customer) {
 		int newOrderId = 0;
 		query = "INSERT INTO order (total_price, total_products, shipped_status, customerID) VALUES (?,?,?,?);";
 		try (Connection conn = DataSource.getConnection();
@@ -23,7 +23,7 @@ public class OrderDAOImpl implements OrderDAO {
 			stmt.setBigDecimal(1, order.getOrderPriceTotal());
 			stmt.setInt(2, order.getOrderItemsTotal());
 			stmt.setBoolean(3,  order.isShipped());
-			stmt.setInt(4, order.getCustomerId());
+			stmt.setInt(4, customer.getCustomerId());
 			stmt.executeUpdate();
 			try (ResultSet rs = stmt.getGeneratedKeys();){
 				if (rs.next()) {
@@ -43,6 +43,7 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public List<Order> findAllOrders() {
 		List<Order> list = new ArrayList<Order>();
+		Customer customer = new Customer();
 		query = "SELECT * FROM order;";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -54,7 +55,9 @@ public class OrderDAOImpl implements OrderDAO {
 					order.setOrderPriceTotal(rs.getBigDecimal(2));
 					order.setOrderItemsTotal(rs.getInt(3));
 					order.setShipped(rs.getBoolean(4));
-					order.setCustomerId(rs.getInt(5));
+					// Assigns a new customer to the order by its id
+					customer.setCustomerId(rs.getInt(5));
+					order.setCustomerOfOrder(customer);
 					list.add(order);
 				}
 				logger.info("Total orders:" + rs.getRow());
@@ -71,6 +74,7 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public Order findOrderById(int orderId) {
 		Order foundOrder = new Order();
+		Customer customer = new Customer();
 		query = "SELECT * FROM order WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -82,7 +86,9 @@ public class OrderDAOImpl implements OrderDAO {
 					foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
 					foundOrder.setOrderItemsTotal(rs.getInt(3));
 					foundOrder.setShipped(rs.getBoolean(4));
-					foundOrder.setCustomerId(rs.getInt(5));
+					// Assigns a customer to the order by its id
+					customer.setCustomerId(rs.getInt(5));
+					foundOrder.setCustomerOfOrder(customer);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -93,6 +99,7 @@ public class OrderDAOImpl implements OrderDAO {
 		return foundOrder;
 	}
 	
+	@Override
 	public boolean isOrderStoredWithId(int orderId) {
 		boolean isStored = false;
 		query = "SELECT * FROM order WHERE id=?";
@@ -113,13 +120,14 @@ public class OrderDAOImpl implements OrderDAO {
 		return isStored;
 	}
 	
-	public ArrayList<Order> findCompletedOrdersByCustomerId(int customerID) {
+	@Override
+	public ArrayList<Order> findCompletedOrdersOfCustomer(Customer customer) {
 		ArrayList<Order> listOfCompletedOrders = new ArrayList<>();
 		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
 			logger.info("Connected to database.");
-			stmt.setObject(1, customerID);
+			stmt.setObject(1, customer.getCustomerId());
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Order foundOrder = new Order();
@@ -127,7 +135,7 @@ public class OrderDAOImpl implements OrderDAO {
 				foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
 				foundOrder.setOrderItemsTotal(rs.getInt(3));
 				foundOrder.setShipped(rs.getBoolean(4));
-				foundOrder.setCustomerId(rs.getInt(5));
+				foundOrder.setCustomerOfOrder(customer);
 				foundOrder.setCompleted(rs.getBoolean(6));
 				logger.info("Found 1 order");
 				if (foundOrder.isCompleted()) {
@@ -141,12 +149,13 @@ public class OrderDAOImpl implements OrderDAO {
 		return listOfCompletedOrders;
 	}
 
-	public ArrayList<Order> findPendingOrdersByCustomerId(int customerID) {
+	@Override
+	public ArrayList<Order> findPendingOrdersOfCustomer(Customer customer) {
 		ArrayList<Order> listOfPendingOrders = new ArrayList<>();
 		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
-			stmt.setInt(1, customerID);	    
+			stmt.setInt(1, customer.getCustomerId());	    
 			ResultSet rs = stmt.executeQuery();
 			logger.info("Connected to database.");
 			while(rs.next()) {
@@ -155,7 +164,7 @@ public class OrderDAOImpl implements OrderDAO {
 				foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
 				foundOrder.setOrderItemsTotal(rs.getInt(3));
 				foundOrder.setShipped(rs.getBoolean(4));
-				foundOrder.setCustomerId(rs.getInt(5));
+				foundOrder.setCustomerOfOrder(customer);
 				foundOrder.setCompleted(rs.getBoolean(6));
 				logger.info("Found an order!");
 				if (!foundOrder.isCompleted()) {
@@ -170,7 +179,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public boolean updateOrder(Order order) {
+	public boolean updateOrder(Order order, Customer customer) {
 		query = "UPDATE order SET total_price = ?, total_products = ?," +
 				"shipped_status = ?, customerID = ? WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
@@ -179,7 +188,7 @@ public class OrderDAOImpl implements OrderDAO {
 			stmt.setBigDecimal(1, order.getOrderPriceTotal());
 			stmt.setInt(2, order.getOrderItemsTotal());
 			stmt.setBoolean(3, order.isShipped());
-			stmt.setInt(4, order.getCustomerId());
+			stmt.setInt(4, customer.getCustomerId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			logger.info("Updating order failed.");

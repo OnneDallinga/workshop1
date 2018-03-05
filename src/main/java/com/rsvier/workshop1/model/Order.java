@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Order {
 	
 	private int orderId;
-	private int customerId;
+	private Customer customer;
 	private BigDecimal orderPriceTotal;
 	private int orderItemsTotal;
 	private boolean shipped;
@@ -16,12 +16,12 @@ public class Order {
 	}
 	
 	public Order(int orderId,
-				 int customerId,
+				 Customer customer,
 				 BigDecimal orderPriceTotal,
 				 int orderItemsTotal) {
 		this.orderId = orderId;
-		this.customerId = customerId;
-		// TODO: Figure out BigDecimal as parameter //
+		this.customer = customer;
+		this.orderPriceTotal = orderPriceTotal;
 		this.orderItemsTotal = orderItemsTotal;
 	}
 
@@ -41,12 +41,12 @@ public class Order {
 		this.completed = completed;
 	}
 	
-	public int getCustomerId() {
-		return customerId;
+	public Customer getCustomerOfOrder() {
+		return customer;
 	}
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setCustomerOfOrder(Customer customer) {
+		this.customer = customer;
 	}
 
 	public BigDecimal getOrderPriceTotal() {
@@ -83,7 +83,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", customerId=" + customerId + ", orderPriceTotal=" + orderPriceTotal +
+		return "Order [orderId=" + orderId + ", customerId=" + customer.getCustomerId() + ", orderPriceTotal=" + orderPriceTotal +
 				", orderItemsTotal=" + orderItemsTotal + ", shipped=" + shipped + ", shippedTo=" + shippedTo + "]";
 	}	
 }
