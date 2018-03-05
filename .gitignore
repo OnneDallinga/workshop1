@@ -1,11 +1,13 @@
 # Eclipse specific files
-**/.classpath
-**/.project
-**/.settings
+.classpath
+.project
+.settings/
 
-**/target/**
+# Maven specific
+target/
 
 # Mac specific file
-**/.DS_Store
+.DS_Store
 
-**/*.class
+# Java specific compiled class files
+*.class
