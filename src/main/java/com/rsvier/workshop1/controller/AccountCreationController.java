@@ -2,6 +2,7 @@ package com.rsvier.workshop1.controller;
 
 import java.util.ArrayList;
 import com.rsvier.workshop1.model.Customer;
+import com.rsvier.workshop1.model.PasswordHasher;
 import com.rsvier.workshop1.model.Validator;
 import com.rsvier.workshop1.model.dao.AccountDAOImpl;
 import com.rsvier.workshop1.model.dao.CustomerDAOImpl;
@@ -42,7 +43,7 @@ public class AccountCreationController extends Controller {
 					break;
 				case "password":
 					PasswordHasher passwordHasher = new PasswordHasher();
-					byte[] salt = passwordHasher.generateSalt();
+					String salt = passwordHasher.generateSalt();
 					newCustomer.setEncryptedPassword(passwordHasher.makeSaltedPasswordHash(userInput, salt));
 					newCustomer.setSalt(salt);
 					break;

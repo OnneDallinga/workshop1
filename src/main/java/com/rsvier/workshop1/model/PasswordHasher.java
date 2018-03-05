@@ -1,4 +1,4 @@
-package com.rsvier.workshop1.model;
+	package com.rsvier.workshop1.model;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,11 +11,11 @@ public class PasswordHasher {
 		    private String encryptedPass;
 		    private String encryptedTotal;*/
 
-		    public byte[] generateSalt() {
+		    public String generateSalt() {
 		        this.random = new SecureRandom();
 		        byte bytes[] = new byte[20];
 		        this.random.nextBytes(bytes);
-		        return bytes;
+		        return new String (bytes);
 		    }
 
 		    /*public String makeSaltedPasswordHash(String password) { // this does nothing?
@@ -35,16 +35,16 @@ public class PasswordHasher {
 		    }*/
 		    
 		    
-		    public String makeSaltedPasswordHash(String password, byte[] salt) {
+		    public String makeSaltedPasswordHash(String password, String salt) {
 		    	String encryptedTotal = "";
-		        try {
+		        /*try {
 		            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 		            messageDigest.update(password.getBytes());
-		            String encryptedPassword = new String(messageDigest.digest());
-		            encryptedTotal = encryptedPassword + salt;
-		        } catch (NoSuchAlgorithmException e) {
+		            String encryptedPassword = new String(messageDigest.digest());*/
+		            encryptedTotal = password + salt;
+		        /*} catch (NoSuchAlgorithmException e) {
 		            System.out.println(e);
-		        }
+		        }*/
 		        return encryptedTotal;
 		    }
 

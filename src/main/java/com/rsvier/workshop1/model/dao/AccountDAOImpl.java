@@ -28,14 +28,14 @@ public class AccountDAOImpl implements AccountDAO {
 			try (Connection connection = DataSource.getConnection();
 					PreparedStatement statementOne = connection.prepareStatement(queryOne);
 					PreparedStatement statementTwo = connection.prepareStatement(queryTwo);){
-					byte[] salt = null;
+					String salt = null;
 					PasswordHasher passwordHasher = new PasswordHasher();
-					logger.info("Connected to database");
+					logger.info("Connected to database with username: " + username);
 					statementOne.setString(1, username);
 					statementTwo.setString(1, username);
 					ResultSet resultSet = statementOne.executeQuery();
 					while (resultSet.next()) {
-						salt = resultSet.getString(1).getBytes();
+						salt = resultSet.getString(1);
 					}
 					resultSet = statementTwo.executeQuery();
 					while (resultSet.next()) {

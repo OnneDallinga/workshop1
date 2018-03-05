@@ -13,7 +13,7 @@ public class Customer {
 	private String encryptedPassword;
 	private String userType;
 	private int active;
-	private byte[] salt;
+	private String salt;
 
 	public Customer() {
 	}
@@ -135,11 +135,11 @@ public class Customer {
 		return this.active;
 	}
 	
-	public void setSalt (byte[] salt) {
+	public void setSalt (String salt) {
 		this.salt = salt;
 	}
 	
-	public byte[] getSalt () {
+	public String getSalt () {
 		return this.salt;
 	}
 
