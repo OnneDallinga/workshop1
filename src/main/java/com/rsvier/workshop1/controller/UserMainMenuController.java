@@ -17,7 +17,7 @@ public class UserMainMenuController extends Controller {
 		menuOptions.put(2, new ProductController(new ProductView()));
 		menuOptions.put(3, new OrderController(new OrderView()));
 		
-		currentMenu.displayMessage();
+		currentMenu.displayMenu();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
 		nextController.setUser(user);
 	}

@@ -1,6 +1,5 @@
 package com.rsvier.workshop1.controller;
 
-import com.rsvier.workshop1.model.*;
 import com.rsvier.workshop1.view.*;
 import java.util.*;
 
@@ -18,7 +17,7 @@ public class AdminMainMenuController extends Controller {
 		menuOptions.put(3, new ProductController(new ProductView()));
 		menuOptions.put(4, new OrderController(new OrderView()));
 		
-		currentMenu.displayMessage();
+		currentMenu.displayMenu();
 		nextController = menuOptions.get(currentMenu.asksUserForMenuChoice(menuOptions));
 		nextController.setUser(user);
 	}

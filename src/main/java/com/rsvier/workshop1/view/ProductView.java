@@ -23,7 +23,7 @@ public class ProductView extends View {
 	
 	public void displayMenuOptions() {
 		System.out.print("1. View product inventory \n" +
-						 "2. Find a product" +
+						 "2. Find a product \n" +
 						 "3. Add new product \n" +
 						 "4. Update product \n" +
 						 "5. Delete product \n" +
@@ -33,7 +33,7 @@ public class ProductView extends View {
 	}
 	
 	public void displayProductPropertiesHeader() {
-		System.out.printf("%-3d %-10s %-5d.2 %-3d %-5d %-10s %-10s %-3d.2 \n",
+		System.out.printf("%-3s %-10s %-5s %-3s %-5s %-10s %-10s %-3s \n",
 						   "id",
 						   "name",
 						   "price",
