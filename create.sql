@@ -89,6 +89,8 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`product` (
   `price` DECIMAL(6,2) NOT NULL,
   `stock_quantity` INT NOT NULL,
   `produced_year` INT(4) NOT NULL,
+  `country` VARCHAR(45) NOT NULL, -- added by Geert --
+  `grape_variety` VARCHAR(90) NOT NULL, -- added by Geert --
   `alcohol_percentage` DECIMAL(3,1) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -126,7 +128,7 @@ DROP TABLE IF EXISTS `RSVier`.`address` ;
 CREATE TABLE IF NOT EXISTS `RSVier`.`address` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `postal_code` VARCHAR(6) NOT NULL,
-  `street_name` VARCHAR(65) NOT NULL COMMENT 'Apparently the longest streetname in NL currently is 61 characters.',
+  `street_name` VARCHAR(65) NOT NULL,
   `city` VARCHAR(45) NOT NULL,
   `house_number` INT NOT NULL,
   `house_number_addition` VARCHAR(5) NOT NULL,
@@ -141,76 +143,7 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`address` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `RSVier`.`grape_variety`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `RSVier`.`grape_variety` ;
-
-CREATE TABLE IF NOT EXISTS `RSVier`.`grape_variety` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `variety_name` VARCHAR(60) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `RSVier`.`product_has_grape_variety`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `RSVier`.`product_has_grape_variety` ;
-
-CREATE TABLE IF NOT EXISTS `RSVier`.`product_has_grape_variety` (
-  `productID` INT NOT NULL,
-  `grape_varietyID` INT NOT NULL,
-  INDEX `grape_varietyID_idx` (`grape_varietyID` ASC),
-  INDEX `productID_idx` (`productID` ASC),
-  CONSTRAINT `grape_varietyID`
-    FOREIGN KEY (`grape_varietyID`)
-    REFERENCES `RSVier`.`grape_variety` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `productID`
-    FOREIGN KEY (`productID`)
-    REFERENCES `RSVier`.`product` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `RSVier`.`product_region`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `RSVier`.`product_region` ;
-
-CREATE TABLE IF NOT EXISTS `RSVier`.`product_region` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `region_name` VARCHAR(60) NOT NULL,
-  `country` VARCHAR(60) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `RSVier`.`product_has_origin`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `RSVier`.`product_has_origin` ;
-
-CREATE TABLE IF NOT EXISTS `RSVier`.`product_has_origin` (
-  `productID` INT NOT NULL,
-  `regionID` INT NOT NULL,
-  INDEX `regionID_idx` (`regionID` ASC),
-  INDEX `productID_idx` (`productID` ASC),
-  CONSTRAINT `regionID`
-    FOREIGN KEY (`regionID`)
-    REFERENCES `RSVier`.`product_region` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `productID`
-    FOREIGN KEY (`productID`)
-    REFERENCES `RSVier`.`product` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- USER PRIVILEGES --
 
 SET SQL_MODE = '';
 GRANT USAGE ON *.* TO GeertL;
@@ -228,7 +161,38 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+-- DATA POPULATION --
+
 INSERT INTO customer (id, first_name, last_name) VALUES (1, 'Onne', 'Dallinga');
 INSERT INTO account (id, username, PASSWORD, owner_type, customer_id, active, hash) VALUES (1, 'Onne', 'Hello', 'ADMIN', 1, 1, 'None');
 INSERT INTO customer (id, first_name, last_name) VALUES (2, 'Piet', 'Pieters');
 INSERT INTO account (id, username, PASSWORD, owner_type, customer_id, active, hash) VALUES (2, 'Piet', 'Piet', 'NOTADMIN', 2, 2, 'None');
+
+INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
+            VALUES (1, 'El Rioja Diablo', 6.66, 14, 2017, 'Spain', 'Rioja', 13.0);
+INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
+            VALUES (2, 'Ech\' Druuvenspul', 1.45, 109, 2015, 'Netherlands', '\'n Rooie Druuf', 10.9);
+INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
+            VALUES (3, 'Chateaux Degoutant', 3.5, 8, 2017, 'France', 'Merlot', 9.4);
+INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
+            VALUES (4, 'Jacob\'s Creek Chardonnay', 6.69, 57, 'Australia', 'Chardonnay', 13.1);
+
+INSERT INTO order (id, total_price, total_products, shipped_status, customerID, order_completed)
+            VALUES (1, 19.98, 3, true, 1, true);
+INSERT INTO order_line_item (productID, orderID, quantity)
+            VALUES (1, 1, 3);
+INSERT INTO order (id, total_price, total_products, shipped_status, customerID, order_completed)
+            VALUES (2, 22.68, 7, false, 2, false);
+INSERT INTO order_line_item (productID, orderID, quantity)
+            VALUES (2, 2, 4);
+INSERT INTO order_line_item (productID, orderID, quantity)
+            VALUES (4, 2, 2);
+INSERT INTO order_line_item (productID, orderID, quantity)
+            VALUES (3, 2, 1);
+
+INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
+            VALUES (1, '7006SZ', 'Pannenkoekdreef', 'Rotterdam', 14, , "del", 1);
+INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
+            VALUES (2, '1339CX', 'Kruisbergseweg', 'Zaandam', 199, "del", 2);
+INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
+            VALUES (3, '5711OR', 'Mussoliniplein', 'St. Oedenrode', 7, "inv", 2);
