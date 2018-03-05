@@ -10,6 +10,11 @@ public class LoginMenuView extends View {
 		System.out.println("Welcome to the login screen. Please enter your username and password to login. Press 0 to exit. "
 					+ "Press 1 to create a new user account.");
 		}
+	
+	@Override
+	public void displayMenu() {
+	}
+	
 	public String[] asksUserForLogin() {
 		String[] userInput = new String[2];
 		String username = null;

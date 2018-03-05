@@ -15,6 +15,10 @@ public class UserCreationView extends View {
 				+ " Press 0 at any point to exit.");
 	}
 	
+	@Override
+	public void displayMenu() {
+	}
+	
 	public String askUserForInput(String customerProperty) {
 		String userInput = "";
 		switch (customerProperty) {

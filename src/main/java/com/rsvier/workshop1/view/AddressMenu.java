@@ -10,6 +10,10 @@ public class AddressMenu extends View {
 	public void displayMessage() {
 	}
 	
+	@Override
+	public void displayMenu() {
+	}
+	
 	public void displayMenuHeader() {
 		System.out.println("Address Menu \n");
 	}
