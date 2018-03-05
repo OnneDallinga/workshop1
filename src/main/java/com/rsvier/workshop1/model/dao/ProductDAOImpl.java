@@ -14,7 +14,6 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public int createProduct(Product newProduct) {
-		int newProductId = 0;
 		query = "INSERT INTO product (name, price, stock_quantity, produced_year, country," +
 				"grape_variety, alcohol_percentage) VALUES (?,?,?,?,?,?,?);";
 		try (Connection conn = DataSource.getConnection();
@@ -28,19 +27,18 @@ public class ProductDAOImpl implements ProductDAO {
 			stmt.setString(6,  newProduct.getGrapeVariety());
 			stmt.setDouble(7, newProduct.getAlcoholPercentage());
 			stmt.executeUpdate();
-			try (ResultSet rs = stmt.getGeneratedKeys();) {
-				if (rs.next()) {
+			int newProductId;
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next()) {
 					newProductId = rs.getInt(1);
-					newProduct.setProductId(newProductId);
+					return newProductId;
 				}           
-			} catch (SQLException e) {
-				logger.info("Creating new product failed.");
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.info("Creating new product failed.");
 		} 
-		logger.info("Succesfully added new newProduct.");
-		return newProductId;
+		logger.info("Succesfully added new product.");
+		return 0;
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.model.dao.ProductDAO;
-import com.rsvier.workshop1.model.dao.ProductDAOImpl;
 import com.rsvier.workshop1.view.AdminMainMenuView;
 import com.rsvier.workshop1.view.ProductView;
 import com.rsvier.workshop1.view.UserMainMenuView;
@@ -15,12 +14,11 @@ import com.rsvier.workshop1.model.Validator;
 public class ProductController extends Controller {
 	
 	private ProductView currentMenu;
-	private ProductDAO productDao;
+	private ProductDAO productModel;
 	private Scanner input = new Scanner(System.in);
 	
 	public ProductController(ProductView theView) {
 		this.currentMenu = theView;
-		productDao = new ProductDAOImpl();
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class ProductController extends Controller {
 	}
 	
 	public void findAllProducts() {
-		ArrayList<Product> allProducts = (ArrayList<Product>) productDao.findAllProducts();
+		ArrayList<Product> allProducts = (ArrayList<Product>) productModel.findAllProducts();
 		currentMenu.displayProductPropertiesHeader();
 		currentMenu.displayDivider();
 		currentMenu.displayAllProducts(allProducts);
@@ -67,13 +65,13 @@ public class ProductController extends Controller {
 		if (Validator.isAnInt(findThisProduct)) {
 			// TODO Don't like using a Try-Catch here, improve later
 			try { // if user input was an int
-				foundProduct = productDao.findProductById(Integer.parseInt(findThisProduct));
+				foundProduct = productModel.findProductById(Integer.parseInt(findThisProduct));
 			} catch (Exception ex) {
 				System.out.println("Could not find a product with that ID.");
 			}
 		} else { 
 			try { // if user input was not an int, a product name is assumed
-				foundProduct = productDao.findProductByName(findThisProduct);
+				foundProduct = productModel.findProductByName(findThisProduct);
 			} catch (Exception ex) {
 				System.out.println("Could not find a product by that name.");
 			}
@@ -108,7 +106,7 @@ public class ProductController extends Controller {
 		double alcoholPercentage = inputAlcoholPercentage();
 		productToAdd.setAlcoholPercentage(alcoholPercentage);
 		
-		productDao.createProduct(productToAdd);
+		productModel.createProduct(productToAdd);
 		currentMenu.displayCreateSuccess();
 	}
 	
@@ -118,11 +116,11 @@ public class ProductController extends Controller {
 		int id = inputValidProductId();
 		
 		productToDelete.setProductId(id);
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			currentMenu.displayDeletionConfirmationPrompt(); // Require confirmation
 			boolean yesOrNo = currentMenu.asksUserYesOrNo();
 			if (yesOrNo) { // user answered yes
-				productDao.deleteProduct(productToDelete);
+				productModel.deleteProduct(productToDelete);
 				currentMenu.displayDeleteSuccess();
 			} else {
 				currentMenu.displayOperationCancelled();
@@ -172,10 +170,10 @@ public class ProductController extends Controller {
 		// requires an id from user to identify which product to update
 		int id = inputValidProductId();
 		// checks whether product is in database with provided id
-		if(idIsInDatabase(id, productDao)) { // proceeds with update if found
+		if(idIsInDatabase(id)) { // proceeds with update if found
 			String name = inputName();
 			productToUpdate.setProductName(name);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else { // alerts user if id is not found in database
 			alertUserAndReturn();
 		} 	
@@ -186,10 +184,10 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 		
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			String price = inputPrice();
 			productToUpdate.setPrice(new BigDecimal(price));
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else {
 			alertUserAndReturn();
 		}
@@ -200,10 +198,10 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 		
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			int stockQuantity = inputStockQuantity();
 			productToUpdate.setStockQuantity(stockQuantity);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else { 
 			alertUserAndReturn();
 		}
@@ -214,10 +212,10 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 		
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			int productYear = inputYear();
 			productToUpdate.setProducedYear(productYear);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else { 
 			alertUserAndReturn();
 		}
@@ -228,10 +226,10 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			String country = inputCountry();
 			productToUpdate.setCountry(country);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else {
 			alertUserAndReturn();
 		}
@@ -242,10 +240,10 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			String grapeVariety = inputGrapeVariety();
 			productToUpdate.setGrapeVariety(grapeVariety);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else {
 			alertUserAndReturn();
 		}
@@ -256,12 +254,12 @@ public class ProductController extends Controller {
 
 		int id = inputValidProductId();
 		
-		if(idIsInDatabase(id, productDao)) {
+		if(idIsInDatabase(id)) {
 			System.out.print("Enter a an alcohol percentage (e.g. 14.2):");
 			String userInputAlcoholPercentage = input.nextLine();
 		// TODO validate input
 			productToUpdate.setGrapeVariety(userInputAlcoholPercentage);
-			runUpdateOnProduct(productToUpdate, productDao);
+			runUpdateOnProduct(productToUpdate);
 		} else {
 			alertUserAndReturn();
 		}
@@ -360,16 +358,12 @@ public class ProductController extends Controller {
 		currentMenu.displayProductUpdateMenu();	
 	}
 	
-	public boolean idIsInDatabase(int id, ProductDAO productDao) {
-		if(productDao.isProductStoredWithId(id)) {
-			return true;
-		} else {
-			return false;
-		}
+	public boolean idIsInDatabase(int id) {
+		return productModel.isProductStoredWithId(id);
 	}
 	
-	public void runUpdateOnProduct(Product productToUpdate, ProductDAO productDao) {
-		boolean isSuccessful = productDao.updateProduct(productToUpdate);
+	public void runUpdateOnProduct(Product productToUpdate) {
+		boolean isSuccessful = productModel.updateProduct(productToUpdate);
 		if (isSuccessful) {
 			currentMenu.displayUpdateSuccess();
 		} else {
