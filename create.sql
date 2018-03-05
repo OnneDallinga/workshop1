@@ -89,8 +89,8 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`product` (
   `price` DECIMAL(6,2) NOT NULL,
   `stock_quantity` INT NOT NULL,
   `produced_year` INT NOT NULL,
-  `country` VARCHAR(45) NOT NULL, -- added by Geert --
-  `grape_variety` VARCHAR(90) NOT NULL, -- added by Geert --
+  `country` VARCHAR(45) NOT NULL,
+  `grape_variety` VARCHAR(90) NOT NULL,
   `alcohol_percentage` DECIMAL(3,1) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
