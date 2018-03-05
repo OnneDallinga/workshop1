@@ -16,7 +16,7 @@ public interface AddressDAO {
 	public List<Address> findAddressesByCustomer(Customer customer);
 		
 	// Update
-	public void updateAddress (Address address);
+	public void updateAddress (Address address, Customer customer);
 		
 	// Delete
 	public void deleteAddress(Address address);

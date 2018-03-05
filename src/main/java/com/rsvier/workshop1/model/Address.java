@@ -3,7 +3,7 @@ package com.rsvier.workshop1.model;
 public class Address {
 
 	private int addressId;
-	private int customerId;
+	private Customer customer;
 	private String street;
 	private int houseNumber;
 	private String houseNumberAddition;
@@ -19,7 +19,7 @@ public class Address {
 	public Address(String postalCode,
 				   int houseNumber,
 				   String houseNumberAddition,
-				   int customerId) {
+				   Customer customer) {
 	}
 	
 	/* Constructor with all parameters */
@@ -30,7 +30,7 @@ public class Address {
 				   String city,
 				   String addressType,
 				   boolean active,
-				   int customerId) {
+				   Customer customer) {
 	}
 
 	public int getAddressId() {
@@ -41,12 +41,12 @@ public class Address {
 		this.addressId = addressId;
 	}
 	
-	public int getCustomerId() {
-		return customerId;
+	public Customer getCustomerAtAddress() {
+		return customer;
 	}
 	
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setCustomerAtAddress(Customer customer) {
+		this.customer = customer;
 	}
 
 	public String getStreet() {
@@ -109,7 +109,7 @@ public class Address {
 	public String toString() {
 		return "Address [addressId=" + addressId + ", street=" + street + ", houseNumber=" + houseNumber
 				+ ", houseNumberAddition=" + houseNumberAddition + ", postalCode=" + postalCode + ", city=" + city
-				+ ", addressType=" + addressType + ", active=" + active + ", customerId=" + customerId + "]";
+				+ ", addressType=" + addressType + ", active=" + active + ", customerId =" + customer.getCustomerId();
 	}
 
 	/* Addresses are considered equal when postal code, house number and house number addition all match */
