@@ -29,7 +29,7 @@ public class Validator { // Validates possible user inputs.
     		if(id >= 0) {
     			return true;
     		} else {
-    			System.out.println("You did not enter a number, it was lower than 0.");
+    			System.out.println("You did not enter a number, or it was lower than 0.");
     			return false;
     		}
     	} catch (Exception ex) {
@@ -134,7 +134,7 @@ public class Validator { // Validates possible user inputs.
 	}
 	
 	public static boolean validatePrice(String userInput) {
-		Pattern pattern = Pattern.compile("^\\d{0,4}(\\.\\d{1,2})?$");
+		Pattern pattern = Pattern.compile("\\d[\\d,\\.]+");
 		if(pattern.matcher(userInput).matches()) return true;
 		System.out.println("Not a valid price");
 		return false;
