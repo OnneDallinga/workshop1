@@ -135,7 +135,6 @@ public class OrderLineItemDAOImpl implements OrderLineItemDAO {
 	
 	@Override
 	public void deleteAllLineItemsFromOrder(int orderId) {
-		// TODO insert correct name for the link table
 		query = "DELETE FROM order_line_item WHERE order_id = " + orderId;
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {

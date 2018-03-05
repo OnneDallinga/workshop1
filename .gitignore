@@ -1,1 +1,11 @@
+# Eclipse specific files
+**/.classpath
+**/.project
+**/.settings
 
+**/target/**
+
+# Mac specific file
+**/.DS_Store
+
+**/*.class
