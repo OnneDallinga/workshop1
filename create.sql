@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`order` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `total_price` DECIMAL(8,2) NOT NULL,
   `total_products` INT NOT NULL,
-  `shipped_status` TINYINT NOT NULL,
+  `shipped_status` TINYINT unsigned NOT NULL,
   `customerID` INT NOT NULL,
-  `order_completed` TINYINT NOT NULL,
+  `order_completed` TINYINT unsigned NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `customerID_idx` (`customerID` ASC),
   CONSTRAINT `customerID`
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`product` (
   `name` VARCHAR(70) NOT NULL,
   `price` DECIMAL(6,2) NOT NULL,
   `stock_quantity` INT NOT NULL,
-  `produced_year` INT(4) NOT NULL,
+  `produced_year` INT NOT NULL,
   `country` VARCHAR(45) NOT NULL, -- added by Geert --
   `grape_variety` VARCHAR(90) NOT NULL, -- added by Geert --
   `alcohol_percentage` DECIMAL(3,1) NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`address` (
   `street_name` VARCHAR(65) NOT NULL,
   `city` VARCHAR(45) NOT NULL,
   `house_number` INT NOT NULL,
-  `house_number_addition` VARCHAR(5) NOT NULL,
+  `house_number_addition` VARCHAR(5),
   `address_type` VARCHAR(10) NOT NULL,
   `customer_id` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -155,7 +155,7 @@ GRANT ALL ON `RSVier`.* TO 'GeertL';
 GRANT SELECT ON TABLE `RSVier`.* TO 'GeertL';
 GRANT SELECT, INSERT, TRIGGER ON TABLE `RSVier`.* TO 'GeertL';
 GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `RSVier`.* TO 'GeertL';
-GRANT EXECUTE ON ROUTINE `RSVier`.* TO 'GeertL';
+GRANT EXECUTE ON `RSVier`.* TO 'GeertL';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -169,20 +169,20 @@ INSERT INTO customer (id, first_name, last_name) VALUES (2, 'Piet', 'Pieters');
 INSERT INTO account (id, username, PASSWORD, owner_type, customer_id, active, hash) VALUES (2, 'Piet', 'Piet', 'NOTADMIN', 2, 2, 'None');
 
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
-            VALUES (1, 'El Rioja Diablo', 6.66, 14, 2017, 'Spain', 'Rioja', 13.0);
+            VALUES (1, ',El Rioja Diablo', 6.66, 14, 2017, 'Spain', 'Rioja', 13.0);
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
             VALUES (2, 'Ech\' Druuvenspul', 1.45, 109, 2015, 'Netherlands', '\'n Rooie Druuf', 10.9);
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
             VALUES (3, 'Chateaux Degoutant', 3.5, 8, 2017, 'France', 'Merlot', 9.4);
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
-            VALUES (4, 'Jacob\'s Creek Chardonnay', 6.69, 57, 'Australia', 'Chardonnay', 13.1);
+            VALUES (4, 'Jacob\'s Creek Chardonnay', 6.69, 57, 2014, 'Australia', 'Chardonnay', 13.1);
 
-INSERT INTO order (id, total_price, total_products, shipped_status, customerID, order_completed)
-            VALUES (1, 19.98, 3, true, 1, true);
+INSERT INTO `order` (id, total_price, total_products, shipped_status, customerID, order_completed)
+            VALUES (1, 19.98, 3, TRUE, 1, TRUE);
 INSERT INTO order_line_item (productID, orderID, quantity)
             VALUES (1, 1, 3);
-INSERT INTO order (id, total_price, total_products, shipped_status, customerID, order_completed)
-            VALUES (2, 22.68, 7, false, 2, false);
+INSERT INTO `order` (id, total_price, total_products, shipped_status, customerID, order_completed)
+            VALUES (2, 22.68, 7, FALSE, 2, FALSE);
 INSERT INTO order_line_item (productID, orderID, quantity)
             VALUES (2, 2, 4);
 INSERT INTO order_line_item (productID, orderID, quantity)
@@ -191,8 +191,8 @@ INSERT INTO order_line_item (productID, orderID, quantity)
             VALUES (3, 2, 1);
 
 INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
-            VALUES (1, '7006SZ', 'Pannenkoekdreef', 'Rotterdam', 14, , "del", 1);
+            VALUES (1, '7006SZ', 'Pannenkoekdreef', 'Rotterdam', 14, NULL, "del", 1);
 INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
-            VALUES (2, '1339CX', 'Kruisbergseweg', 'Zaandam', 199, "del", 2);
+            VALUES (2, '1339CX', 'Kruisbergseweg', 'Zaandam', 199, 'b', "del", 2);
 INSERT INTO address (id, postal_code, street_name, city, house_number, house_number_addition, address_type, customer_id)
-            VALUES (3, '5711OR', 'Mussoliniplein', 'St. Oedenrode', 7, "inv", 2);
+            VALUES (3, '5711OR', 'Mussoliniplein', 'St. Oedenrode', 7, NULL, "inv", 2);
