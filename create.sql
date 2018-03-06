@@ -102,7 +102,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `RSVier`.`order_line_item` ;
 
 CREATE TABLE IF NOT EXISTS `RSVier`.`order_line_item` (
-  `productID` INT NOT NULL,
+  `productID` INT NULL,
   `orderID` INT NOT NULL,
   `quantity` INT NOT NULL,
   INDEX `product_idx` (`productID` ASC),
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `RSVier`.`order_line_item` (
   CONSTRAINT `product`
     FOREIGN KEY (`productID`)
     REFERENCES `RSVier`.`product` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `order`
     FOREIGN KEY (`orderID`)
@@ -169,7 +169,7 @@ INSERT INTO customer (id, first_name, last_name) VALUES (2, 'Piet', 'Pieters');
 INSERT INTO account (id, username, PASSWORD, owner_type, customer_id, active, hash) VALUES (2, 'Piet', 'Piet', 'NOTADMIN', 2, 2, 'None');
 
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
-            VALUES (1, ',El Rioja Diablo', 6.66, 14, 2017, 'Spain', 'Rioja', 13.0);
+            VALUES (1, 'El Rioja Diablo', 6.66, 14, 2017, 'Spain', 'Rioja', 13.0);
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
             VALUES (2, 'Ech\' Druuvenspul', 1.45, 109, 2015, 'Netherlands', '\'n Rooie Druuf', 10.9);
 INSERT INTO product (id, name, price, stock_quantity, produced_year, country, grape_variety, alcohol_percentage)
