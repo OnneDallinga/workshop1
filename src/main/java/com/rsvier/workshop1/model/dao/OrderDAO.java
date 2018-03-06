@@ -1,6 +1,5 @@
 package com.rsvier.workshop1.model.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.rsvier.workshop1.model.Order;
@@ -12,10 +11,10 @@ public interface OrderDAO {
 	public int createOrder(Order order, Customer customer);
 	
 	// Read
-	public List<Order> findAllOrders();
 	public Order findOrderById(int orderId);
-	public ArrayList<Order> findCompletedOrdersOfCustomer(Customer customer);
-	public ArrayList<Order> findPendingOrdersOfCustomer(Customer customer);
+	public List<Order> findAllOrders();
+	public List<Order> findCompletedOrders();
+	public List<Order> findPendingOrders();
 	public boolean isOrderStoredWithId(int orderId);
 	
 	// Update

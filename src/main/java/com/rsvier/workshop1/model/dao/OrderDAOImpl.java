@@ -17,7 +17,7 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public int createOrder(Order order, Customer customer) {
 		int newOrderId = 0;
-		query = "INSERT INTO order (total_price, total_products, shipped_status, customerID) VALUES (?,?,?,?);";
+		query = "INSERT INTO `` (total_price, total_products, shipped_status, customerID) VALUES (?,?,?,?);";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 			stmt.setBigDecimal(1, order.getOrderPriceTotal());
@@ -38,6 +38,34 @@ public class OrderDAOImpl implements OrderDAO {
 			e.printStackTrace();
 		} 
 		return newOrderId;
+	}
+	
+	@Override
+	public Order findOrderById(int orderId) {
+		Order foundOrder = new Order();
+		Customer customer = new Customer();
+		query = "SELECT * FROM order WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");
+			stmt.setInt(1, orderId);
+			try (ResultSet rs = stmt.executeQuery();) {
+				if(rs.next()) {
+					foundOrder.setOrderId(rs.getInt(1));
+					foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
+					foundOrder.setOrderItemsTotal(rs.getInt(3));
+					foundOrder.setShipped(rs.getBoolean(4));
+					// Assigns a customer to the order by its id
+					customer.setCustomerId(rs.getInt(5));
+					foundOrder.setCustomerOfOrder(customer);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return foundOrder;
 	}
 
 	@Override
@@ -70,59 +98,11 @@ public class OrderDAOImpl implements OrderDAO {
 		} 
 		return list;
 	}
-
-	@Override
-	public Order findOrderById(int orderId) {
-		Order foundOrder = new Order();
-		Customer customer = new Customer();
-		query = "SELECT * FROM order WHERE id=?";
-		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);) {
-			logger.info("Connected to database.");
-			stmt.setInt(1, orderId);
-			try (ResultSet rs = stmt.executeQuery();) {
-				if(rs.next()) {
-					foundOrder.setOrderId(rs.getInt(1));
-					foundOrder.setOrderPriceTotal(rs.getBigDecimal(2));
-					foundOrder.setOrderItemsTotal(rs.getInt(3));
-					foundOrder.setShipped(rs.getBoolean(4));
-					// Assigns a customer to the order by its id
-					customer.setCustomerId(rs.getInt(5));
-					foundOrder.setCustomerOfOrder(customer);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return foundOrder;
-	}
 	
+	// TODO: Fix
 	@Override
-	public boolean isOrderStoredWithId(int orderId) {
-		boolean isStored = false;
-		query = "SELECT * FROM order WHERE id=?";
-		query = "SELECT * FROM product WHERE id=?";
-		try (Connection conn = DataSource.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(query);) {
-			logger.info("Connected to database.");	    
-			stmt.setInt(1, orderId);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next())
-				isStored = true;
-			else
-				isStored = false;
-		} catch (Exception e) {
-			logger.info("No order found.");
-			e.printStackTrace();
-		}
-		return isStored;
-	}
-	
-	@Override
-	public ArrayList<Order> findCompletedOrdersOfCustomer(Customer customer) {
-		ArrayList<Order> listOfCompletedOrders = new ArrayList<>();
+	public List<Order> findCompletedOrders() {
+		List<Order> listOfCompletedOrders = new ArrayList<>();
 		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -149,9 +129,10 @@ public class OrderDAOImpl implements OrderDAO {
 		return listOfCompletedOrders;
 	}
 
+	// TODO Fix
 	@Override
-	public ArrayList<Order> findPendingOrdersOfCustomer(Customer customer) {
-		ArrayList<Order> listOfPendingOrders = new ArrayList<>();
+	public List<Order> findPendingOrders() {
+		List<Order> listOfPendingOrders = new ArrayList<>();
 		query = "SELECT * FROM order WHERE customerID = (?)";
 		try (Connection conn = DataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -176,6 +157,27 @@ public class OrderDAOImpl implements OrderDAO {
 			e.printStackTrace();
 		}
 		return listOfPendingOrders;
+	}
+	
+	@Override
+	public boolean isOrderStoredWithId(int orderId) {
+		boolean isStored = false;
+		query = "SELECT * FROM order WHERE id=?";
+		query = "SELECT * FROM product WHERE id=?";
+		try (Connection conn = DataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);) {
+			logger.info("Connected to database.");	    
+			stmt.setInt(1, orderId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next())
+				isStored = true;
+			else
+				isStored = false;
+		} catch (Exception e) {
+			logger.info("No order found.");
+			e.printStackTrace();
+		}
+		return isStored;
 	}
 
 	@Override
