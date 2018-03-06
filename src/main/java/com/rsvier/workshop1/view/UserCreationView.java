@@ -11,8 +11,8 @@ public class UserCreationView extends View {
 	
 	@Override
 	public void displayMessage() {
-		System.out.println("Welcome. Please enter your information below in order to create an account."
-				+ " Press 0 at any point to exit.");
+		System.out.println("Please enter your information below in order to create an account.\n\n"
+				+ "Press 0 at any point to exit. \n");
 	}
 	
 	@Override

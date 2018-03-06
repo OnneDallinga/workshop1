@@ -27,7 +27,7 @@ public class OrderView extends View {
 		System.out.print("1. View all orders \n" +
 						 "2. View pending orders only \n" +
 						 "3. View completed orders only \n" +
-						 "4. Find an order" +
+						 "4. Find a specific order \n" +
 						 "5. Add new order \n" +
 						 "6. Update order \n" +
 						 "7. Delete order \n" +
@@ -48,7 +48,7 @@ public class OrderView extends View {
 	public void displayOrderProperties(Order order) {
 		System.out.printf("%-5d %-5d %-5d %-7d.2 %-7s \n",
 						   order.getOrderId(),
-						   order.getCustomerId(),
+						   order.getCustomerOfOrder().getCustomerId(),
 						   order.getOrderItemsTotal(),
 						   order.getOrderPriceTotal(),
 						   order.isShipped());
@@ -79,16 +79,24 @@ public class OrderView extends View {
 	public void displayOrderUpdateMenu() {
 		System.out.print("What would you like to update? \n" +
 						 "\n" +
-						 "1. Associated customer \n" +
-						 "2. Items in order \n" +
-						 "3. Shipping status \n" +
-						 "4. Associated shipping address \n" +
+						 "1. Items in order \n" +
+						 "4. Shipping status \n" +
+						 "5. Associated customer \n" +
+						 "6. Associated shipping address \n" +
 						 "9. Return to the order menu \n" +
 						 "\n");
 	}
 	
-	public void askWhichOrder() {
-		System.out.print("Please provide ID-number of order.");
+	public void displayAddressList() {
+		displayAddressPropertiesHeader();
+		displayAddressDetails();
 	}
-
+	
+	public void displayAddressPropertiesHeader() {
+		
+	}
+	
+	public void displayAddressDetails() {
+		
+	}
 }

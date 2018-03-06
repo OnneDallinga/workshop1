@@ -7,12 +7,29 @@ public class LoginMenuView extends View {
 	
 	@Override		
 	public void displayMessage() {
-		System.out.println("Welcome to the login screen. Please enter your username and password to login. Press 0 to exit. "
-					+ "Press 1 to create a new user account.");
+		System.out.print("\nWelcome to the login screen. \n\n" +
+					     "Please enter your username and password to login. \n\n" +
+					     "Alternative actions: \n" +
+					     "Press 1 to create a new user account. \n" +
+					     "Press 0 to exit. \n\n");
 		}
 	
 	@Override
 	public void displayMenu() {
+		displayMenuHeader();
+		displayDivider();
+		displayMenuOptions();
+	}
+	
+	public void displayMenuHeader() {
+		System.out.println("Login Menu \n");
+	}
+	
+	public void displayMenuOptions() {
+		System.out.print("1. Login \n" +
+						 "2. Create New Account \n" +
+						 "0. Exit program \n" +
+						 "\n");
 	}
 	
 	public String[] asksUserForLogin() {

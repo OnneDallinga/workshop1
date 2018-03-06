@@ -109,6 +109,7 @@ public abstract class View<K> { //parent version
 	}
 	
 	public String askUserForInput() {
+		System.out.print("\n Please enter a choice:");
 		String userInput = "";
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
@@ -128,7 +129,7 @@ public abstract class View<K> { //parent version
 	}
 	
 	public void pressEnterToReturn() {
-		System.out.println("Hit \"ENTER\" to return to the previous menu.");
+		System.out.println("\nHit \"ENTER\" to return to the previous menu.");
 		Scanner input;
 		   try {
 			   input = new Scanner(System.in);
@@ -139,11 +140,11 @@ public abstract class View<K> { //parent version
 	}
 	
 	public void promptUserForItemId() {
-		System.out.println("Please enter the items's ID-number");
+		System.out.print("Please enter the items's ID-number: ");
 	}
 	
 	public void displayCanFindByIdAndName() {
-		System.out.println("Please enter the item's ID-number or name");
+		System.out.print("Please enter the item's ID-number or name: ");
 	}
 	
 	public void displayCreateSuccess() {
@@ -176,5 +177,9 @@ public abstract class View<K> { //parent version
 	
 	public void displayDivider() { // Commonly used to segment information for the user
 		System.out.println("==================================================" + "\n");
+	}
+	
+	public void displayLongDivider() { // Commonly used to segment information for the user
+	System.out.println("=========================================================================================================");
 	}
 }

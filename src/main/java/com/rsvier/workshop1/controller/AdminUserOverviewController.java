@@ -23,7 +23,7 @@ public class AdminUserOverviewController extends Controller{
 		boolean userWantsToStay = true;
 		ArrayList<String> allOfTheUsernames = new AccountDAOImpl().getUsernameList(); // load the users from the database
 		while (userWantsToStay) {
-			currentMenu.displayMessage();
+			currentMenu.displayMenu();
 			int userMenuChoice = currentMenu.asksUserForMenuChoice(menuOptions);
 			switch (userMenuChoice) {
 			case 1: // Admin wants to view all users

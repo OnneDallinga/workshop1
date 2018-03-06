@@ -15,6 +15,22 @@ public class AdminUserOverview extends View {
 	
 	@Override
 	public void displayMenu() {
+		displayMenuHeader();
+		displayDivider();
+		displayMenuOptions();
+	}
+	
+	public void displayMenuHeader() {
+		System.out.println("User overview \n");
+	}
+	
+	public void displayMenuOptions() {
+		System.out.print("1. View all current users \n" +
+				 "2. Delete a user \n" +
+				 "3. Change user permissions \n" +
+				 "9. Return to the main menu \n" +
+				 "0. Exit program \n" +
+				 "\n");
 	}
 
 	public void printAllUsers(ArrayList<String> allOfTheUsers) {

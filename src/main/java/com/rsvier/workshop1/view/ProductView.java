@@ -33,11 +33,11 @@ public class ProductView extends View {
 	}
 	
 	public void displayProductPropertiesHeader() {
-		System.out.printf("%-3s %-10s %-5s %-3s %-5s %-10s %-10s %-3s \n",
+		System.out.printf("%-3s %-30s %-8s %-8s %-5s %-15s %-15s %-3s \n",
 						   "id",
 						   "name",
 						   "price",
-						   "# in stock",
+						   "stock",
 						   "year",
 						   "country",
 						   "variety",
@@ -45,15 +45,15 @@ public class ProductView extends View {
 	}
 	
 	public void displayProductProperties(Product product) {
-		System.out.printf("%-3d %-10s %-5d.2 %-3d %-5d %-10s %-10s %-3d.2 \n",
+		System.out.printf("%-3d %-30s %-8s %-8d %-5d %-15s %-15s %-3s \n",
 						   product.getProductId(),
 						   product.getProductName(),
-						   product.getPrice(),
+						   (product.getPrice()).toString(),
 						   product.getStockQuantity(),
 						   product.getProducedYear(),
 						   product.getCountry(),
 						   product.getGrapeVariety(),
-						   product.getAlcoholPercentage());
+						   ((Double)product.getAlcoholPercentage()).toString());
 	}
 	
 	public void displayAllProducts(ArrayList<Product> allProducts) {
