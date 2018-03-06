@@ -2,6 +2,8 @@ package com.rsvier.workshop1.model.dao;
 
 import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.database.DataSource;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -61,7 +63,6 @@ public class ProductDAOImpl implements ProductDAO {
 					product.setAlcoholPercentage(rs.getDouble(8));
 					allProducts.add(product);
 				}
-			logger.info("Total products:" + rs.getRow());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -152,7 +153,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public boolean updateProduct(Product product) {
-		query = "UPDATE product SET name = ?, price = ?, stock_quantity = ?" + 
+		query = "UPDATE product SET name = ?, price = ?, stock_quantity = ?," + 
 				"produced_year = ?, country = ?, grape_variety = ?," + 
 				"alcohol_percentage = ? WHERE id=?";
 		try (Connection conn = DataSource.getConnection();
@@ -165,7 +166,9 @@ public class ProductDAOImpl implements ProductDAO {
 			stmt.setString(5,  product.getCountry());
 			stmt.setString(6, product.getGrapeVariety());
 			stmt.setDouble(7, product.getAlcoholPercentage());
+			stmt.setInt(8, product.getProductId());
 			stmt.executeUpdate();
+			logger.info("Update made");
 		} catch (SQLException e) {
 			logger.info("Updating product failed.");
 			e.printStackTrace();
@@ -182,11 +185,11 @@ public class ProductDAOImpl implements ProductDAO {
 			logger.info("Connected to database.");	    
 			stmt.setInt(1, product.getProductId());
 			stmt.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			logger.info("Deleting product failed.");
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 }

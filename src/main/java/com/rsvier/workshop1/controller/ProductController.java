@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.rsvier.workshop1.model.Product;
 import com.rsvier.workshop1.model.dao.ProductDAO;
+import com.rsvier.workshop1.model.dao.ProductDAOImpl;
 import com.rsvier.workshop1.view.AdminMainMenuView;
 import com.rsvier.workshop1.view.ProductView;
 import com.rsvier.workshop1.view.UserMainMenuView;
@@ -52,14 +53,22 @@ public class ProductController extends Controller {
 	}
 	
 	public void findAllProducts() {
+		productModel = new ProductDAOImpl();
+		
 		ArrayList<Product> allProducts = (ArrayList<Product>) productModel.findAllProducts();
+		
 		currentMenu.displayProductPropertiesHeader();
-		currentMenu.displayDivider();
+		currentMenu.displayLongDivider();
 		currentMenu.displayAllProducts(allProducts);
+		
+		currentMenu.pressEnterToReturn();
+		this.runView();
 	}
 	
 	public void findProduct() {
 		Product foundProduct = new Product();
+		productModel = new ProductDAOImpl();
+		
 		currentMenu.displayCanFindByIdAndName(); // Indicates allowed search parameters to user
 		String findThisProduct = currentMenu.askUserForInput();
 		if (Validator.isAnInt(findThisProduct)) {
@@ -77,12 +86,17 @@ public class ProductController extends Controller {
 			}
 		}
 		currentMenu.displayProductPropertiesHeader();
-		currentMenu.displayDivider();
+		currentMenu.displayLongDivider();
 		currentMenu.displayProductProperties(foundProduct);
+		
+		currentMenu.pressEnterToReturn();
+		this.runView();
 	}
 	
 	public void addNewProduct() {
 		Product productToAdd = new Product();
+		productModel = new ProductDAOImpl();
+		
 		System.out.println("Please enter product details below:");
 
 		String name = inputName();
@@ -108,26 +122,42 @@ public class ProductController extends Controller {
 		
 		productModel.createProduct(productToAdd);
 		currentMenu.displayCreateSuccess();
+		
+		currentMenu.pressEnterToReturn();
+		this.runView();
 	}
 	
 	public void deleteProduct() {
 		Product productToDelete = new Product();
+		productModel = new ProductDAOImpl();
 		
 		int id = inputValidProductId();
-		
+		System.out.println(id);
 		productToDelete.setProductId(id);
 		if(idIsInDatabase(id)) {
+			System.out.println(productToDelete.getProductId());
 			currentMenu.displayDeletionConfirmationPrompt(); // Require confirmation
 			boolean yesOrNo = currentMenu.asksUserYesOrNo();
 			if (yesOrNo) { // user answered yes
-				productModel.deleteProduct(productToDelete);
-				currentMenu.displayDeleteSuccess();
+				boolean deleteSuccess = productModel.deleteProduct(productToDelete);
+				if (deleteSuccess) {
+					currentMenu.displayDeleteSuccess();
+					currentMenu.pressEnterToReturn();
+					this.runView();
+				} else {
+					currentMenu.displayOperationFailed();
+					currentMenu.pressEnterToReturn();
+					this.runView();
+				}
 			} else {
 				currentMenu.displayOperationCancelled();
+				currentMenu.pressEnterToReturn();
+				this.runView();
 			}
 		} else {
 			currentMenu.displayItemNotFound();
 			currentMenu.pressEnterToReturn();
+			this.runView();
 		}
 	}
 	
@@ -156,7 +186,7 @@ public class ProductController extends Controller {
 					break;
 			case 7: editProductAlcoholContent();
 					break;
-			case 9:	currentMenu.displayMenu();
+			case 9:	this.runView();
 					break;
 			default: System.out.println("Invalid choice. \n");
 					currentMenu.displayProductUpdateMenu();
@@ -167,10 +197,14 @@ public class ProductController extends Controller {
 	
 	public void editProductName() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 		// requires an id from user to identify which product to update
 		int id = inputValidProductId();
 		// checks whether product is in database with provided id
 		if(idIsInDatabase(id)) { // proceeds with update if found
+			// Populates product with current data
+			productToUpdate = productModel.findProductById(id);
+			
 			String name = inputName();
 			productToUpdate.setProductName(name);
 			runUpdateOnProduct(productToUpdate);
@@ -181,10 +215,13 @@ public class ProductController extends Controller {
 	
 	public void editProductPrice() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 		
 		if(idIsInDatabase(id)) {
+			productToUpdate = productModel.findProductById(id);
+			
 			String price = inputPrice();
 			productToUpdate.setPrice(new BigDecimal(price));
 			runUpdateOnProduct(productToUpdate);
@@ -195,10 +232,13 @@ public class ProductController extends Controller {
 	
 	public void editProductStockQuantity() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 		
 		if(idIsInDatabase(id)) {
+			productToUpdate = productModel.findProductById(id);
+			
 			int stockQuantity = inputStockQuantity();
 			productToUpdate.setStockQuantity(stockQuantity);
 			runUpdateOnProduct(productToUpdate);
@@ -209,10 +249,13 @@ public class ProductController extends Controller {
 	
 	public void editProductYear() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 		
 		if(idIsInDatabase(id)) {
+			productToUpdate = productModel.findProductById(id);
+			
 			int productYear = inputYear();
 			productToUpdate.setProducedYear(productYear);
 			runUpdateOnProduct(productToUpdate);
@@ -223,10 +266,13 @@ public class ProductController extends Controller {
 	
 	public void editProductCountryOfOrigin() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 
 		if(idIsInDatabase(id)) {
+			productToUpdate = productModel.findProductById(id);
+			
 			String country = inputCountry();
 			productToUpdate.setCountry(country);
 			runUpdateOnProduct(productToUpdate);
@@ -237,10 +283,13 @@ public class ProductController extends Controller {
 	
 	public void editProductGrapeVariety() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 
 		if(idIsInDatabase(id)) {
+			productToUpdate = productModel.findProductById(id);
+			
 			String grapeVariety = inputGrapeVariety();
 			productToUpdate.setGrapeVariety(grapeVariety);
 			runUpdateOnProduct(productToUpdate);
@@ -251,14 +300,17 @@ public class ProductController extends Controller {
 	
 	public void editProductAlcoholContent() {
 		Product productToUpdate = new Product();
+		productModel = new ProductDAOImpl();
 
 		int id = inputValidProductId();
 		
 		if(idIsInDatabase(id)) {
-			System.out.print("Enter a an alcohol percentage (e.g. 14.2):");
+			productToUpdate = productModel.findProductById(id);
+			
+			System.out.print("Enter an alcohol percentage (e.g. 14.2):");
 			String userInputAlcoholPercentage = input.nextLine();
-		// TODO validate input
-			productToUpdate.setGrapeVariety(userInputAlcoholPercentage);
+			productToUpdate.setAlcoholPercentage(Double.parseDouble(userInputAlcoholPercentage));
+			
 			runUpdateOnProduct(productToUpdate);
 		} else {
 			alertUserAndReturn();
@@ -345,7 +397,7 @@ public class ProductController extends Controller {
 		currentMenu.promptUserForItemId();
 		String attemptAtId = input.nextLine();
 		while (!Validator.isAnInt(attemptAtId)) {
-			System.out.println("You did not enter a valid product id.");
+			System.out.println("You did not enter a valid product id. Please try again:");
 			attemptAtId = input.nextLine();
 		}
 		int id = Integer.parseInt(attemptAtId);
@@ -355,7 +407,7 @@ public class ProductController extends Controller {
 	public void alertUserAndReturn() {
 		currentMenu.displayItemNotFound();
 		currentMenu.pressEnterToReturn();
-		currentMenu.displayProductUpdateMenu();	
+		this.runView();
 	}
 	
 	public boolean idIsInDatabase(int id) {
@@ -366,8 +418,12 @@ public class ProductController extends Controller {
 		boolean isSuccessful = productModel.updateProduct(productToUpdate);
 		if (isSuccessful) {
 			currentMenu.displayUpdateSuccess();
+			currentMenu.pressEnterToReturn();
+			this.runView();
 		} else {
 			currentMenu.displayOperationFailed();
+			currentMenu.pressEnterToReturn();
+			this.runView();
 		}
 	}
 }
